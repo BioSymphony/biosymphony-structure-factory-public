@@ -11,7 +11,7 @@ Public scaffold: yes. Runtime execution: review required for current package ter
 ## Hand A Mission To An Agent
 
 ```text
-Use the BioSymphony Structure Factory skill with the Cofold Scoring Stack tool card. For target <PDB:ID> and candidate set <path>, prepare a multi-validator cofold lane that runs Boltz, Chai-1, and AF2-Multimer in parallel, then rescores with ipSAE for a min-ipSAE consensus gate. Specify recycle and sample counts per validator and the closeout artifact list.
+Use the BioSymphony Structure Factory skill with the Cofold Scoring Stack tool card. For target <PDB:ID> and candidate set <path>, prepare a multi-validator cofold lane that runs Boltz, Chai-1, AF2-Multimer, and optional OpenDDE in parallel, then rescores with ipSAE for a min-ipSAE consensus gate. Specify recycle and sample counts per validator and the closeout artifact list.
 ```
 
 ## Headline Finding (2026): Multi-Validator min-ipSAE Consensus
@@ -26,6 +26,7 @@ This card is the meta-lane. Individual cofold validators have their own cards:
 
 - [Boltz](boltz.md) for fast cofold with full PAE output.
 - [Chai-1](chai.md) for MSA-driven cofold with parquet inputs.
+- [OpenDDE](opendde.md) for all-atom biomolecular cofolds, ABAG canaries, and optional PAE/PDE sidecars.
 - AF2-Multimer (via LocalColabFold) as the long-established baseline validator.
 
 A common slate:
@@ -33,6 +34,7 @@ A common slate:
 1. **AF2-Multimer v3** via LocalColabFold (`alphafold2_multimer_v3` with `--templates` on for target classes with dense PDB coverage).
 2. **Boltz-2** with optional template injection (`templates: [{cif:<ref>.cif, force:true}]` in YAML).
 3. **Chai-1** with proper MSA + template (`use_esm_embeddings=False`, `msa_directory=<target_aligned.pqt>`).
+4. **OpenDDE** for selected canaries or ranked candidates, especially antibody-antigen complexes where the ABAG checkpoint is relevant.
 
 Each validator emits a PAE matrix → ipSAE post-hoc rescore.
 
@@ -129,6 +131,27 @@ colabfold_batch \
 
 5-model mean+stddev is your free orthogonal confidence proxy.
 
+### OpenDDE
+
+```bash
+LAYERNORM_TYPE=torch opendde pred \
+    -i inputs/design_001.opendde.json \
+    -o opendde_out/design_001 \
+    -n opendde_v1 \
+    --use_msa false \
+    --use_template false \
+    --use_rna_msa false \
+    --sample 3 \
+    --step 200 \
+    --cycle 10 \
+    --need_atom_confidence true
+```
+
+Use `--load_checkpoint_path "$OPENDDE_ROOT_DIR/checkpoint/opendde_abag.pt"` for
+the ABAG checkpoint. Preserve both summary confidence JSON and `full_data` JSON
+when the output will feed an ipSAE-style or PAE/PDE sidecar gate. Summary-only
+output is useful for triage but incomplete for interface-error rescoring.
+
 ### ABCFold (one-call multi-validator)
 
 ```bash
@@ -174,6 +197,9 @@ python /workspace/ipsae/ipsae.py \
 | AF2M | `--num-recycle` | 3 | 3 | Bump to 5 for borderline calls |
 | AF2M | `--rank` | plddt | **`multimer`** | iPTM-weighted ranking |
 | AF2M | `--templates` | off | **on** when target has PDB coverage | Templates pin register where cofolders hallucinate |
+| OpenDDE | `--need_atom_confidence` | false | **true** for ranked candidates | Saves PAE/PDE/contact sidecars. |
+| OpenDDE | `--use_msa`, `--use_template`, `--use_rna_msa` | true/false by flag | **false for first canary** | Avoids public-service and large-database dependencies. |
+| OpenDDE | `--load_checkpoint_path` | default `opendde.pt` | use `opendde_abag.pt` for ABAG canaries | Selects antibody-antigen checkpoint. |
 | ipSAE | `pae_cutoff` (Å) | 10 | 10 | Dunbrack default |
 | ipSAE | `dist_cutoff` (Å) | 5 | 5 | Dunbrack default |
 | ABCFold | `-abc` | — | **-abc** | Three cofolders, one call |
@@ -193,6 +219,8 @@ python /workspace/ipsae/ipsae.py \
 | Chai-1 | NPZ | `per_chain_pair_iptm[binder, target]` | interface iPTM (not global `iptm`) |
 | AF2M | `<job>_summary_confidences.json` | `iptm`, `ranking_confidence`, `ptm` | top-rank model |
 | AF2M | `<job>_scores_rank_<k>.json` | `ptm`, `iptm`, `predicted_aligned_error` | per-model, for the 5-model spread |
+| OpenDDE | `<job>_summary_confidence_sample_<k>.json` | `chain_pair_iptm`, `iptm`, `ptm`, `gpde`, `ranking_score` | scalar and chain-pair confidence diagnostics |
+| OpenDDE | `<job>_full_data_sample_<k>.json` | `token_pair_pae`, `token_pair_pde`, `contact_probs` | sidecars for downstream interface-error scoring |
 | ipSAE | stdout / CSV | `ipSAE_d0chn`, `ipSAE_max`, mean interface PAE | post-hoc |
 
 ## Consensus Gate
@@ -243,6 +271,9 @@ A candidate that passes the first row but fails site or state checks should clos
 - **Boltz `--num_workers > 1` crashes on shared community hosts** with a CUDA `_cuda_init` driver-too-old race even when single-worker mode works. Force `--num_workers 1`.
 - **LocalColabFold's pixi installer is the current supported install path** (2026-01 pivot); the older `install_colabbatch_linux.sh` still works on Ubuntu 22.04.
 - **AF2-Multimer fetches its own MSAs** (per-job, ColabFold MMseqs2). Even if you have cached a Boltz / Chai `.a3m`, AF2M does not reuse it — rate-limit risk reappears on >20 jobs.
+- **OpenDDE package install currently needs source or Docker** as of the 2026-07-05 review; the advertised PyPI package route was not visible. Pin the source commit or Docker digest in provider packets.
+- **OpenDDE summary-only output is not enough for ipSAE-style gates.** Use `--need_atom_confidence true` and preserve `full_data`, then budget for larger artifacts.
+- **OpenDDE uses public MMseqs2 by default for protein MSA search.** Use precomputed A3M or a self-hosted `MMSEQS_SERVICE_HOST_URL` for private sequences or batch fanout.
 - **For peptide ligands with disordered or partly-cleaved N-termini** (common in GPCR-peptide complexes), expect interface ipSAE to be lower due to peptide flexibility. Not a bad model — a real biological feature. Calibrate the threshold against a known positive-control complex.
 
 ## Citations And References
@@ -257,6 +288,7 @@ A candidate that passes the first row but fails site or state checks should clos
 - Overath / Rygaard binder-presence floor: bioRxiv 2025.08.14.670059v2
 - DigBioLab reference pipeline (defines the consensus gate): https://github.com/DigBioLab/de_novo_binder_scoring
 - BindEnergyCraft / pTMEnergy (free upgrade on pAE logits): arXiv 2505.21241
+- OpenDDE: https://github.com/aurekaresearch/OpenDDE
 
 ## Currency Check (Run Before Reusing This Card)
 

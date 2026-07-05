@@ -322,6 +322,48 @@ software:
     citation_notes: "Record repo commit, model weights, and inputs."
     status: planned
     notes: "Verify current repo/license before packaging."
+  opendde:
+    role: biomolecular_complex_prediction
+    image_family: ai-design
+    install_method: source_or_public_docker
+    upstream_repo: "https://github.com/aurekaresearch/OpenDDE"
+    upstream_commit_sha_observed_2026_07_05: "a72e9f655231660f8af0072dbdb8b2a54f3fbd3c"
+    docker_image: "aurekaresearch/opendde:v1"
+    docker_tag_digest_observed_2026_07_05: "sha256:a9404f76df1cd965a80447ee30c9c440af48b199581d9bd44ee157c18109a9d6"
+    upstream_model_repo: "https://huggingface.co/aurekaresearch/OpenDDE"
+    upstream_model_repo_commit_observed_2026_07_05: "eddd563ce96571f784012edd8f045181c8f8627d"
+    released_checkpoints: "opendde.pt, opendde_abag.pt"
+    checkpoint_sizes_observed_2026_07_05: "opendde.pt ~2.5GB; opendde_abag.pt ~2.5GB"
+    common_runtime_size_observed_2026_07_05: "~0.65GB before search databases"
+    license_class: open_source_apache_2_reported_by_repo
+    license_gate: verify_current_terms_and_weight_posture
+    runpod_fit: strong_after_no_search_canary
+    gpu_class: "RTX 4090/L40S for canaries; 4x GPU for Fold-CP distributed route"
+    smoke_command: "opendde doctor && opendde --help"
+    runtime_artifacts: "opendde_predictions/, opendde_manifest.json, summary_confidence.json, full_data.json when --need_atom_confidence true"
+    citation_notes: "Record repo commit, Docker digest or source install route, Hugging Face model commit, checkpoint hashes, input JSON, MSA/template posture, and confidence sidecars."
+    weights_cache_default: "$OPENDDE_ROOT_DIR/checkpoint"
+    weights_cache_env_var: "OPENDDE_ROOT_DIR"
+    weights_source: "Hugging Face aurekaresearch/OpenDDE; opendde.pt default, opendde_abag.pt selected with --load_checkpoint_path."
+    status: planned
+    notes: |
+      AlphaFold-3-style all-atom prediction/cofold lane for proteins, DNA,
+      RNA, ligands, ions, explicit covalent bonds, and antibody-antigen
+      canaries. Use as an orthogonal validator next to Boltz, Chai-1,
+      AF2-Multimer, and ESMFold2, not as a generator.
+
+      Start with a no-search public protein canary:
+      --use_msa false --use_template false --use_rna_msa false. Promote to
+      MSA/template/RNA-MSA only after database, HMMER/Kalign, and public/private
+      sequence posture are declared. Do not send private sequences to the public
+      ColabFold-compatible MMseqs2 service.
+
+      The reviewed source path loads PyTorch and pickle-based runtime artifacts,
+      including the model checkpoint and RDKit CCD cache. Execution-ready
+      provider packets must pin URL, remote ETag/Xet hash where available, local
+      SHA-256, and byte size before loading. For ipSAE-style rescoring, run with
+      --need_atom_confidence true and preserve the full_data JSON; summary-only
+      output is scalar confidence, not a complete interface sidecar bundle.
   alphafold3:
     role: biomolecular_prediction
     image_family: ai-design
