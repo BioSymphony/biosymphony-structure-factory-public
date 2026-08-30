@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "contract_id": "pd-l1-binder-hunt.stage-contract.v1",
+  "manifest_id": "structure-factory-pd-l1-binder-hunt",
+  "run_id": "structure-factory-pd-l1-binder-hunt-${STRUCTURE_FACTORY_RUN_ID}",
+  "run_id_resolution_policy": "Campaign-level template. The bridge manifest supplies the concrete run_id through STRUCTURE_FACTORY_RUN_ID.",
+  "campaign_id": "pd-l1-pd1-binder-design",
+  "wave": "pd-l1-binder-hunt",
+  "execution_profile": "genie3-boltz-design-ranking",
+  "progress_ledger": "/workspace/runpod-execution/artifacts/stage-progress.jsonl",
+  "success_claim": "Genie 3-generated PD-L1 binder candidates against public 4ZQK are Boltz cofolded, ranked in candidate_ranking.json and candidate_ranking_top32.json, and capped at candidate-level computational evidence.",
+  "fail_closed": true,
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "target_window_sha256_change",
+      "genie3_pinned_commit_sha_change",
+      "genie3_hf_revision_change",
+      "boltz_pinned_release_change",
+      "repo_commit_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "target_intake",
+      "description": "Materialize and hash the committed PD-L1 target-window report plus public target slice metadata.",
+      "required": true,
+      "expected_outputs": [
+        "validation/target_intake.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/target_intake.json",
+      "done_marker": "validation/target_intake.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage target_intake --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "runtime_gate",
+      "description": "Verify CUDA, Boltz, Genie 3 CLI resolution, and expected weights/cache directories before design work.",
+      "required": true,
+      "expected_outputs": [
+        "validation/runtime_gate.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/runtime_gate.json",
+      "done_marker": "validation/runtime_gate.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage runtime_gate --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "genie3_install",
+      "description": "Idempotently install or detect Genie 3 at the pinned source commit.",
+      "required": true,
+      "expected_outputs": [
+        "validation/genie3_install.json",
+        "logs/genie3_install.log"
+      ],
+      "timeout_minutes": 30,
+      "checkpoint_marker": "validation/genie3_install.json",
+      "done_marker": "validation/genie3_install.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage genie3_install --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "genie3_weights_fetch",
+      "description": "Operator-gated fetch of the pinned Genie 3 Hugging Face revision; records a weights_manifest.json with per-file hashes.",
+      "required": true,
+      "expected_outputs": [
+        "validation/genie3_weights_fetch.json",
+        "weights_manifest.json"
+      ],
+      "timeout_minutes": 45,
+      "checkpoint_marker": "validation/genie3_weights_fetch.json",
+      "done_marker": "weights_manifest.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage genie3_weights_fetch --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "genie3_generation_canary",
+      "description": "Generate the two canary binder candidates and emit one manifest row per attempted candidate.",
+      "required": true,
+      "expected_outputs": [
+        "validation/genie3_generation_canary.json",
+        "design_candidates/cand-001/manifest.json",
+        "design_candidates/cand-002/manifest.json"
+      ],
+      "timeout_minutes": 60,
+      "checkpoint_marker": "validation/genie3_generation_canary.json",
+      "done_marker": "validation/genie3_generation_canary.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage genie3_generation_canary --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 3
+      }
+    },
+    {
+      "stage_id": "boltz_crosscheck_canary",
+      "description": "Boltz-cofold successfully generated canary candidates against the public PD-L1 target window.",
+      "required": true,
+      "expected_outputs": [
+        "validation/boltz_crosscheck_canary.json"
+      ],
+      "timeout_minutes": 90,
+      "checkpoint_marker": "validation/boltz_crosscheck_canary.json",
+      "done_marker": "validation/boltz_crosscheck_canary.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage boltz_crosscheck_canary --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "genie3_generation_extended",
+      "description": "Generate the extended candidate tranche only after canary cross-check criteria are satisfied; skipped is explicit evidence.",
+      "required": true,
+      "expected_outputs": [
+        "validation/genie3_generation_extended.json"
+      ],
+      "timeout_minutes": 240,
+      "checkpoint_marker": "validation/genie3_generation_extended.json",
+      "done_marker": "validation/genie3_generation_extended.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage genie3_generation_extended --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "boltz_crosscheck_extended",
+      "description": "Boltz-cofold the extended generated candidates and emit per-candidate success or failure rows.",
+      "required": true,
+      "expected_outputs": [
+        "validation/boltz_crosscheck_extended.json"
+      ],
+      "timeout_minutes": 180,
+      "checkpoint_marker": "validation/boltz_crosscheck_extended.json",
+      "done_marker": "validation/boltz_crosscheck_extended.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage boltz_crosscheck_extended --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "ranking_synthesis",
+      "description": "Aggregate generated, failed, and Boltz-crosschecked candidates into candidate_ranking.json, candidate_ranking.md, and candidate_ranking_top32.json.",
+      "required": true,
+      "expected_outputs": [
+        "validation/ranking_synthesis.json",
+        "candidate_ranking.json",
+        "candidate_ranking.md",
+        "candidate_ranking_top32.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "candidate_ranking.json",
+      "done_marker": "candidate_ranking_top32.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage ranking_synthesis --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 4
+      }
+    },
+    {
+      "stage_id": "report",
+      "description": "Render a public report from the runtime gate and candidate ranking without making binding or therapeutic claims.",
+      "required": true,
+      "expected_outputs": [
+        "report/README.md"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "report/README.md",
+      "done_marker": "report/README.md",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage report --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "validation_review",
+      "description": "Emit validation_ledger, methods, provenance, operator closeout, and artifact hashes with all scientific claims capped at candidate or lower.",
+      "required": true,
+      "expected_outputs": [
+        "validation_ledger.json",
+        "validation_ledger.md",
+        "methods.md",
+        "provenance.md",
+        "operator_closeout.md",
+        "artifact_index.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "validation_ledger.json",
+      "done_marker": "operator_closeout.md",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage validation_review --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 6
+      }
+    },
+    {
+      "stage_id": "contract_self_check",
+      "description": "Verify required ranking artifacts, top-32 consistency, generated structure paths, Boltz prediction paths, weights revision, and allowed result boundary.",
+      "required": true,
+      "expected_outputs": [
+        "validation/contract-self-check.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "validation/contract-self-check.json",
+      "done_marker": "validation/contract-self-check.json",
+      "resume_command": "python3 scripts/structure_factory/pd_l1_binder_hunt.py --stage contract_self_check --out runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    }
+  ],
+  "expected_outputs": [
+    "runpod-execution/status.json",
+    "runpod-execution/artifacts/stage-progress.jsonl",
+    "runpod-execution/artifacts/executed-commands.jsonl",
+    "runpod-execution/artifacts/candidate_ranking.json",
+    "runpod-execution/artifacts/candidate_ranking_top32.json",
+    "runpod-execution/artifacts/validation_ledger.json",
+    "runpod-execution/artifacts/operator_closeout.md",
+    "runpod-execution/artifacts/validation/contract-self-check.json",
+    "runpod-execution/artifacts/runpod-execution.tar.gz"
+  ],
+  "exact_commands": [
+    "python3 scripts/structure_factory/pd_l1_binder_hunt.py --out runpod-execution/artifacts --stage all --json"
+  ],
+  "done_markers": [
+    "runpod-execution/status.json reports ok true",
+    "runpod-execution/artifacts/validation/contract-self-check.json reports ok true",
+    "runpod-execution/artifacts/candidate_ranking_top32.json exists with at most 32 candidates"
+  ],
+  "claim_levels_allowed": [
+    "candidate",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "default_claim_level": "candidate",
+  "license_gates_required": [
+    "Genie 3 dependency and weight terms review",
+    "Boltz license review (MIT)",
+    "ColabFold MSA service public-target-only posture"
+  ],
+  "no_false_success_notes": [
+    "status.json ok true requires no failed stages and contract_self_check ok true.",
+    "candidate_ranking_top32.json is a ranking artifact, not a binding claim.",
+    "Any skipped or failed upstream stage must downgrade to partial, failed, blocked, or insufficient_evidence."
+  ]
+}

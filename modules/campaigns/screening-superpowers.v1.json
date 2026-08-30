@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "module_type": "campaign_manifest",
+  "campaign_id": "screening-superpowers",
+  "campaign_family": "screening-first",
+  "run_profile": "no_download_smoke",
+  "data_modules": [
+    "modules/data-modules/screening-superpowers-ligand-library.v1.json",
+    "modules/data-modules/screening-superpowers-receptor-ensemble.v1.json"
+  ],
+  "image_modules": [
+    "modules/image-modules/md-docking.v1.json",
+    "modules/image-modules/ai-design.v1.json",
+    "modules/image-modules/model-build.v1.json"
+  ],
+  "lane_modules": [
+    "modules/lane-modules/rdkit.descriptor-baseline.v1.json",
+    "modules/lane-modules/autodock-vina.wide-screen.v1.json",
+    "modules/lane-modules/boltz.focused-screen.v1.json",
+    "modules/lane-modules/gnina.review-gate.v1.json"
+  ],
+  "smoke_suites": [
+    "modules/smoke-checks/no-download.v1.json"
+  ],
+  "artifact_contract": "modules/artifact-contracts/screening-results.v1.json",
+  "screening_defaults": {
+    "primary_pilot": "openbind_style_public_calibration",
+    "provider_priority": [
+      "runpod",
+      "aws_batch",
+      "neocloud_gpu_pod"
+    ],
+    "wide_pass_methods": [
+      "stdlib_descriptor_proxy",
+      "rdkit",
+      "autodock_vina"
+    ],
+    "focused_methods": [
+      "boltz"
+    ],
+    "gated_methods": [
+      "gnina",
+      "diffdock",
+      "alphafold3",
+      "chai",
+      "phenix",
+      "chimerax"
+    ],
+    "report_promotion": "top_hits_controls_disagreement_failures_only",
+    "claim_ceiling": "candidate"
+  },
+  "policies": {
+    "allow_large_downloads": false,
+    "allow_raw_cryoem_downloads": false,
+    "allow_private_data": false,
+    "expected_download_bytes": 0
+  }
+}

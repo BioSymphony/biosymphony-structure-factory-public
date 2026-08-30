@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "relion",
+  "mode": "toolcheck",
+  "required": false,
+  "license_gate": "none",
+  "skip_policy": "warn_when_missing_in_prep",
+  "fail_policy": "fail_when_required_by_execution_profile",
+  "smoke_command": "relion_refine --version || relion --version"
+}

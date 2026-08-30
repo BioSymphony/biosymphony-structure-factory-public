@@ -1,0 +1,49 @@
+name: Public bug report
+description: Report a bug in validators, docs, examples, or templates.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include secrets, private biological data, provider IDs, private tracker links, raw logs, or local workstation paths. Use synthetic paths and redacted snippets.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What failed, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command or workflow
+      description: Paste commands and short output excerpts only.
+      render: bash
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - CLI or validator
+        - Skill instructions
+        - Example campaign
+        - Multi-agent task plan
+        - RunPod/cloud template
+        - Documentation
+        - Other surface
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public safety checklist
+      options:
+        - label: I removed credentials, tokens, signed URLs, provider IDs, and private paths.
+          required: true
+        - label: I removed private biological data, unpublished sequences, model weights, generated structures, and raw data.
+          required: true
+        - label: I kept scientific conclusions tied to the outputs and validation shown here.
+          required: true

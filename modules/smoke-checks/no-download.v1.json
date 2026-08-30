@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "module_type": "smoke_check",
+  "check_id": "no_download",
+  "severity": "fatal",
+  "assertions": [
+    "allow_large_downloads=false",
+    "allow_raw_cryoem_downloads=false",
+    "allow_private_data=false",
+    "expected_download_bytes=0"
+  ],
+  "expected_artifacts": [
+    "run-manifest.json",
+    "validation/input-audit.json",
+    "validation/contract-self-check.json"
+  ]
+}

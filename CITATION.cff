@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use BioSymphony Structure Factory, cite the repository and the specific third-party tools or datasets used by your campaign."
+title: "BioSymphony Structure Factory"
+version: "0.1.0a0"
+date-released: "2026-05-23"
+authors:
+  - name: "BioSymphony contributors"
+license: "MIT"
+repository-code: "https://github.com/BioSymphony/structure-factory"
+abstract: "An agent-ready control plane for structural biology workflows: binder-design planning, structure mapping, candidate screening, provider-gated execution contracts, and reviewable computational reports."

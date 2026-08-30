@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "contract_id": "structure-factory-map-model-report.stage-contract.v1",
+  "manifest_id": "structure-factory-map-model-report-emdb-43816-pdb-9asj",
+  "run_id": "structure-factory-emdb-43816-pdb-9asj-report",
+  "execution_profile": "map-model-report",
+  "progress_ledger": "/workspace/structure-factory/runs/structure-factory-emdb-43816-pdb-9asj-report/stage-progress.jsonl",
+  "success_claim": "map/model report with explicit validation and downgraded claims when evidence is incomplete",
+  "fail_closed": true,
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "data_intake_hash_change",
+      "repo_commit_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "manifest_preflight",
+      "description": "Validate manifest, artifact plan, private image auth references, and no raw-movie policy.",
+      "required": true,
+      "expected_outputs": [
+        "validation/runpod-manifest-check.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/runpod-manifest-check.json",
+      "done_marker": "validation/runpod-manifest-check.json",
+      "resume_command": "bash runpod/entrypoints/no-download-smoke.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "input_audit",
+      "description": "Audit EMDB/PDB map-model inputs before download.",
+      "required": true,
+      "expected_outputs": [
+        "validation/input-audit.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/input-audit.json",
+      "done_marker": "validation/input-audit.json",
+      "resume_command": "bash runpod/entrypoints/no-download-smoke.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "map_model_validation",
+      "description": "Record FSC provenance, local resolution, mask provenance, handedness, and geometry checks.",
+      "required": true,
+      "expected_outputs": [
+        "validation/map_model_fit.json",
+        "report_manifest.json"
+      ],
+      "timeout_minutes": 60,
+      "checkpoint_marker": "validation/map_model_fit.json",
+      "done_marker": "report_manifest.json",
+      "resume_command": "python3 scripts/structure_factory/contract_self_check.py --manifest runpod/launch-manifests/map-model-report.json --artifact-root /workspace/structure-factory/runs/structure-factory-emdb-43816-pdb-9asj-report --execution-mode real",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "figure_report",
+      "description": "Produce figures, methods, provenance, and validation ledger with explicit result boundarys.",
+      "required": true,
+      "expected_outputs": [
+        "figures/",
+        "methods.md",
+        "validation_ledger.md",
+        "provenance.md"
+      ],
+      "timeout_minutes": 120,
+      "checkpoint_marker": "methods.md",
+      "done_marker": "validation_ledger.md",
+      "resume_command": "python3 scripts/structure_factory/contract_self_check.py --manifest runpod/launch-manifests/map-model-report.json --artifact-root /workspace/structure-factory/runs/structure-factory-emdb-43816-pdb-9asj-report --execution-mode real",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 4
+      }
+    },
+    {
+      "stage_id": "contract_self_check",
+      "description": "Reject screenshot-only resolution claims and unchecked map-model overclaims.",
+      "required": true,
+      "expected_outputs": [
+        "validation/contract-self-check.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "validation/contract-self-check.json",
+      "done_marker": "validation/contract-self-check.json",
+      "resume_command": "python3 scripts/structure_factory/contract_self_check.py --manifest runpod/launch-manifests/map-model-report.json --artifact-root /workspace/structure-factory/runs/structure-factory-emdb-43816-pdb-9asj-report --execution-mode real",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "esmfold2",
+  "mode": "toolcheck",
+  "required": false,
+  "license_gate": "none",
+  "license_class": "mit_with_third_party_notices_reviewed",
+  "skip_policy": "warn_when_missing_in_prep",
+  "fail_policy": "fail_when_required_by_execution_profile",
+  "smoke_command": "python -c 'from esm.models.esmfold2 import ESMFold2InputBuilder; print(\"esmfold2 import ok\")'",
+  "alternate_smoke_commands": [
+    "python -c 'from esm.models.esmfold2 import ProteinInput, StructurePredictionInput; print(\"esmfold2 inputs ok\")'",
+    "python -c 'from esm.sdk.forge import SequenceStructureForgeInferenceClient; print(\"biohub client import ok\")'",
+    "python -c 'from transformers.models.esmfold2.modeling_esmfold2 import ESMFold2Model; print(\"transformers esmfold2 ok\")'"
+  ],
+  "image_family": "ai-design",
+  "source_policy": {
+    "upstream_repo": "https://github.com/Biohub/esm",
+    "install_ref_observed_in_public_docs": "c94ed8d",
+    "pin_policy": "operator packet must pin a full Biohub esm commit SHA before paid execution"
+  },
+  "weights_policy": {
+    "source": "huggingface_public_snapshots_or_biohub_api",
+    "fast_repo": "biohub/ESMFold2-Fast",
+    "fast_revision_observed_2026_05_28": "0438ea0d932a314950665e0b4d0af4322ae88250",
+    "full_repo": "biohub/ESMFold2",
+    "full_revision_observed_2026_05_28": "e1e189d0f5fb70c2693da2332eca4443c0ccccd6",
+    "esmc_repo": "biohub/ESMC-6B",
+    "esmc_revision_observed_2026_05_28": "89c554c46a44d825fbfbe3ce2a6bdc539770bdaa",
+    "cache_path": "/workspace/structure-factory/weights/esmfold2",
+    "download_allowed_by_default": false,
+    "biohub_api_key_policy": "runtime_secret_only",
+    "pin_policy": "pin Hugging Face revisions and hash downloaded files before closeout"
+  },
+  "execution_profiles": [
+    "esmfold2-no-download-toolcheck",
+    "esmfold2-fast-fold-canary",
+    "esmfold2-fast-foldability-gallery",
+    "esmfold2-binder-crosscheck",
+    "esmfold2-rnp-or-complex-canary",
+    "esmfold2-atlas-scout"
+  ],
+  "runtime_artifacts": [
+    "validation/host_probe.json",
+    "validation/source_install.json",
+    "validation/package_probe.json",
+    "validation/model_metadata_probe.json",
+    "validation/weights_manifest.json",
+    "esmfold2/prediction.cif",
+    "esmfold2/confidence_summary.json",
+    "validation/structure_validation.json",
+    "executed-commands.jsonl",
+    "claim_ledger.json",
+    "artifact_index.json"
+  ],
+  "claim_policy": {
+    "allowed_result_boundaries": [
+      "planning",
+      "public_demo",
+      "computational_candidate",
+      "insufficient_support",
+      "blocked"
+    ],
+    "default_result_boundary": "computational_candidate",
+    "notes": "ESMFold2 structures, confidence plots, and videos do not establish binding, function, stability, expression, therapeutic utility, safety, or wet-lab validation."
+  },
+  "campaign_use": [
+    "model_comparison",
+    "foldability_gallery",
+    "binder_crosscheck",
+    "rnp_or_complex_stress_test"
+  ],
+  "notes": "Start with no-download source/package/model metadata toolcheck. The Biohub API is documented as optional/deferred; the first proven cloud route for this repo should use Hugging Face weights with explicit model-weight, budget, and cleanup gates."
+}

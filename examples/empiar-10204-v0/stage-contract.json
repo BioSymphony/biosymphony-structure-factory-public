@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "contract_id": "empiar-10204-cryocore-handoff-smoke",
+  "result_boundary": "public_demo",
+  "fail_closed": true,
+  "stages": [
+    {
+      "id": "metadata_handoff",
+      "description": "Record public accession metadata and expected artifact shape without downloading raw movies.",
+      "required_outputs": ["campaign-manifest.json"]
+    },
+    {
+      "id": "operator_gate_review",
+      "description": "Document what explicit operator approval would be needed before any CryoCore-owned raw-data download, provider launch, or reconstruction work.",
+      "required_outputs": ["validation-notes.md"]
+    }
+  ],
+  "boundaries": [
+    "No raw cryo-EM data is downloaded by this example.",
+    "No map, model, reconstruction, or biological interpretation is established by this example."
+  ]
+}

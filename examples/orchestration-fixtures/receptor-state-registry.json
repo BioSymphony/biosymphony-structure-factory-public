@@ -1,0 +1,40 @@
+{
+  "_note": "Schema example. Synthetic receptor and state IDs showing the receptor-state-registry.v1 shape. Operators replace these with real receptors and accessions when scaffolding a multimer-state campaign.",
+  "schema_version": 1,
+  "registry_id": "example-state-registry-fixture-v1",
+  "campaign_id": "example-multimer-state-atlas",
+  "registry_type": "receptor_state_registry",
+  "receptors": [
+    {
+      "receptor_id": "EXAMPLE-RECEPTOR-1",
+      "family": "EXAMPLE",
+      "name": "Example receptor (placeholder)",
+      "states": [
+        {
+          "state_id": "inactive",
+          "state_class": "inactive",
+          "accessions": ["PLACEHOLDER-PDB"],
+          "chain_ids": ["A"],
+          "source_module": "modules/data-modules/example-receptor-inactive.v1.json",
+          "evidence_mode": "report_only",
+          "claim_level": "candidate"
+        },
+        {
+          "state_id": "active_like",
+          "state_class": "active_like",
+          "accessions": ["PLACEHOLDER-PDB"],
+          "chain_ids": ["A"],
+          "source_module": "modules/data-modules/example-receptor-active-like.v1.json",
+          "evidence_mode": "report_only",
+          "claim_level": "candidate"
+        }
+      ]
+    }
+  ],
+  "policies": {
+    "public_only": true,
+    "allow_raw_cryoem_downloads": false,
+    "allow_private_structures": false,
+    "claim_upgrade_requires_materialized_artifacts": true
+  }
+}

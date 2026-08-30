@@ -1,0 +1,1388 @@
+# Structure Factory software registry.
+# Each entry must be verified from primary sources before status moves to ready.
+# Human-readable public posture: docs/tooling-and-licensing.md
+# Redistribution/image policy: docs/public-repo-and-private-image-policy.md
+#
+# Cloud backends: RunPod, AWS Batch, Lambda Cloud, and Modal are reviewed
+# execution paths; see docs/compute-backends.md and modules/provider-profiles/.
+# The runpod_fit field scores per-tool suitability for the RunPod pod path;
+# Lambda and Modal fit are covered narratively in docs/compute-backends.md.
+#
+# The status field records source, license, and version review. It does not
+# report installation, service availability, or adapter readiness. Read
+# references/binder-execution-adapters.json for bundled binder execution.
+
+software:
+  relion:
+    role: cryoem_reconstruction
+    image_family: cryo-core
+    install_method: source_or_package_build
+    license_class: open_source_gplv2
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S smoke; A100/H100 production"
+    smoke_command: "relion_refine --version || relion --version"
+    runtime_artifacts: "versions.json, relion_toolcheck.json"
+    citation_notes: "Record RELION version and cite RELION methods papers appropriate to version."
+    status: planned
+    notes: "Primary open-source SPA processing lane."
+  cryosparc:
+    role: cryoem_reconstruction_gui
+    image_family: cryosparc
+    install_method: runtime_license_install_or_prebuilt_private_image
+    license_class: free_nonprofit_academic_proprietary
+    license_gate: required_runtime_secret
+    runpod_fit: strong_with_license
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "cryosparcm status"
+    runtime_artifacts: "cryosparc_project_manifest.json, job_exports/"
+    citation_notes: "Record CryoSPARC version and job metadata."
+    status: gated
+    notes: "Use license injected at runtime; do not commit license IDs."
+  warp_m:
+    role: cryoem_cryoet_processing
+    image_family: cryo-core
+    install_method: source_or_release_build
+    license_class: open_source_gplv3
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S smoke; A100/H100 production"
+    smoke_command: "WarpTools --help || warp --help"
+    runtime_artifacts: "warp_toolcheck.json, preprocessing_manifests/"
+    citation_notes: "Record Warp/M/WarpTools versions and cite corresponding methods."
+    status: planned
+    notes: "Linux/CUDA lane for Warp, M, WarpTools, Noise2Map."
+  motioncor:
+    role: motion_correction
+    image_family: cryo-core
+    install_method: runtime_or_manual_installer
+    license_class: free_academic_nonprofit
+    license_gate: verify_before_packaging
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S/A100"
+    smoke_command: "MotionCor3 --help || MotionCor2 --help"
+    runtime_artifacts: "motioncorr_versions.json, corrected_micrograph_manifest.json"
+    citation_notes: "Record MotionCor version and detector/movie metadata."
+    status: gated
+    notes: "Confirm terms before packaging."
+  ctffind:
+    role: ctf_estimation
+    image_family: cryo-core
+    install_method: source_or_binary_with_terms_review
+    license_class: verify_before_packaging
+    license_gate: terms_review
+    runpod_fit: strong
+    gpu_class: "CPU acceptable; GPU not required"
+    smoke_command: "ctffind --help || ctffind4 --help"
+    runtime_artifacts: "ctf_summary.tsv, ctf_qc_plots/"
+    citation_notes: "Record CTFFIND version and CTF thresholds."
+    status: gated
+    notes: "Common CTF estimation lane."
+  gctf:
+    role: ctf_estimation
+    image_family: cryo-core
+    install_method: binary_with_terms_review
+    license_class: verify_before_packaging
+    license_gate: terms_review
+    runpod_fit: possible
+    gpu_class: "RTX 4090/L40S/A100"
+    smoke_command: "Gctf --help"
+    runtime_artifacts: "gctf_summary.tsv"
+    citation_notes: "Record Gctf version and thresholds."
+    status: gated
+    notes: "Optional CTF comparison lane."
+  topaz:
+    role: particle_picking_denoising
+    image_family: cryo-core
+    install_method: pip_or_conda
+    license_class: open_source_gplv3
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S"
+    smoke_command: "topaz --help"
+    runtime_artifacts: "topaz_pick_manifest.json, particle_coordinates/"
+    citation_notes: "Record model/checkpoint and Topaz version."
+    status: planned
+    notes: "Particle picking and denoising."
+  cryolo:
+    role: particle_picking
+    image_family: cryo-core
+    install_method: conda_or_runtime_env
+    license_class: academic_noncommercial
+    license_gate: academic_noncommercial_terms
+    runpod_fit: possible
+    gpu_class: "RTX 4090/L40S"
+    smoke_command: "cryolo_predict.py --help"
+    runtime_artifacts: "cryolo_pick_manifest.json"
+    citation_notes: "Record crYOLO version and model."
+    status: gated
+    notes: "License-constrained comparison lane."
+  cryosieve:
+    role: particle_sorting
+    image_family: cryo-core
+    install_method: source_or_pip_after_license_review
+    license_class: verify_repo_license
+    license_gate: terms_review
+    runpod_fit: possible
+    gpu_class: "RTX 4090/L40S"
+    smoke_command: "cryosieve --help"
+    runtime_artifacts: "particle_sorting_manifest.json"
+    citation_notes: "Record exact repo commit and method citation."
+    status: planned
+    notes: "Optional particle filtering lane."
+  cryodrgn:
+    role: heterogeneity_analysis
+    image_family: cryo-core
+    install_method: pip_or_source
+    license_class: verify_repo_license
+    license_gate: terms_review
+    runpod_fit: strong
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "cryodrgn --help"
+    runtime_artifacts: "latent_embeddings/, heterogeneity_report.json"
+    citation_notes: "Record cryoDRGN version, model args, and checkpoints."
+    status: planned
+    notes: "Continuous heterogeneity/model-comparison lane."
+  recovar:
+    role: heterogeneity_analysis
+    image_family: cryo-core
+    install_method: source_after_license_review
+    license_class: verify_repo_license
+    license_gate: terms_review
+    runpod_fit: possible
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "recovar --help"
+    runtime_artifacts: "recovar_report.json"
+    citation_notes: "Record repo commit and paper citation."
+    status: planned
+    notes: "Optional heterogeneity comparison lane."
+  modelangelo:
+    role: atomic_model_building
+    image_family: model-build
+    install_method: pip_or_source
+    license_class: open_source_mit
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S/A100"
+    smoke_command: "model_angelo --help || model-angelo --help"
+    runtime_artifacts: "modelangelo_output/, model_build_manifest.json"
+    citation_notes: "Record model weights, version, sequence inputs, and map processing."
+    status: planned
+    notes: "Automatic cryo-EM model building."
+  phenix:
+    role: model_refinement_validation
+    image_family: model-build
+    install_method: runtime_license_install
+    license_class: free_nonprofit_academic
+    license_gate: required_runtime_access
+    runpod_fit: strong_with_license
+    gpu_class: "CPU acceptable; GPU optional"
+    smoke_command: "phenix.version"
+    runtime_artifacts: "phenix_validation.json, real_space_refine_outputs/"
+    citation_notes: "Record Phenix version and validation modules."
+    status: gated
+    notes: "Refinement, map-to-model, validation; do not redistribute installers without checking terms."
+  coot:
+    role: manual_model_building
+    image_family: model-build
+    install_method: package_or_source
+    license_class: open_source_gpl
+    license_gate: none
+    runpod_fit: gui_or_vnc
+    gpu_class: "CPU acceptable"
+    smoke_command: "coot --version"
+    runtime_artifacts: "coot_session_notes.md"
+    citation_notes: "Record Coot version and manual edits."
+    status: planned
+    notes: "Manual/interactive model building."
+  chimerax:
+    role: visualization_figures_model_review
+    image_family: model-build
+    install_method: runtime_installer_or_local_review
+    license_class: no_cost_noncommercial
+    license_gate: noncommercial_terms
+    runpod_fit: gui_or_scripted
+    gpu_class: "GPU helpful for rendering; CPU possible"
+    smoke_command: "ChimeraX --version || chimerax --version"
+    runtime_artifacts: "chimerax_sessions/, figure_panels/"
+    citation_notes: "Record ChimeraX version, commands, contour levels, camera state."
+    status: gated
+    notes: |
+      Use for figures, sessions, model/map inspection. Multi-panel atlas
+      render lanes use ChimeraX 1.x noncommercial; operator must confirm
+      noncommercial use (or record a commercial license override) per
+      docs/tooling-and-licensing.md before render promotion. ChimeraX is
+      not redistributed in the public model-build image; runtime install
+      is operator-driven.
+  pymol:
+    role: visualization_figures
+    image_family: model-build
+    install_method: open_source_build_or_license_specific_installer
+    license_class: open_source_or_academic_license_dependent
+    license_gate: terms_review
+    runpod_fit: scripted
+    gpu_class: "CPU acceptable for scripted renders"
+    smoke_command: "pymol -cq -d 'quit'"
+    runtime_artifacts: "pymol_sessions/, figure_panels/"
+    citation_notes: "Record PyMOL build/license channel and render settings."
+    status: planned
+    notes: "Scripted figure lane."
+  isolde:
+    role: model_interactive_refinement
+    image_family: model-build
+    install_method: chimerax_bundle_runtime
+    license_class: verify_bundle_terms
+    license_gate: chimerax_terms
+    runpod_fit: gui_or_vnc
+    gpu_class: "GPU helpful"
+    smoke_command: "ChimeraX --nogui --cmd 'exit'"
+    runtime_artifacts: "isolde_session_notes.md"
+    citation_notes: "Record ChimeraX/ISOLDE versions and manual interventions."
+    status: gated
+    notes: "Interactive refinement lane."
+  boltz:
+    role: biomolecular_prediction_and_affinity
+    image_family: ai-design
+    install_method: pip
+    pip_package: "boltz[cuda]==2.2.1"
+    upstream_repo: "https://github.com/jwohlwend/boltz"
+    upstream_release_tag: "v2.2.1"
+    upstream_commit_sha: "cb04aeccdd480fd4db707f0bbafde538397fa2ac"
+    upstream_release_date: "2025-09-08"
+    pypi_wheel_sha256: "b8c62bbdede1922931d9203118f62c858f11aa699bf91fd4c05a5ed6a6d8b4fc"
+    pypi_sdist_sha256: "355a033ce2b49543a927470d585136794521d8639b2eeb5a1818d74dc3e513c3"
+    license_class: open_source_mit
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "boltz --help"
+    runtime_artifacts: "boltz_predictions/, boltz_manifest.json"
+    citation_notes: "Record model version, input FASTA/MSA/ligands, and confidence outputs."
+    weights_cache_default: "~/.boltz"
+    weights_cache_env_var: "BOLTZ_CACHE"
+    weights_cache_cli_flag: "--cache"
+    weights_auto_download: true
+    weights_source: "auto-downloaded by `boltz predict` on first run; no manual HF pull needed"
+    status: pinned
+    notes: |
+      Model-comparison and design support lane. Pinned to v2.2.1 (released
+      2025-09-08, MIT, model: Boltz-2). The `boltz` PyPI package installs
+      both Boltz-1 and Boltz-2; default model is Boltz-2.
+
+      Weights are auto-downloaded by `boltz predict` on first invocation to
+      whichever directory the `--cache` flag (or BOLTZ_CACHE env var) points
+      at. A provider entrypoint may pass a dedicated runtime cache such as
+      `/workspace/structure-factory/weights/boltz` via `--boltz-weights-dir`.
+      A persistent runtime cache is optional; auto-download works without it
+      but adds cold-pull time to the first pod.
+
+      Provider bootstraps should pip-install this version when the CLI is
+      absent. Override the version via env var
+      STRUCTURE_FACTORY_BOLTZ_VERSION.
+  esmfold2:
+    role: biomolecular_complex_structure_prediction_and_sequence_design
+    image_family: ai-design
+    install_method: pinned_source_or_biohub_api
+    pip_package: "esm @ git+https://github.com/Biohub/esm.git@f652b471d29da828b31e9b7a9cf7d0a7803240f5"
+    upstream_repo: "https://github.com/Biohub/esm"
+    upstream_commit_sha: "f652b471d29da828b31e9b7a9cf7d0a7803240f5"
+    upstream_model_repo: "https://huggingface.co/biohub/ESMFold2"
+    upstream_model_sha_observed_2026_05_28: "e1e189d0f5fb70c2693da2332eca4443c0ccccd6"
+    upstream_fast_model_repo: "https://huggingface.co/biohub/ESMFold2-Fast"
+    upstream_fast_model_sha_observed_2026_05_28: "0438ea0d932a314950665e0b4d0af4322ae88250"
+    upstream_transformers_model_repo: "https://huggingface.co/biohub/ESMFold2-hf"
+    upstream_transformers_model_sha_observed_2026_08_28: "bce015efb23b5dc604842d0ab5c2bbb02c7bd3ee"
+    upstream_transformers_docs: "https://huggingface.co/docs/transformers/main/model_doc/esmfold2"
+    upstream_esmc_model_repo: "https://huggingface.co/biohub/ESMC-6B"
+    upstream_esmc_model_sha_observed_2026_05_28: "89c554c46a44d825fbfbe3ce2a6bdc539770bdaa"
+    biohub_model_ids: "esmfold2-2026-05, esmfold2-fast-2026-05"
+    primary_source_checked: "2026-08-28; Biohub/esm LICENSE.md and THIRD_PARTY_NOTICE.md at the pinned source revision, Biohub acceptable-use policy, pinned Hugging Face model cards, and the official Transformers ESMFold2 main documentation."
+    license_class: mit_with_third_party_notices_reviewed
+    license_gate: none
+    route_terms: "biohub_api=biohub_api_terms_and_aup"
+    runpod_fit: strong_after_provider_smoke_and_fast_canary
+    gpu_class: "L40S/A100/H100 for first canary; A10-class generic cloud VM may fit small fast-model runs after Torch/CUDA proof"
+    smoke_command: "bsf-esmfold2-predict readiness --variant full"
+    runtime_artifacts: "predictions.jsonl, predictions/*/structure.cif, predictions/*/confidence.json.gz, predictions/*/confidence-summary.json"
+    citation_notes: "Record Biohub ESM source commit, Hugging Face model revisions, API/local route, inputs, confidence outputs, and Biohub ESM citation."
+    weights_cache_default: "HF_HOME"
+    weights_cache_env_var: "HF_HOME"
+    weights_source: "Hugging Face biohub/ESMFold2 and biohub/ESMFold2-Fast through Biohub esm; biohub/ESMFold2-hf through Transformers main; or Biohub API with secure runtime API key."
+    status: planned
+    notes: |
+      Biohub ESMFold2 folds biomolecular inputs and can optimize sequence logits
+      through a differentiable structure objective. Record prediction and
+      sequence-design runs as separate operations with separate adapters. The
+      bundled prediction wrapper is ready, but the optional package, cached
+      checkpoints, CCD file, and CUDA device remain runtime readiness checks.
+      The official biohub/ESMFold2-hf checkpoint is an alternative full-model
+      route through Transformers main. It is not wired to the bundled wrapper;
+      supply a validated adapter when selecting that route.
+      The pinned local-weight route has no repository-imposed license gate. The
+      Biohub API route requires the API terms, acceptable-use policy, budget,
+      and data handling review that apply to that service. ESMFold2 outputs do
+      not confirm binding, function, therapeutic value, or safety.
+  esmfold2-fast:
+    role: biomolecular_complex_structure_prediction_and_sequence_design_variant
+    image_family: ai-design
+    install_method: hosted_api_or_pinned_huggingface_snapshot
+    upstream_repo: "https://github.com/Biohub/esm"
+    upstream_model_repo: "https://huggingface.co/biohub/ESMFold2-Fast"
+    upstream_model_sha_observed_2026_05_28: "0438ea0d932a314950665e0b4d0af4322ae88250"
+    primary_source_checked: "2026-08-28; Biohub ESM source license and third-party notice, Biohub acceptable-use policy, and the pinned ESMFold2-Fast model card."
+    license_class: mit_with_third_party_notices_reviewed
+    license_gate: none
+    route_terms: "biohub_api=biohub_api_terms_and_aup"
+    runpod_fit: strong_after_provider_canary
+    gpu_class: "RTX 4090/L40S for a first canary; measure larger inputs before scaling"
+    smoke_command: "bsf-esmfold2-predict readiness --variant fast"
+    runtime_artifacts: "predictions.jsonl, predictions/*/structure.cif, predictions/*/confidence.json.gz, predictions/*/confidence-summary.json"
+    citation_notes: "Record the source commit, ESMFold2-Fast model revision, API or local route, inputs, and confidence outputs."
+    status: planned
+    notes: "Selectable ESMFold2 family variant for lower-cost fold or gradient-inversion design canaries. The bundled prediction wrapper uses cached local snapshots; package, checkpoint, CCD, and CUDA readiness remain runtime checks. Treat Fast as a variant, not an independent predictor, when comparing predictor agreement."
+  simplefold:
+    role: single_protein_structure_and_conformational_ensemble_prediction
+    image_family: runtime_only
+    install_method: pinned_source_with_runtime_model_acquisition
+    pip_package: "simplefold @ git+https://github.com/apple/ml-simplefold.git@c7a5570a6be9f5c695126e27c804e77567209934"
+    upstream_repo: "https://github.com/apple/ml-simplefold"
+    upstream_commit_sha: "c7a5570a6be9f5c695126e27c804e77567209934"
+    upstream_model_source: "https://ml-site.cdn-apple.com/models/simplefold/"
+    released_models: "simplefold_100M, simplefold_360M, simplefold_700M, simplefold_1.1B, simplefold_1.6B, simplefold_3B"
+    inference_backends: "PyTorch; MLX on Apple silicon"
+    primary_source_checked: "2026-08-30; Apple repository README, CLI and FASTA parser at c7a5570, MIT LICENSE, Apple Machine Learning Research Model License, and arXiv:2509.18480."
+    license_class: mit_code_apple_research_only_model_assets
+    license_gate: noncommercial_scientific_research_model_terms
+    runpod_fit: possible_after_runtime_adapter_and_asset_review
+    gpu_class: "Select against model size and backend; measure memory and runtime with a public canary before a batch."
+    smoke_command: "adapter_required"
+    runtime_artifacts: "sampled_structures/, sample_manifest.json, versions.json, asset_manifest.json, validation_notes.md"
+    citation_notes: "Record the Apple source commit, selected model and checkpoint hash, backend, ESM2 and CCD asset revisions, input sequence hash, steps, tau, sample count, seed, output format, pLDDT setting, and SimpleFold paper."
+    weights_cache_default: ".runtime/tools/simplefold/assets"
+    weights_source: "Apple-hosted SimpleFold checkpoints plus upstream ESM2 and CCD assets. Acquire them only after the model-license gate and record their source revisions and hashes."
+    status: planned
+    notes: |
+      SimpleFold performs stochastic single-protein structure generation from
+      FASTA input and can emit multiple conformers in PDB or mmCIF format. The
+      upstream CLI exposes model size, sampling steps, tau, sample count,
+      optional pLDDT, output format, backend, and seed.
+
+      Use SimpleFold to compare monomer foldability or conformational spread.
+      It does not replace a target-binder cofold predictor or an interface
+      scorer. The current public registry supplies an external-adapter contract
+      rather than an installed command. A user-selected adapter may wrap a
+      local, cloud, scheduler, container, or platform-skill execution route.
+
+      Keep model assets and generated structures outside public git. The source
+      code uses MIT terms, but Apple's released model assets permit only the
+      research purposes defined in LICENSE_MODEL. Record that use context
+      before downloading or running the released models.
+  chai:
+    role: biomolecular_prediction
+    image_family: ai-design
+    install_method: source_after_license_review
+    license_class: apache_2_reported_by_repo
+    license_gate: verify_current_terms
+    runpod_fit: strong
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "python -c 'import chai_lab'"
+    runtime_artifacts: "chai_predictions/, chai_manifest.json"
+    citation_notes: "Record repo commit, model weights, and inputs."
+    status: planned
+    notes: "Verify current repo/license before packaging."
+  opendde:
+    role: biomolecular_complex_prediction
+    image_family: ai-design
+    install_method: source_or_public_docker
+    upstream_repo: "https://github.com/aurekaresearch/OpenDDE"
+    upstream_commit_sha_observed_2026_07_05: "a72e9f655231660f8af0072dbdb8b2a54f3fbd3c"
+    docker_image: "aurekaresearch/opendde:v1"
+    docker_tag_digest_observed_2026_07_05: "sha256:a9404f76df1cd965a80447ee30c9c440af48b199581d9bd44ee157c18109a9d6"
+    upstream_model_repo: "https://huggingface.co/aurekaresearch/OpenDDE"
+    upstream_model_repo_commit_observed_2026_07_05: "eddd563ce96571f784012edd8f045181c8f8627d"
+    released_checkpoints: "opendde.pt, opendde_abag.pt"
+    checkpoint_sizes_observed_2026_07_05: "opendde.pt ~2.5GB; opendde_abag.pt ~2.5GB"
+    common_runtime_size_observed_2026_07_05: "~0.65GB before search databases"
+    license_class: open_source_apache_2_reported_by_repo
+    license_gate: verify_current_terms_and_weight_posture
+    runpod_fit: strong_after_no_search_canary
+    gpu_class: "RTX 4090/L40S for canaries; 4x GPU for Fold-CP distributed route"
+    smoke_command: "opendde doctor && opendde --help"
+    runtime_artifacts: "opendde_predictions/, opendde_manifest.json, summary_confidence.json, full_data.json when --need_atom_confidence true"
+    citation_notes: "Record repo commit, Docker digest or source install route, Hugging Face model commit, checkpoint hashes, input JSON, MSA/template posture, and confidence sidecars."
+    weights_cache_default: "$OPENDDE_ROOT_DIR/checkpoint"
+    weights_cache_env_var: "OPENDDE_ROOT_DIR"
+    weights_source: "Hugging Face aurekaresearch/OpenDDE; opendde.pt default, opendde_abag.pt selected with --load_checkpoint_path."
+    status: planned
+    notes: |
+      AlphaFold-3-style all-atom prediction/cofold lane for proteins, DNA,
+      RNA, ligands, ions, explicit covalent bonds, and antibody-antigen
+      canaries. Use as an orthogonal validator next to Boltz, Chai-1,
+      AF2-Multimer, and ESMFold2, not as a generator.
+
+      Start with a no-search public protein canary:
+      --use_msa false --use_template false --use_rna_msa false. Promote to
+      MSA/template/RNA-MSA only after database, HMMER/Kalign, and public/private
+      sequence posture are declared. Do not send private sequences to the public
+      ColabFold-compatible MMseqs2 service.
+
+      The reviewed source path loads PyTorch and pickle-based runtime artifacts,
+      including the model checkpoint and RDKit CCD cache. Execution-ready
+      provider packets must pin URL, remote ETag/Xet hash where available, local
+      SHA-256, and byte size before loading. For ipSAE-style rescoring, run with
+      --need_atom_confidence true and preserve the full_data JSON; summary-only
+      output is scalar confidence, not a complete interface sidecar bundle.
+  alphafold3:
+    role: biomolecular_prediction
+    image_family: ai-design
+    install_method: manual_terms_and_weights
+    license_class: noncommercial_restricted_weights
+    license_gate: required_runtime_access
+    runpod_fit: strong_with_manual_terms
+    gpu_class: "A100/H100 preferred"
+    smoke_command: "python run_alphafold.py --help"
+    runtime_artifacts: "alphafold3_predictions/, af3_manifest.json"
+    citation_notes: "Record exact terms, model params access, database versions, and input JSON."
+    status: gated
+    notes: "Do not assume weights are available; keep terms explicit."
+  alphafold2_multimer_v3:
+    role: protein_complex_prediction
+    image_family: ai-design
+    install_method: alphafold_or_colabfold_runtime
+    upstream_repo: "https://github.com/google-deepmind/alphafold"
+    primary_source_checked: "2026-08-28; the upstream license records Apache-2.0 for code, and the README records CC BY 4.0 for model parameters."
+    license_class: apache_2_code_cc_by_4_parameters
+    license_gate: none
+    runpod_fit: strong_with_gpu_and_database_plan
+    gpu_class: "L40S/A100/H100; database search and model size affect memory and storage"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "alphafold_multimer_predictions/, confidence_sidecars/, prediction_manifest.json"
+    citation_notes: "Record the AlphaFold or ColabFold source revision, parameter revision, database or MSA posture, target and candidate hashes, model preset, seeds, and recycles."
+    status: planned
+    notes: "AlphaFold-Multimer v3 is a published-method substitute predictor. Runtime records must distinguish the upstream AlphaFold and ColabFold execution routes."
+  proteinmpnn:
+    role: sequence_design
+    image_family: ai-design
+    install_method: source
+    upstream_repo: "https://github.com/dauparas/ProteinMPNN"
+    upstream_commit_sha: "8907e6671bfbfc92303b5f79c4b5e6ce47cdef57"
+    weights_checkpoint_default: "vanilla_model_weights/v_48_020.pt"
+    weights_checkpoint_sha256: "c9cb4a671d79604111231f8dbfc7c590e06f1197453b7a6854ac6661a642f5bd"
+    primary_source_checked: "2026-08-21; the pinned ProteinMPNN checkout records MIT and contains the default and soluble checkpoints."
+    license_class: open_source_mit
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S"
+    smoke_command: "python protein_mpnn_run.py --help"
+    runtime_artifacts: "proteinmpnn_sequences.fasta, design_manifest.json"
+    citation_notes: "Record the source commit, checkpoint name and hash, design constraints, seed, and sampling temperature."
+    status: pinned
+    notes: |
+      Design lane for sequence assignment after backbone generation. The
+      registry pins the source and default checkpoint. A runtime adapter still
+      verifies its checkout and installed dependencies before execution.
+      ProteinMPNN interprets seed 0 as a request for a random seed, so pass a
+      nonzero seed for a reproducible run. Designed sequences are computational
+      candidates only.
+  solublempnn:
+    role: soluble_sequence_design_variant
+    image_family: ai-design
+    install_method: proteinmpnn_source_with_soluble_model_flag
+    upstream_repo: "https://github.com/dauparas/ProteinMPNN"
+    upstream_commit_sha: "8907e6671bfbfc92303b5f79c4b5e6ce47cdef57"
+    weights_checkpoint_default: "soluble_model_weights/v_48_020.pt"
+    primary_source_checked: "2026-08-21; the ProteinMPNN repository at the pinned commit lists the soluble checkpoint and --use_soluble_model runner flag."
+    license_class: open_source_mit
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S; CPU can suit small canaries"
+    smoke_command: "python protein_mpnn_run.py --help"
+    runtime_artifacts: "solublempnn_sequences.fasta, design_manifest.json"
+    citation_notes: "Record the ProteinMPNN commit, soluble checkpoint revision, --use_soluble_model flag, seed, and sampling settings."
+    status: pinned
+    notes: "SolubleMPNN is a selectable ProteinMPNN checkpoint mode, not a separate software package."
+  caliby:
+    role: sequence_design
+    image_family: ai-design
+    install_method: source_with_runtime_model_download
+    upstream_repo: "https://github.com/ProteinDesignLab/caliby"
+    primary_source_checked: "2026-08-28; the upstream license records Apache-2.0 for code and weights, and the README documents the first-run model download."
+    license_class: open_source_apache_2_code_and_weights
+    license_gate: none
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Measure against the selected model and candidate count"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "caliby_sequences.fasta, design_manifest.json"
+    citation_notes: "Record the source and model revisions, design mode, target, backbone hashes, seed, and sampling settings."
+    status: planned
+    notes: "Caliby is a selectable sequence-design identity in the published binder cohort. Supply an installation-specific adapter before execution."
+  solublecaliby:
+    role: soluble_sequence_design_variant
+    image_family: ai-design
+    install_method: caliby_source_with_soluble_variant
+    upstream_repo: "https://github.com/ProteinDesignLab/caliby"
+    primary_source_checked: "2026-08-28; the upstream license records Apache-2.0 for code and weights, and the README documents the soluble variant and first-run model download."
+    license_class: open_source_apache_2_code_and_weights
+    license_gate: none
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Measure against the selected model and candidate count"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "solublecaliby_sequences.fasta, design_manifest.json"
+    citation_notes: "Record the Caliby source and model revisions, soluble variant, target, backbone hashes, seed, and sampling settings."
+    status: planned
+    notes: "SolubleCaliby is a selectable Caliby family variant. Keep the family and variant identities in comparison records."
+  ligandmpnn:
+    role: ligand_aware_sequence_design
+    image_family: ai-design
+    install_method: source
+    license_class: open_source_mit
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S"
+    smoke_command: "python run.py --help"
+    runtime_artifacts: "ligandmpnn_sequences.fasta, design_manifest.json"
+    citation_notes: "Record repo commit, ligand definitions, and design constraints."
+    status: planned
+    notes: "Ligand/cofactor-aware design lane."
+  rfdiffusion:
+    role: protein_backbone_generation
+    image_family: ai-design
+    install_method: source_after_terms_review
+    license_class: restricted_or_noncommercial_verify
+    license_gate: terms_review
+    runpod_fit: strong
+    gpu_class: "A100/H100 preferred"
+    smoke_command: "python scripts/run_inference.py --help"
+    runtime_artifacts: "rfdiffusion_outputs/, design_manifest.json"
+    citation_notes: "Record repo commit, model weights, and design settings."
+    status: gated
+    notes: "Potential design lane; terms must be explicit."
+  rfdiffusion3:
+    role: atom_level_codesign_generation
+    image_family: ai-design
+    install_method: hosted_runner_or_upstream_foundry_install
+    upstream_repo: "https://github.com/RosettaCommons/foundry"
+    primary_source_checked: "2026-08-24; the Foundry production-branch license records BSD-3-Clause for code, and its documentation names RFdiffusion3 checkpoint downloads without separate checkpoint terms."
+    license_class: bsd_3_clause_code_weights_unverified
+    license_gate: weight_terms_review
+    runpod_fit: hosted_or_self_hosted_after_checkpoint_terms_review
+    gpu_class: "Measure against the selected Foundry release, model, and design size"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "rfdiffusion3_outputs/, candidate_manifest.jsonl, design_manifest.json"
+    citation_notes: "Record the Foundry revision, checkpoint provenance, target hash, site constraints, seeds, and downstream scorer versions."
+    status: gated
+    notes: "RFdiffusion3 is a separate selectable identity from the earlier RFdiffusion release. A runtime adapter may target a hosted API or a reviewed self-hosted installation."
+  bindcraft:
+    role: protein_binder_design_pipeline
+    image_family: ai-design
+    install_method: source_after_terms_review
+    upstream_repo: "https://github.com/martinpacesa/BindCraft"
+    license_class: open_source_mit_code_with_runtime_gate
+    license_gate: pyrosetta_terms_af2_weights_and_dependency_review
+    runpod_fit: strong_with_gpu_and_runtime_license
+    gpu_class: "L40S/A100/H100; large complexes need high-memory GPU"
+    smoke_command: "python bindcraft.py --help"
+    runtime_artifacts: "bindcraft_designs/, bindcraft_filters.json, design_manifest.json, downstream_cofold_scores/"
+    citation_notes: "Record repo commit, target settings JSON, filter JSON, AF2/MPNN/PyRosetta posture, and downstream cofold scorer versions."
+    status: gated
+    notes: "High-fit binder-design lane. Mention and scaffold only until PyRosetta, AlphaFold2 weights, dependency terms, and target-use context are recorded."
+  freebindcraft:
+    role: binder_sequence_structure_codesign_without_pyrosetta
+    image_family: ai-design
+    install_method: source_with_component_setup
+    upstream_repo: "https://github.com/cytokineking/FreeBindCraft"
+    upstream_commit_sha: "8b8d4c4627da06f084f46b7007450048fe3ca22f"
+    primary_source_checked: "2026-08-26; the upstream license records MIT for code, and the setup script downloads AlphaFold2 parameters."
+    license_class: mit_code_with_alphafold2_parameter_terms
+    license_gate: af2_parameter_terms_review
+    runpod_fit: strong_with_gpu_after_runtime_review
+    gpu_class: "High-memory NVIDIA GPU for design; CPU-capable relaxation path"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "freebindcraft_poses/, freebindcraft_sequences/, design_statistics.csv, candidate_manifest.jsonl"
+    citation_notes: "Record the source commit, no-PyRosetta mode, AlphaFold2 parameter posture, target and site hashes, seeds, and downstream scores."
+    status: gated
+    notes: "FreeBindCraft exposes a PyRosetta-free BindCraft-family route. The AlphaFold2 parameter terms remain a separate runtime-use check."
+  foldcraft:
+    role: binder_sequence_structure_codesign
+    image_family: ai-design
+    install_method: source_with_component_setup_after_parameter_review
+    upstream_repo: "https://github.com/KhondamirRustamov/FoldCraft"
+    primary_source_checked: "2026-08-28; the upstream license records MIT for code, and the setup script downloads AlphaFold2 parameters without separate parameter terms."
+    license_class: mit_code_with_unverified_alphafold2_parameter_terms
+    license_gate: af2_parameter_terms_review
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Measure against the selected model, target size, and candidate count"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "foldcraft_poses/, foldcraft_sequences/, candidate_manifest.jsonl"
+    citation_notes: "Record the source revision, downloaded parameter revisions, target and site hashes, seeds, and downstream scores."
+    status: gated
+    notes: "FoldCraft is a published-cohort generator identity. Supply an installation-specific adapter and record the downloaded parameter terms before execution."
+  boltzdesign1:
+    role: boltz_based_binder_sequence_structure_codesign
+    image_family: ai-design
+    install_method: source_with_boltz_runtime
+    upstream_repo: "https://github.com/yehlincho/BoltzDesign1"
+    primary_source_checked: "2026-08-28; the upstream README records MIT and names Boltz model downloads; the Boltz project records MIT for code and weights."
+    license_class: open_source_mit_code_and_weights
+    license_gate: none
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Measure against the selected Boltz model, target size, and optimization rounds"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "boltzdesign1_candidates/, optimization_ledger.jsonl, candidate_manifest.jsonl"
+    citation_notes: "Record the source and Boltz revisions, target and site hashes, objective, round count, seed, and downstream scores."
+    status: planned
+    notes: "BoltzDesign1 is a published-cohort generator identity. Adapter readiness depends on the selected installation, not this registry status."
+  protein_hunter:
+    role: boltz_and_chai_binder_generation
+    image_family: ai-design
+    install_method: source_with_boltz_and_chai_runtimes
+    upstream_repo: "https://github.com/yehlincho/Protein-Hunter"
+    primary_source_checked: "2026-08-28; the upstream README records MIT and names Boltz and Chai model downloads; their upstream projects record MIT and Apache-2.0 model terms."
+    license_class: mit_code_with_mit_and_apache_2_model_dependencies
+    license_gate: none
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Measure against the selected Boltz and Chai models, target size, and candidate count"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "protein_hunter_candidates/, candidate_manifest.jsonl, scorer_outputs/"
+    citation_notes: "Record the source, Boltz, and Chai revisions, target and site hashes, seeds, and retained scorer outputs."
+    status: planned
+    notes: "Protein Hunter is a published-cohort generator identity. Keep its component model identities in the execution record."
+  pxdesign:
+    role: binder_backbone_generation
+    image_family: ai-design
+    install_method: source_with_pxdesign_and_protenix_checkpoints
+    upstream_repo: "https://github.com/bytedance/PXDesign"
+    primary_source_checked: "2026-08-28; the upstream license records Apache-2.0 for code, and its documentation names automatic PXDesign and Protenix checkpoint downloads without separate checkpoint terms."
+    license_class: apache_2_code_weights_unverified
+    license_gate: weight_terms_review
+    runpod_fit: strong_with_gpu_after_checkpoint_review
+    gpu_class: "A100/H100 for initial canaries"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "pxdesign_mmcif/, backbone_manifest.jsonl, downstream_sequence_design/"
+    citation_notes: "Record PXDesign and Protenix revisions, checkpoint hashes, target and site hashes, constraints, seeds, and downstream sequence designer."
+    status: gated
+    notes: "PXDesign emits backbone candidates in this contract. Apply a declared sequence designer before independent cofold scoring."
+  proteina-complexa:
+    role: binder_sequence_structure_codesign
+    image_family: ai-design
+    install_method: source_with_official_checkpoint_download
+    upstream_repo: "https://github.com/NVIDIA-BioNeMo/Proteina-Complexa"
+    primary_source_checked: "2026-08-28; the upstream code license records Apache-2.0, the weight license records the NVIDIA Open Model License Agreement, and the inference guide documents custom protein and ligand targets."
+    license_class: apache_2_code_nvidia_open_model_weights
+    license_gate: nvidia_open_model_terms
+    runpod_fit: strong_with_gpu
+    gpu_class: "A100/H100 for initial canaries"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "proteina_complexa_poses/, proteina_complexa_sequences/, candidate_manifest.jsonl"
+    citation_notes: "Record the source revision, checkpoint hashes and terms, target contract, seed, and independent cofold scores."
+    status: gated
+    notes: "Proteina-Complexa includes predefined tasks and custom protein or ligand target records. A runtime adapter can bind either route after it validates the target structure, chain ranges, hotspots, and selected checkpoint family."
+  binderflow:
+    role: protein_binder_pipeline_and_benchmark
+    image_family: ai-design
+    install_method: source_after_terms_review
+    upstream_repo: "https://github.com/cryoEM-CNIO/BinderFlow"
+    license_class: verify_repo_and_dependency_terms
+    license_gate: terms_and_runtime_dependency_review
+    runpod_fit: possible
+    gpu_class: "L40S/A100/H100 depending configured stages"
+    smoke_command: "python -m binderflow --help || python run_binderflow.py --help"
+    runtime_artifacts: "binderflow_runs/, binderflow_manifest.json, benchmark_summary.tsv"
+    citation_notes: "Record repo commit, configured design stages, target inputs, dependency versions, and any paper/preprint citation."
+    status: planned
+    notes: "Candidate comparison/orchestration lane for binder campaigns; keep outputs as computational candidates and route winners through the cofold scoring stack."
+  proteindj:
+    role: protein_design_pipeline
+    image_family: ai-design
+    install_method: source_after_terms_review
+    upstream_repo: "https://github.com/PapenfussLab/proteindj"
+    license_class: verify_repo_and_weight_terms
+    license_gate: terms_and_weights_review
+    runpod_fit: possible
+    gpu_class: "L40S/A100/H100 depending model path"
+    smoke_command: "python -m proteindj --help || proteindj --help"
+    runtime_artifacts: "proteindj_designs/, proteindj_manifest.json"
+    citation_notes: "Record repo commit, model/weight revisions, seeds, constraints, and downstream validation tools."
+    status: planned
+    notes: "Watchlist design pipeline; do not promote before install smoke, license review, and independent structure/scoring checks."
+  genie3:
+    role: all_atom_protein_generation
+    image_family: ai-design
+    install_method: source_after_terms_review
+    upstream_repo: "https://github.com/aqlaboratory/genie3"
+    upstream_commit_sha: "5214459c42e69b01fadfc7d7ebda09d8e5082115"
+    upstream_model_repo: "https://huggingface.co/yeqinglin/genie3"
+    upstream_model_sha: "9ae31ebb8c56eebdc05ab282a8fd3f6a6d2a03a2"
+    license_class: apache_2_reported_by_repo_and_hf
+    license_gate: dependency_and_weight_terms_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "genie3 --help"
+    runtime_artifacts: "genie3_designs/, genie3_manifest.json, evaluation/results/"
+    citation_notes: "Record repo commit, HF model revision, generated seeds, constraints, evaluator versions, and the Genie 3 preprint."
+    weights_cache_default: "pretrained/"
+    weights_cache_env_var: "GENIE3_PRETRAINED_DIR"
+    weights_source: "Hugging Face yeqinglin/genie3; dry-run review showed pretrained weights only are about 536 MB at last check."
+    status: planned
+    notes: |
+      Candidate all-atom protein design lane for unconditional generation,
+      motif scaffolding, and binder design. Add through the ai-design image
+      module behind toolcheck, dependency review, weights manifest, and
+      private-data gates. Do not bake into a public image or run paid GPU work
+      until unpinned setup dependencies (ColabFold, OpenFold/ESM, ProteinMPNN,
+      IPSAE, TMscore/TMalign, DSSP helper, CUDA/JAX) are reviewed and recorded.
+      Binder prep can query the ColabFold MSA server; private or unpublished
+      targets require local/precomputed MSA posture. Outputs are computational
+      candidates only and should be cross-checked with Boltz or another
+      independent prediction lane before any promotion.
+  proto:
+    role: biological_design_programming
+    image_family: ai-design
+    install_method: source_or_hosted_client_after_review
+    upstream_repo: "https://github.com/evo-design/proto-language"
+    upstream_tools_repo: "https://github.com/evo-design/proto-tools"
+    upstream_client_repo: "https://github.com/evo-design/proto-client"
+    upstream_commit_sha: "2b0f35dadeb04e793b77bd4604bc9f860ffe2e9f"
+    upstream_tools_commit_sha: "76a81d8f2f9865a5dbc6189e2517acf999b5eccb"
+    upstream_client_commit_sha: "4eb76aa0764f524e68e6b73bdf95efbf20f8343b"
+    license_class: open_source_mit_code_with_hosted_service_gate
+    license_gate: hosted_api_terms_and_runtime_credential_review
+    runpod_fit: possible
+    gpu_class: "Depends on selected generator/tool"
+    smoke_command: "proto-client me || proto-tools --help || proto-language --help"
+    runtime_artifacts: "proto_program.json, proto_run_manifest.json, exported_assets/, versions.json"
+    citation_notes: "Record Proto language/tools/client commits, hosted-or-local mode, program JSON, generators, constraints, optimizer settings, exported assets, and tool/model versions."
+    status: planned
+    notes: "Design-programming layer for composing biological inputs, generators, constraints, and optimizers. Hosted MCP/API use needs runtime credential handling and a declared input policy. Local tool wrappers may install tools, download weights, or create caches, so start with a public no-download canary."
+  allogen:
+    role: allosteric_state_selectivity_design
+    image_family: ai-design
+    install_method: huggingface_snapshot_after_terms_review
+    upstream_model_repo: "https://huggingface.co/ChatterjeeLab/AlloGen"
+    upstream_model_sha: "2327665e9c468791741638ad3e326adf2231a642"
+    license_class: apache_2_reported_by_huggingface_tag
+    license_gate: checkpoint_terms_and_input_policy_review
+    runpod_fit: possible
+    gpu_class: "L40S/A100/H100 depending generator path"
+    smoke_command: "python -c 'import torch; print(\"allogen runtime ready\")'"
+    runtime_artifacts: "allogen_manifest.json, allogen_scores.json, selectivity_ranking.csv"
+    citation_notes: "Record Hugging Face snapshot revision, checkpoint hashes, apo/holo inputs, score definitions, generator provenance, and downstream scorer versions."
+    status: planned
+    notes: "State-selective allosteric design scorer/generator candidate for apo/holo or inactive/active comparison lanes. Pair outputs with an independent cofold or structure-scoring lane."
+  switchcraft:
+    role: multistate_switch_protein_design
+    image_family: ai-design
+    install_method: source_after_terms_review
+    upstream_repo: "https://github.com/bjing2016/switchcraft"
+    license_class: open_source_mit
+    license_gate: dependency_and_weight_terms_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "A100/H100 (large pairformer autograd graph)"
+    smoke_command: "python switchcraft.py --help"
+    runtime_artifacts: "switchcraft_designs/, per_state_structures/, conf_change_metrics.json"
+    citation_notes: "Cite SwitchCraft (ICML 2026, arXiv 2605.31236); record the pinned cofolder and sequence-model versions, the vendored weights revision, and per-state ligand inputs."
+    status: planned
+    notes: |
+      New multistate/switch-design lane: one sequence, multiple ligand-conditioned
+      conformations (allostery, induced binding, ligand discrimination,
+      small-molecule biosensors). Optimizes a single cofolder's distogram head, so
+      every output must be routed through the cofold scoring stack for an
+      orthogonal switch check before promotion. Vendors an open cofolder and an
+      open sequence-design model; review their pinned dependency and weight terms
+      before image inclusion. Evaluated from source and paper; not yet run. Outputs
+      are single-cofolder computational candidates, not validated sensors.
+  domino:
+    role: multidomain_construct_design
+    image_family: ai-design
+    install_method: source_after_terms_review
+    upstream_repo: "https://github.com/westlake-repl/DOMINO"
+    upstream_model_repo: "https://huggingface.co/westlake-repl/DOMINO"
+    license_class: unresolved_no_license_published_verify
+    license_gate: terms_and_weights_review_blocking
+    runpod_fit: possible
+    gpu_class: "CPU acceptable for pairwise scoring; small GPU for generation"
+    smoke_command: "python DOMIN_inference.py --help"
+    runtime_artifacts: "domino_compatibility_scores.json, domino_generated/, domino_perplexity.json"
+    citation_notes: "Cite DOMINO (bioRxiv 2026) and TED; record the Hugging Face weights revision and license/model-card state, unresolved at review."
+    status: planned
+    notes: |
+      Adjacent construct/fusion-assembly lane, downstream of a validated binder;
+      not a binder designer. The directional compatibility score (DOMIN) is the
+      evidence-backed primitive; the generator (DOMO) regenerates whole domains, so
+      treat any proposed junction as a hypothesis to graft onto validated
+      sequences. Inter-domain geometry remains a cofold/PAE job. License is
+      unresolved upstream (no LICENSE file, empty model card, no-reuse preprint
+      license at review): mention and scaffold only; do not bake into an image,
+      redistribute, or run paid compute until terms are published. Evaluated from
+      source; not yet run.
+  openmm:
+    role: molecular_simulation
+    image_family: md-docking
+    install_method: conda
+    license_class: open_source_mit_lgpl
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S/A100"
+    smoke_command: "python -c 'import openmm; print(openmm.__version__)'"
+    runtime_artifacts: "openmm_simulation_manifest.json, trajectories/"
+    citation_notes: "Record platform, force field, and OpenMM version."
+    status: planned
+    notes: "GPU MD and refinement support."
+  gromacs:
+    role: molecular_dynamics
+    image_family: md-docking
+    install_method: package_or_source_cuda_build
+    license_class: open_source_lgpl
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S/A100"
+    smoke_command: "gmx --version"
+    runtime_artifacts: "gromacs_manifest.json, trajectories/"
+    citation_notes: "Record build flags, GPU backend, and GROMACS version."
+    status: planned
+    notes: "GPU MD support."
+  autodock_vina:
+    role: docking
+    image_family: md-docking
+    install_method: package_or_source
+    license_class: open_source_apache_2
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "CPU acceptable"
+    smoke_command: "vina --help"
+    runtime_artifacts: "vina_results/, docking_manifest.json"
+    citation_notes: "Record receptor/ligand prep and Vina version."
+    status: planned
+    notes: "Small-molecule docking lane."
+  gnina:
+    role: deep_learning_docking
+    image_family: md-docking
+    install_method: source_or_binary_after_license_review
+    license_class: gpl_or_apache_depending_build
+    license_gate: build_terms_review
+    runpod_fit: strong
+    gpu_class: "RTX 4090/L40S/A100"
+    smoke_command: "gnina --help"
+    runtime_artifacts: "gnina_results/, docking_manifest.json"
+    citation_notes: "Record GNINA build, CNN model, and dependency license posture."
+    status: gated
+    notes: "License depends on OpenBabel-linked build."
+  rdkit:
+    role: cheminformatics
+    image_family: md-docking
+    install_method: conda_or_pip
+    license_class: open_source_bsd
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "CPU acceptable"
+    smoke_command: "python -c 'import rdkit; print(rdkit.__version__)'"
+    runtime_artifacts: "ligand_prep_manifest.json"
+    citation_notes: "Record RDKit version and ligand standardization steps."
+    status: planned
+    notes: "Ligand prep and analysis support."
+  gemmi:
+    role: structure_file_parsing
+    image_family: model-build
+    install_method: pip_or_conda
+    license_class: open_source_mpl2
+    license_gate: none
+    runpod_fit: strong
+    gpu_class: "CPU acceptable"
+    smoke_command: "python -c 'import gemmi; print(gemmi.__version__)'"
+    runtime_artifacts: "structure_parse_manifest.json"
+    citation_notes: "Record gemmi version for parsing/conversion."
+    status: planned
+    notes: "mmCIF/PDB/map parsing helper."
+  openbind:
+    role: structure_affinity_benchmark_dataset
+    image_family: md-docking
+    install_method: dataset_metadata_importer
+    upstream_repo: "https://github.com/OpenBind-Consortium/EV-A71_2A_benchmark"
+    upstream_docs: "https://openbind.uk/news/blog-openbinds-first-release-a-structure-affinity-dataset-for-structure-based-ai/"
+    license_class: verify_dataset_terms
+    license_gate: terms_review
+    runpod_fit: n/a
+    gpu_class: "n/a"
+    smoke_command: "python3 scripts/structure_factory/screening_benchmark_check.py examples/screening-superpowers/benchmark-set.json --json"
+    runtime_artifacts: "benchmark_set.json, calibration_summary.json"
+    citation_notes: "Record dataset release, target split, ligand IDs, assay labels, and OpenBind benchmark repo ref."
+    status: planned
+    notes: "First calibration anchor for screening claims; use metadata/small fixtures in git, not bulk structures."
+  plinder:
+    role: protein_ligand_benchmark_dataset
+    image_family: md-docking
+    install_method: dataset_metadata_importer
+    upstream_repo: "https://github.com/plinder-org/plinder"
+    license_class: verify_dataset_terms
+    license_gate: terms_review
+    runpod_fit: strong_for_metadata_and_calibration
+    gpu_class: "n/a"
+    smoke_command: "python3 scripts/structure_factory/screening_benchmark_check.py examples/screening-superpowers/benchmark-set.json --json"
+    runtime_artifacts: "plinder_slice_manifest.json, leakage_guard_report.json"
+    citation_notes: "Record PLINDER version/split and leakage guards."
+    status: planned
+    notes: "Use as a larger benchmark source after OpenBind tiny-slice validation."
+  posebench:
+    role: docking_cofolding_benchmark
+    image_family: md-docking
+    install_method: source_after_terms_review
+    upstream_repo: "https://github.com/BioinfoMachineLearning/PoseBench"
+    license_class: verify_repo_license
+    license_gate: terms_review
+    runpod_fit: strong
+    gpu_class: "CPU/GPU depending method lane"
+    smoke_command: "python -m posebench --help"
+    runtime_artifacts: "posebench_metrics.json, method_leaderboard.json"
+    citation_notes: "Record benchmark task, split, exact repo commit, and method adapters."
+    status: planned
+    notes: "Benchmark wrapper candidate for docking/cofolding comparison."
+  posebusters:
+    role: ligand_pose_validity
+    image_family: md-docking
+    install_method: pip_or_source
+    upstream_repo: "https://github.com/maabuu/posebusters"
+    license_class: open_source_mit_reported_by_repo
+    license_gate: none_after_current_terms_check
+    runpod_fit: strong
+    gpu_class: "CPU acceptable"
+    smoke_command: "bust --help || posebusters --help"
+    runtime_artifacts: "pose_validity.jsonl, pose_quality_ledger.json"
+    citation_notes: "Record PoseBusters version and checks enabled."
+    status: planned
+    notes: "Pose validity lane for Vina/Boltz/GNINA-style outputs."
+  dockq_v2:
+    role: interface_quality_scoring
+    image_family: md-docking
+    install_method: pip_or_source
+    upstream_repo: "https://github.com/wallnerlab/DockQ"
+    license_class: open_source_mit_reported_by_repo
+    license_gate: none_after_current_terms_check
+    runpod_fit: strong_cpu
+    gpu_class: "CPU acceptable"
+    smoke_command: "DockQ --help || python -m DockQ --help"
+    runtime_artifacts: "interface_quality_scores.tsv, dockq_scorecards.jsonl"
+    citation_notes: "Record DockQ version, native/reference complex, chain mapping, interface type, and scoring mode."
+    status: planned
+    notes: "Reference-based interface scoring for protein, nucleic-acid, and small-molecule docking models; requires a suitable reference complex."
+  ipsae:
+    role: pairwise_interface_confidence_scoring
+    image_family: ai-design
+    install_method: vendored_script_with_local_wrapper
+    upstream_repo: "https://github.com/DunbrackLab/IPSAE"
+    primary_source_checked: "2026-08-25; the vendored upstream version 4 script carries an MIT license header and matches the SHA-256 pin in the local wrapper."
+    license_class: open_source_mit
+    license_gate: none
+    runpod_fit: strong_cpu
+    gpu_class: "CPU only"
+    smoke_command: "python3 scripts/structure_factory/compute_ipsae.py --help"
+    runtime_artifacts: "ipsae_summary.json, chain_pair_scores.txt, residue_scores.txt"
+    citation_notes: "Record the vendored implementation revision and hash, structure and PAE hashes, chain mapping, and PAE and distance cutoffs."
+    status: pinned
+    notes: "The repository includes a pinned local wrapper and scorer bytes. The generic binder executor still needs a runtime adapter that stages the wrapper under its contained run directory."
+  posex:
+    role: docking_pose_benchmark
+    image_family: md-docking
+    install_method: source_after_terms_review
+    upstream_repo: "https://github.com/CataAI/PoseX"
+    license_class: verify_repo_license
+    license_gate: terms_review
+    runpod_fit: possible
+    gpu_class: "CPU/GPU depending method lane"
+    smoke_command: "python -m posex --help"
+    runtime_artifacts: "posex_metrics.json"
+    citation_notes: "Record PoseX split and task definition."
+    status: planned
+    notes: "Optional benchmark source after OpenBind/PLINDER/PoseBench are wired."
+  protenix:
+    role: biomolecular_prediction_and_cofolding
+    image_family: ai-design
+    install_method: pip_or_pinned_source
+    upstream_repo: "https://github.com/bytedance/Protenix"
+    primary_source_checked: "2026-08-28; the upstream README and LICENSE state that Apache-2.0 covers the project code and model parameters."
+    license_class: open_source_apache_2_code_and_model_parameters
+    license_gate: none
+    runpod_fit: strong_with_gpu
+    gpu_class: "A100/H100 preferred; L40S possible for canaries"
+    smoke_command: "protenix --help"
+    runtime_artifacts: "protenix_predictions/, protenix_manifest.json"
+    citation_notes: "Record the Protenix package or source revision, selected model identity, input assemblies, MSA route, seeds, and confidence outputs."
+    status: planned
+    notes: "Protenix-v2 is the published binder-study scoring identity. Installation and model selection remain runtime checks; the public upstream license does not impose a separate repository gate."
+  decaf:
+    role: few_step_cofolding_acceleration
+    image_family: ai-design
+    install_method: source_after_release_and_terms_review
+    upstream_repo: "https://github.com/genesistherapeutics/decaf"
+    upstream_commit_sha: "466cb41ca120eb5a53a4fe536c33a232df76fa1d"
+    license_class: open_source_mit_reported_by_repo_with_weight_terms_pending
+    license_gate: code_weight_and_confidence_output_review
+    runpod_fit: possible
+    gpu_class: "Depends on released model and complex size"
+    smoke_command: "python -m decaf --help || decaf --help"
+    runtime_artifacts: "decaf_manifest.json, decaf_predictions/, confidence_sidecars/, speed_quality_table.json"
+    citation_notes: "Record repo commit, released checkpoint revision, supported complex types, confidence outputs, and speed/quality smoke results."
+    status: planned
+    notes: "Few-step cofolding accelerator watchlist. Useful if released weights support Structure Factory complex types and confidence sidecars for downstream scoring."
+  openfold3:
+    role: biomolecular_prediction_and_cofolding
+    image_family: ai-design
+    install_method: source_with_public_parameter_download
+    upstream_repo: "https://github.com/aqlaboratory/openfold-3"
+    primary_source_checked: "2026-08-21; release v0.5.0 code and the OpenFold3 model card record Apache-2.0, and the project parameter bucket permits unauthenticated download."
+    license_class: open_source_apache_2_code_and_weights
+    license_gate: none
+    runpod_fit: strong_with_gpu
+    gpu_class: "A100/H100 preferred"
+    smoke_command: "python run_pretrained_openfold.py --help || python -m openfold --help"
+    runtime_artifacts: "openfold3_predictions/, openfold3_manifest.json"
+    citation_notes: "Record preview status, repo commit, model parameters, and input JSON."
+    status: planned
+    notes: "OpenFold3 is a selectable cofold predictor and a published post-hoc comparison identity. Record whether a run uses preview or v0.5.0 parameters."
+  rosettafold3:
+    role: biomolecular_prediction_and_cofolding
+    image_family: ai-design
+    install_method: upstream_foundry_install_after_checkpoint_review
+    upstream_repo: "https://github.com/RosettaCommons/foundry"
+    primary_source_checked: "2026-08-28; the Foundry production-branch license records BSD-3-Clause for code, and its documentation names RoseTTAFold3 checkpoint downloads without separate checkpoint terms."
+    license_class: bsd_3_clause_code_weights_unverified
+    license_gate: weight_terms_review
+    runpod_fit: possible_after_checkpoint_terms_review
+    gpu_class: "Measure against the selected Foundry release, model, and complex size"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "rosettafold3_predictions/, confidence_sidecars/, prediction_manifest.json"
+    citation_notes: "Record the Foundry revision, checkpoint provenance, target and candidate hashes, seeds, and confidence sidecars."
+    status: gated
+    notes: "RoseTTAFold3 is a published post-hoc predictor identity. Record checkpoint terms before execution."
+  bioemu:
+    role: protein_ensemble_sampling
+    image_family: ai-design
+    install_method: pip_or_source_after_terms_review
+    upstream_repo: "https://github.com/microsoft/bioemu"
+    license_class: open_source_mit_with_weight_and_dependency_review
+    license_gate: model_weights_msa_and_dependency_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "A100/H100 preferred; L40S possible for short canaries"
+    smoke_command: "python -m bioemu.sample --help"
+    runtime_artifacts: "bioemu_ensembles/, ensemble_manifest.json, flexibility_risk_report.json"
+    citation_notes: "Record BioEmu version, checkpoint, sequence checksum, MSA/cache posture, sample count, steering settings, and source provenance."
+    weights_cache_default: "~/.cache/bioemu and ~/.cache/colabfold"
+    weights_source: "BioEmu model parameters and AlphaFold2/ColabFold-related runtime caches; keep outside public git."
+    status: planned
+    notes: "Sequence-conditioned monomer ensemble lane for conformational risk triage. Outputs are ensemble hypotheses, not binding, function, or validation evidence."
+  cryofm:
+    role: cryoem_foundation_model
+    image_family: cryo-core
+    install_method: source_after_terms_review
+    upstream_docs: "https://bytedance-seed.github.io/cryofm/docs/"
+    license_class: verify_repo_and_weight_terms
+    license_gate: terms_and_weights_review
+    runpod_fit: possible
+    gpu_class: "A100/H100 preferred"
+    smoke_command: "python -m cryofm --help"
+    runtime_artifacts: "cryofm_features/, cryofm_manifest.json"
+    citation_notes: "Record model checkpoint, map preprocessing, and task."
+    status: planned
+    notes: "Advanced cryo-EM context lane; gated until weights and use terms are recorded."
+  cryoatom:
+    role: cryoem_atomic_model_building
+    image_family: model-build
+    install_method: source_after_terms_review
+    upstream_docs: "https://yanglab.qd.sdu.edu.cn/CryoAtom/"
+    license_class: verify_source_and_weight_terms
+    license_gate: terms_and_weights_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "A100/H100 preferred"
+    smoke_command: "python -m cryoatom --help"
+    runtime_artifacts: "cryoatom_models/, cryoatom_manifest.json"
+    citation_notes: "Record CryoAtom version, map/model inputs, sequence inputs, and validation outputs."
+    status: planned
+    notes: "Advanced map-to-model lane for RNP and cryo-EM campaigns after terms review."
+  cryoread:
+    role: cryoem_rna_dna_model_building
+    image_family: model-build
+    install_method: source_after_terms_review
+    license_class: verify_repo_and_weight_terms
+    license_gate: terms_and_weights_review
+    runpod_fit: possible
+    gpu_class: "GPU likely helpful"
+    smoke_command: "python -m cryoread --help"
+    runtime_artifacts: "cryoread_models/, rna_chain_registry.json"
+    citation_notes: "Record RNA/DNA model-building assumptions and map thresholds."
+    status: planned
+    notes: "Candidate RNA-aware lane for RNP fitting."
+  skypilot:
+    role: cloud_orchestration_adapter
+    image_family: provider-neutral
+    install_method: pip_or_source
+    upstream_repo: "https://github.com/skypilot-org/skypilot"
+    license_class: open_source_verify_current
+    license_gate: terms_review
+    runpod_fit: adapter_only
+    gpu_class: "provider-dependent"
+    smoke_command: "sky --version"
+    runtime_artifacts: "skypilot_task.yaml, provider_closeout.json"
+    citation_notes: "Record generated task YAML and cloud/provider used."
+    status: planned
+    notes: "Export adapter only until it consumes Structure Factory shard and closeout contracts."
+  nextflow:
+    role: workflow_orchestration_adapter
+    image_family: provider-neutral
+    install_method: package_or_runtime_bootstrap
+    upstream_repo: "https://github.com/nextflow-io/nextflow"
+    license_class: open_source_verify_current
+    license_gate: terms_review
+    runpod_fit: adapter_only
+    gpu_class: "provider-dependent"
+    smoke_command: "nextflow -version"
+    runtime_artifacts: "main.nf, Nextflow runtime report, provider_closeout.json"
+    citation_notes: "Record generated workflow and executor profile."
+    status: planned
+    notes: "Export adapter only; does not replace Structure Factory evidence contracts."
+  nf_core_proteinfold:
+    role: protein_prediction_workflow_adapter
+    image_family: provider-neutral
+    install_method: nextflow_pipeline_after_dependency_review
+    upstream_repo: "https://github.com/nf-core/proteinfold"
+    license_class: verify_pipeline_and_dependency_terms
+    license_gate: dependency_database_and_weight_terms_review
+    runpod_fit: adapter_only
+    gpu_class: "provider-dependent"
+    smoke_command: "nextflow run nf-core/proteinfold -profile test,docker --help"
+    runtime_artifacts: "proteinfold_launch_manifest.json, nextflow_execution_report, tool_versions.yml"
+    citation_notes: "Record nf-core/proteinfold revision, profile, container digests, databases, weights, and generated Structure Factory artifact mapping."
+    status: planned
+    notes: "Workflow-adapter candidate for folding lanes after Structure Factory input/output contracts are mapped."
+  workflow_run_ro_crate:
+    role: run_provenance_packaging
+    image_family: provider-neutral
+    install_method: schema_or_library_after_profile_review
+    upstream_docs: "https://www.researchobject.org/workflow-run-crate/"
+    license_class: open_standard_with_library_terms_review
+    license_gate: profile_and_library_terms_review
+    runpod_fit: n/a
+    gpu_class: "n/a"
+    smoke_command: "python3 -m json.tool ro-crate-metadata.json"
+    runtime_artifacts: "ro-crate-metadata.json, provenance-run-crate sidecars, artifact hashes"
+    citation_notes: "Record RO-Crate profile version, context, run identifier, workflow, inputs, outputs, and public-path omission policy."
+    status: planned
+    notes: "Provenance envelope candidate for provider closeout bundles; public exports must omit local private paths and credentials."
+  molviewspec:
+    role: molecular_visualization_state_spec
+    image_family: model-build
+    install_method: schema_or_library_after_terms_review
+    upstream_repo: "https://github.com/molstar/mol-view-spec"
+    license_class: open_source_mit_reported_by_repo
+    license_gate: none_after_current_terms_check
+    runpod_fit: strong_for_report_artifacts
+    gpu_class: "CPU/browser"
+    smoke_command: "python3 -m json.tool view.mvsj"
+    runtime_artifacts: "molviewspec_states/, structure_view_manifest.json"
+    citation_notes: "Record MolViewSpec version/schema, input structures, selections, camera state, and viewer used."
+    status: planned
+    notes: "Static molecular-view state format for review packets; store compact states, not generated heavy structures."
+  boltzgen:
+    role: binder_generation
+    image_family: ai-design
+    install_method: source_after_terms_review
+    license_class: verify_repo_and_weight_terms
+    license_gate: terms_and_weights_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "python -m boltzgen --help"
+    runtime_artifacts: "boltzgen_designs/, design_tranche.json"
+    citation_notes: "Record generator version, constraints, seeds, and downstream scoring."
+    status: planned
+    notes: "Advanced design lane; outputs are computational candidates only."
+  promera:
+    role: unified_cofolding_and_binder_design
+    image_family: ai-design
+    install_method: source_and_huggingface_snapshot_after_terms_review
+    upstream_repo: "https://github.com/bjing2016/promera"
+    upstream_commit_sha: "0840973a339029ac5c6ee9aef6970c6df2585b21"
+    upstream_model_repo: "https://huggingface.co/bjing-mit/promera"
+    upstream_model_sha: "9e7e88001bd912500afa6f8557d58416f9db1eb5"
+    license_class: open_source_mit_reported_by_repo_and_huggingface
+    license_gate: repo_weight_msa_and_confidence_output_review
+    runpod_fit: possible
+    gpu_class: "L40S/A100/H100 depending target size"
+    smoke_command: "python -m promera --help"
+    runtime_artifacts: "promera_manifest.json, promera_outputs/, confidence_sidecars/, downstream_cofold_scores/"
+    citation_notes: "Record repo commit, Hugging Face snapshot, input schemas, MSA settings, confidence outputs, and downstream scorer versions."
+    status: planned
+    notes: "Unified cofolding plus minibinder/nanobody design lane. Keep confidence sidecars and compare selected outputs with an independent cofold scoring lane."
+  helixdiff:
+    role: short_helical_peptide_backbone_generation
+    image_family: ai-design
+    install_method: source_after_current_source_dependency_weight_and_license_review
+    license_class: verify_current_source_dependency_and_weight_terms
+    license_gate: current_source_dependency_weight_and_license_review
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Runtime-dependent GPU; verify against the selected implementation"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "helixdiff_backbones/, helix_geometry.jsonl, sequence_design_handoff.json"
+    citation_notes: "Record the primary source, implementation version, dependency and weight revisions, target window, constraints, and seeds."
+    status: planned
+    notes: "Public planning identity for short helical peptide backbones. Select and review a current implementation before execution."
+  pepglad:
+    role: full_atom_peptide_sequence_structure_codesign
+    image_family: ai-design
+    install_method: source_after_current_branch_dependency_weight_and_license_review
+    license_class: verify_current_branch_dependency_weight_and_license_terms
+    license_gate: current_branch_dependency_weight_and_license_review
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Runtime-dependent GPU; verify against the selected implementation"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "pepglad_candidates/, candidate_scores.jsonl, cofold_handoff.json"
+    citation_notes: "Record the primary source, implementation branch and version, dependency and weight revisions, constraints, and seeds."
+    status: planned
+    notes: "Public planning identity for peptide sequence-structure co-design. Select and review a current implementation before execution."
+  evobind:
+    role: peptide_sequence_optimization_and_ranking
+    image_family: ai-design
+    install_method: source_after_current_dependency_alphafold_weight_and_license_review
+    upstream_repo: "https://github.com/patrickbryant1/EvoBind"
+    license_class: verify_current_source_dependency_and_alphafold_weight_terms
+    license_gate: current_source_dependency_alphafold_weight_and_license_review
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Runtime-dependent GPU; verify against the selected AlphaFold-family implementation"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "evobind_rankings.jsonl, optimization_ledger.jsonl, cofold_handoff.json"
+    citation_notes: "Record the source version, AlphaFold-family dependency and weight posture, objective, stopping rule, seeds, and independent structural checks."
+    status: planned
+    notes: "Public planning identity for sequence-centered peptide optimization. Scores are ranking inputs, not binding evidence."
+  rfpeptides:
+    role: cyclic_and_constrained_peptide_backbone_generation
+    image_family: ai-design
+    install_method: rfdiffusion_runtime_after_dependency_container_review
+    upstream_repo: "https://github.com/RosettaCommons/RFdiffusion"
+    license_class: open_source_bsd_source_and_readme_referenced_weights
+    license_gate: dependency_container_review
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Runtime-dependent GPU; verify against the selected RFdiffusion installation"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "rfpeptides_backbones/, constraint_checks.jsonl, sequence_design_handoff.json"
+    citation_notes: "Record the RFdiffusion version, checkpoint revision, cyclic constraints, hotspot residues, sample settings, and closure checks."
+    status: planned
+    notes: "RFdiffusion-family planning identity for cyclic and constrained peptide backbones. Runtime readiness is not bundled."
+  cosine:
+    role: antibody_sequence_evolution_and_variant_scoring
+    image_family: ai-design
+    install_method: source_and_weight_snapshot_after_dependency_review
+    upstream_repo: "https://github.com/thematrixmaster/cosine"
+    upstream_model_repo: "https://huggingface.co/thematrixmaster/cosine"
+    license_class: open_source_mit_code_and_weights_reported_by_public_record
+    license_gate: none
+    runpod_fit: possible_after_runtime_adapter_review
+    gpu_class: "Ampere-or-newer GPU expected for the released flash-attention dependency"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "maturation_trajectories/, variant_scores.jsonl, cosine_manifest.json"
+    citation_notes: "Record source and checkpoint revisions, alignment posture, branch length, masking or oracle settings, seeds, and output schema."
+    status: planned
+    notes: "Sequence evolution and variant-scoring identity for antibody lanes. Use an independent structural judge before promotion."
+  rfantibody:
+    role: antibody_backbone_generation_and_sequence_design
+    image_family: ai-design
+    install_method: source_with_official_weight_download
+    upstream_repo: "https://github.com/RosettaCommons/RFantibody"
+    primary_source_checked: "2026-08-25; the upstream license records MIT for code, and the official download script names four weight files without separate weight terms."
+    license_class: open_source_mit_code_weights_unverified
+    license_gate: weight_terms_review
+    runpod_fit: strong_with_gpu_after_weight_terms_review
+    gpu_class: "L40S/A100/H100-class GPU"
+    smoke_command: "adapter_required"
+    runtime_artifacts: "rfantibody_outputs/, design_manifest.json, geometry_checks.jsonl"
+    citation_notes: "Record the source revision, downloaded weight names and hashes, framework and hotspot inputs, seeds, and downstream scorer versions."
+    status: gated
+    notes: "RFantibody is an optional antibody-design swap. Keep weights outside tracked files and record their terms before use."
+  admet_ai:
+    role: admet_prediction
+    image_family: md-docking
+    install_method: pip_or_source_after_terms_review
+    license_class: verify_repo_and_model_terms
+    license_gate: terms_review
+    runpod_fit: strong_cpu
+    gpu_class: "CPU acceptable"
+    smoke_command: "admet_ai --help || python -m admet_ai --help"
+    runtime_artifacts: "admet_predictions.jsonl"
+    citation_notes: "Record model version and applicability caveats."
+    status: planned
+    notes: "Screening triage lane for assayability/safety hints, not validation."
+  molpal:
+    role: active_learning_ligand_selection
+    image_family: md-docking
+    install_method: pip_or_source_after_current_terms_check
+    upstream_repo: "https://github.com/coleygroup/molpal"
+    license_class: open_source_mit_reported_by_repo
+    license_gate: none_after_current_terms_check
+    runpod_fit: strong_cpu
+    gpu_class: "CPU acceptable; GPU optional"
+    smoke_command: "molpal --help"
+    runtime_artifacts: "active_learning_tranches.json, acquisition_report.json"
+    citation_notes: "Record acquisition function, budget, seed, and library hashes."
+    status: planned
+    notes: "Optional active-learning planner after core tranche contract is in place."
+  reinvent:
+    role: generative_chemistry_design
+    image_family: ai-design
+    install_method: source_after_terms_review
+    license_class: verify_repo_and_model_terms
+    license_gate: terms_review
+    runpod_fit: possible
+    gpu_class: "GPU helpful"
+    smoke_command: "reinvent --help"
+    runtime_artifacts: "generated_smiles.smi, design_tranche.json"
+    citation_notes: "Record scoring function, constraints, seed, and filters."
+    status: planned
+    notes: "Advanced generative chemistry lane; candidate-only outputs."
+  openfe:
+    role: free_energy_followup
+    image_family: md-docking
+    install_method: conda_or_source_after_terms_review
+    license_class: verify_repo_license
+    license_gate: terms_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "openfe --help"
+    runtime_artifacts: "free_energy_network.json, openfe_results.json"
+    citation_notes: "Record force field, network, simulation length, and convergence diagnostics."
+    status: planned
+    notes: "Optional follow-up lane for prioritized candidates, not wide-screen."
+  diffdock:
+    role: generative_ligand_docking
+    image_family: md-docking
+    install_method: source_after_terms_review
+    license_class: verify_repo_and_weight_terms
+    license_gate: terms_and_weights_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "python -m inference --help"
+    runtime_artifacts: "diffdock_poses/, pose_quality_ledger.json"
+    citation_notes: "Record repo commit, weights, receptor/ligand prep, and confidence outputs."
+    status: gated
+    notes: "Review-required method-comparison lane; not a default scoring authority."
+  dynamicbind:
+    role: flexible_ligand_docking
+    image_family: md-docking
+    install_method: source_after_terms_review
+    license_class: verify_repo_and_weight_terms
+    license_gate: terms_and_weights_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "python -m dynamicbind --help"
+    runtime_artifacts: "dynamicbind_poses/, pose_quality_ledger.json"
+    citation_notes: "Record receptor flexibility assumptions and model weights."
+    status: gated
+    notes: "Advanced flexible docking lane behind method-adapter gates."
+  placer:
+    role: biomolecular_ligand_complex_prediction
+    image_family: ai-design
+    install_method: source_after_terms_review
+    license_class: verify_repo_and_weight_terms
+    license_gate: terms_and_weights_review
+    runpod_fit: strong_with_gpu
+    gpu_class: "L40S/A100/H100"
+    smoke_command: "python -m placer --help"
+    runtime_artifacts: "placer_complexes/, method_summary.json"
+    citation_notes: "Record repo commit, weights, ligands, constraints, and confidence."
+    status: gated
+    notes: "Optional ligand-complex prediction lane; requires current access review."

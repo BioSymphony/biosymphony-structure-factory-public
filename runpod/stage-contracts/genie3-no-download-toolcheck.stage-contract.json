@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "contract_id": "genie3-no-download-toolcheck.stage-contract.v1",
+  "manifest_id_glob": "genie3-no-download-toolcheck*",
+  "manifest_id": "genie3-no-download-toolcheck",
+  "run_id": "genie3-no-download-toolcheck-${STRUCTURE_FACTORY_RUN_ID}",
+  "run_id_resolution_policy": "Contract is lane-level template. Per-shard concrete run_id is genie3-no-download-toolcheck and is set at pod launch via STRUCTURE_FACTORY_RUN_ID.",
+  "campaign_id": "genie3-toolcheck",
+  "wave": "T0",
+  "execution_profile": "genie3-no-download-toolcheck",
+  "progress_ledger": "/workspace/runpod-execution/artifacts/stage-progress.jsonl",
+  "success_claim": "Genie 3 source archive at the lane-pinned commit SHA fetches, pip install succeeds in the host runtime, at least one declared smoke command exits 0, and the pinned HuggingFace weights revision resolves via API HEAD without body download. Result boundary is at most candidate.",
+  "fail_closed": true,
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "lane_module_sha256_change",
+      "genie3_pinned_commit_sha_change",
+      "repo_commit_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "host_probe",
+      "description": "Record python, OS, nvidia-smi, torch.cuda visibility, jax availability, and the Genie 3 env-flag posture. Must run before any source fetch.",
+      "required": true,
+      "expected_outputs": [
+        "validation/host_probe.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/host_probe.json",
+      "done_marker": "validation/host_probe.json",
+      "resume_command": "python3 scripts/structure_factory/genie3_toolcheck.py --out /workspace/runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "source_download",
+      "description": "Fetch the Genie 3 source archive from GitHub at the lane-pinned commit SHA. No git binary required. Tarball is hashed and extracted under runpod-execution/artifacts/source/genie3.",
+      "required": true,
+      "expected_outputs": [
+        "validation/source_download.json",
+        "source/genie3"
+      ],
+      "timeout_minutes": 15,
+      "checkpoint_marker": "validation/source_download.json",
+      "done_marker": "validation/source_download.json",
+      "resume_command": "python3 scripts/structure_factory/genie3_toolcheck.py --out /workspace/runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "dependency_review",
+      "description": "Read setup.py, pyproject.toml, environment files, and install/setup docs from the extracted source. Record the first 8 KB of each so the operator can review dependency posture without re-fetching.",
+      "required": true,
+      "expected_outputs": [
+        "validation/dependency_review.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/dependency_review.json",
+      "done_marker": "validation/dependency_review.json",
+      "resume_command": "python3 scripts/structure_factory/genie3_toolcheck.py --out /workspace/runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "pip_install",
+      "description": "Attempt pip install -e against the extracted source. Captures stdout/stderr to logs/pip_install.log and a full pip freeze to logs/pip_freeze.txt on success. May terminate as completed (skipped) when no setup.py or pyproject.toml is present.",
+      "required": true,
+      "expected_outputs": [
+        "validation/pip_install.json",
+        "logs/pip_install.log"
+      ],
+      "timeout_minutes": 35,
+      "checkpoint_marker": "validation/pip_install.json",
+      "done_marker": "validation/pip_install.json",
+      "resume_command": "python3 scripts/structure_factory/genie3_toolcheck.py --out /workspace/runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "smoke_commands",
+      "description": "Run the lane module smoke commands in order (genie3 --help, python -m genie3.cli --help, python -c 'import genie3'). Stage is completed when at least one exits 0; otherwise terminal failed and the validation ledger downgrades to insufficient_evidence.",
+      "required": true,
+      "expected_outputs": [
+        "validation/smoke_commands.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "validation/smoke_commands.json",
+      "done_marker": "validation/smoke_commands.json",
+      "resume_command": "python3 scripts/structure_factory/genie3_toolcheck.py --out /workspace/runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "hf_weights_probe",
+      "description": "HEAD-equivalent probe of the HuggingFace API for the lane-pinned weights revision. Body is read only to enumerate sibling filenames; weights bytes are not downloaded.",
+      "required": true,
+      "expected_outputs": [
+        "validation/hf_weights_probe.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/hf_weights_probe.json",
+      "done_marker": "validation/hf_weights_probe.json",
+      "resume_command": "python3 scripts/structure_factory/genie3_toolcheck.py --out /workspace/runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "emit_artifacts",
+      "description": "Write versions.json, validation_ledger.json, genie3_toolcheck_report.md, and artifact_index.json. Computes overall_ok = source_download_ok AND (pip_install_succeeded OR pip_install_skipped) AND smoke_any_ok.",
+      "required": true,
+      "expected_outputs": [
+        "versions.json",
+        "validation_ledger.json",
+        "genie3_toolcheck_report.md",
+        "artifact_index.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation_ledger.json",
+      "done_marker": "artifact_index.json",
+      "resume_command": "python3 scripts/structure_factory/genie3_toolcheck.py --out /workspace/runpod-execution/artifacts --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 4
+      }
+    }
+  ],
+  "claim_levels_allowed": [
+    "candidate",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "default_claim_level": "candidate",
+  "license_gates_required": [],
+  "no_false_success_notes": [
+    "Toolcheck only. No weights downloaded. No inference. No design output.",
+    "A toolcheck pass is necessary but not sufficient for any Genie 3 generation claim.",
+    "smoke_commands terminal=failed must downgrade claim_level to insufficient_evidence; the lane is blocked until source/install/CLI all pass on a single run.",
+    "hf_weights_probe ok means the revision exists publicly; it does NOT mean weights are licensed for this campaign or downloaded."
+  ]
+}

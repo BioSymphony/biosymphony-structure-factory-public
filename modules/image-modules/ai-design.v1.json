@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "module_type": "image_module",
+  "family": "ai-design",
+  "purpose": "Prediction, design, and model-comparison lanes.",
+  "required_for_profiles": ["model_comparison", "design_campaign"],
+  "candidate_tools": ["boltz", "chai", "esmfold2", "alphafold3", "proteinmpnn", "ligandmpnn", "rfdiffusion", "genie3"],
+  "execution_ready_requires": ["oci_digest", "toolcheck_pass", "license_audit", "weights_policy"],
+  "lane_dependencies": [
+    {
+      "lane_id": "boltz",
+      "lane_module": "modules/lane-modules/boltz.toolcheck.v1.json",
+      "required_for": ["model_comparison", "design_campaign"],
+      "weights_cache_path": "/workspace/structure-factory/weights/boltz",
+      "license_class": "open_source_mit"
+    },
+    {
+      "lane_id": "esmfold2",
+      "lane_module": "modules/lane-modules/esmfold2.toolcheck.v1.json",
+      "required_for": ["model_comparison", "foldability_gallery", "binder_crosscheck"],
+      "weights_cache_path": "/workspace/structure-factory/weights/esmfold2",
+      "license_class": "mit_with_third_party_notices_reviewed",
+      "license_gate": "none"
+    },
+    {
+      "lane_id": "proteinmpnn",
+      "lane_module": "modules/lane-modules/proteinmpnn.toolcheck.v1.json",
+      "required_for": ["design_campaign"],
+      "weights_cache_path": "/workspace/structure-factory/weights/proteinmpnn",
+      "license_class": "open_source_mit"
+    },
+    {
+      "lane_id": "genie3",
+      "lane_module": "modules/lane-modules/genie3.toolcheck.v1.json",
+      "required_for": ["genie3-design-canary", "genie3-boltz-design-ranking"],
+      "weights_cache_path": "/workspace/structure-factory/weights/genie3",
+      "license_class": "apache_2_reported_by_repo_and_hf",
+      "license_gate": "dependency_and_weight_terms_review"
+    }
+  ],
+  "policy_notes": [
+    "AlphaFold 3 is excluded by default (license-gated; redistribution restrictions). Use Boltz / Chai-1 / AF2-Multimer slate instead unless an operator gate explicitly authorizes AF3.",
+    "ESMFold2 is a prediction and foldability lane. Hugging Face weights are the preferred first cloud route; Biohub API use is optional/deferred and requires runtime-secret and terms gates.",
+    "Designed sequences from ProteinMPNN are computational candidates only; wet-lab synthesis is out of campaign scope.",
+    "Genie 3 outputs are computational candidates only; require a weights manifest, dependency/license review, private-data gate, and independent prediction or validation evidence before promotion."
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "schema_version": "structure-factory-published-binder-workflow-reference-v1",
+  "reference_id": "anthropic-autonomous-binder-design-public-shape",
+  "primary_report": "https://www-cdn.anthropic.com/30bf50e22a01388bb29bf077ee3f244531594b7a.pdf",
+  "public_dataset": "https://huggingface.co/datasets/Anthropic/claude-protein-binder-design",
+  "public_dataset_revision": "9e1b81696da46835e9e9cde9a3da976e0abc92ab",
+  "bounded_stage_ids": ["target", "generation", "sequence_design", "cofold", "scoring", "filter", "report"],
+  "contract_categories": [
+    "target and site",
+    "toolchain arms",
+    "controls and constraints",
+    "prediction and scoring",
+    "failure-preserving ranking",
+    "artifact provenance and closeout"
+  ],
+  "published_tool_cohort": {
+    "source": "public_dataset_metadata_and_report_method",
+    "generators": [
+      {"tool_id": "boltzdesign1", "source_label": "BoltzDesign1"},
+      {"tool_id": "boltzgen", "source_label": "BoltzGen"},
+      {"tool_id": "foldcraft", "source_label": "FoldCraft"},
+      {"tool_id": "freebindcraft", "source_label": "FreeBindCraft (BindCraft)"},
+      {"tool_id": "genie3", "source_label": "Genie3"},
+      {"tool_id": "pxdesign", "source_label": "PXDesign"},
+      {"tool_id": "protein-hunter", "source_label": "Protein Hunter"},
+      {"tool_id": "proteina-complexa", "source_label": "Proteina-Complexa"},
+      {"tool_id": "rfdiffusion", "source_label": "RFdiffusion"},
+      {"tool_id": "rfdiffusion3", "source_label": "RFdiffusion3"}
+    ],
+    "sequence_designers": [
+      {"tool_id": "proteinmpnn", "source_label": "ProteinMPNN"},
+      {
+        "tool_id": "solublempnn",
+        "family_id": "proteinmpnn",
+        "variant_id": "soluble_model_weights",
+        "source_label": "SolubleMPNN"
+      },
+      {
+        "tool_id": "caliby",
+        "family_id": "caliby",
+        "variant_id": "default",
+        "source_label": "Caliby"
+      },
+      {
+        "tool_id": "solublecaliby",
+        "family_id": "caliby",
+        "variant_id": "soluble",
+        "source_label": "SolubleCaliby"
+      }
+    ],
+    "native_codesign": {
+      "method_id": "native-codesign",
+      "source_label": "designed jointly by the structure model (native co-design)",
+      "tool_selected_by_generator": true
+    },
+    "published_score_predictors": [
+      {
+        "source_id": "ef2fast",
+        "tool_id": "esmfold2",
+        "variant_id": "esmfold2-fast"
+      },
+      {
+        "source_id": "ef2full",
+        "tool_id": "esmfold2",
+        "variant_id": "esmfold2-full"
+      },
+      {
+        "source_id": "ptxv2",
+        "tool_id": "protenix",
+        "variant_id": "protenix-v2"
+      }
+    ],
+    "published_interface_scorers": [
+      {"tool_id": "ipsae", "measurement_id": "ipsae-min"},
+      {"tool_id": "dockq-v2", "measurement_id": "sc-dockq"}
+    ],
+    "named_without_ordered_designs": [
+      {"source_label": "Mosaic", "ordered_designs_contributed": false},
+      {"source_label": "HalluDesign", "ordered_designs_contributed": false}
+    ],
+    "permitted_predictor_substitutes": [
+      {"source_label": "AlphaFold-Multimer v3 / ColabFold", "tool_id": "alphafold-multimer-v3"},
+      {"source_label": "AlphaFold 3 architecture with OpenFold3 weights", "tool_id": "openfold3"},
+      {"source_label": "Chai-1", "tool_id": "chai"},
+      {"source_label": "Boltz-1", "tool_id": "boltz", "variant_id": "boltz-1"},
+      {"source_label": "Boltz-2", "tool_id": "boltz", "variant_id": "boltz-2"},
+      {"source_label": "AF_unmasked", "tool_id": null, "mapping_status": "source_identity_not_mapped"}
+    ],
+    "post_hoc_predictors": [
+      {"source_label": "OpenFold3", "tool_id": "openfold3"},
+      {"source_label": "RoseTTAFold3", "tool_id": "rosettafold3"},
+      {"source_label": "OpenDDE", "tool_id": "opendde"}
+    ]
+  },
+  "replay_policy": {
+    "exact_stack": "Select the source tool and variant identities recorded in published_tool_cohort.",
+    "deliberate_swap": "Replace any identity with a capability-ledger tool that serves the same role, and record the replacement and reason.",
+    "runtime_binding": "Resolve each selected identity through a bundled or runtime adapter. Adapter absence in the bundled registry is an installation fact, not a policy prohibition.",
+    "inventory_scope": "published_tool_cohort separates tools that contributed ordered designs, names that contributed no ordered designs, permitted predictor substitutes, and post-hoc predictors. The capability ledger also lists optional swap tools, including RFantibody, that are outside the published cohort."
+  },
+  "published_result_values_imported": false,
+  "boundary": "This reference records a public workflow shape and source revision. It does not copy published sequences, structures, measurements, rankings, or result values."
+}

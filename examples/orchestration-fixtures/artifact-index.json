@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "index_id": "orchestration-fixtures-fixture-artifact-index",
+  "artifacts": [
+    {
+      "artifact_id": "benchmark_set",
+      "path": "examples/orchestration-fixtures/benchmark-set.json",
+      "evidence_mode": "fixture_or_demo",
+      "claim_ids": [
+        "claim:fixture-only"
+      ]
+    }
+  ]
+}

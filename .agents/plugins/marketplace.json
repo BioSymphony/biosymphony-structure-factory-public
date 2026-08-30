@@ -1,0 +1,20 @@
+{
+  "name": "biosymphony-structure-factory",
+  "interface": {
+    "displayName": "BioSymphony Structure Factory"
+  },
+  "plugins": [
+    {
+      "name": "biosymphony-structure-factory",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Research"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "manifest_id": "structure-factory-no-download-smoke",
+  "execution_profile": "no-download-smoke",
+  "provider": "runpod",
+  "provider_class": "pod",
+  "run_id": "structure-factory-no-download-smoke",
+  "campaign_id": "structure-factory-empiar-10204-v0",
+  "stage_contract": "runpod/stage-contracts/no-download-smoke.stage-contract.json",
+  "progress_ledger": "/workspace/structure-factory/runs/structure-factory-no-download-smoke/stage-progress.jsonl",
+  "repo": {
+    "url": "https://github.com/BioSymphony/structure-factory.git",
+    "git_ref": "structure-factory-prep-v0",
+    "delivery": "public_git_clone"
+  },
+  "data_policy": {
+    "allow_large_downloads": false,
+    "allow_raw_cryoem_downloads": false,
+    "allow_private_data": false,
+    "expected_download_bytes": 0
+  },
+  "scratch_policy": {
+    "scratch_only": false,
+    "delete_after_export": false
+  },
+  "runpod": {
+    "mode": "pod",
+    "recommended_gpu": "NVIDIA GeForce RTX 4090",
+    "fallback_gpu": "NVIDIA L40S",
+    "gpu_count": 1,
+    "container_disk_gb": 80,
+    "volume_mount": "/workspace",
+    "network_volume_required": true,
+    "template_family": "cryo-core",
+    "image_name": "docker.io/library/ubuntu:22.04",
+    "image_visibility": "public",
+    "image_digest_required_for_real": true,
+    "registry_auth": {
+      "required": false,
+      "provider": "public_registry",
+      "runtime_secret_refs": [],
+      "credential_policy": "none"
+    },
+    "monitoring": {
+      "desired_status_only_ok": false,
+      "progress_ledger": "/workspace/structure-factory/runs/structure-factory-no-download-smoke/stage-progress.jsonl",
+      "required_signals": [
+        "provider_actual_status",
+        "runtime_uptime_seconds",
+        "image_pull_success_or_failure",
+        "stage_progress_heartbeat"
+      ]
+    },
+    "ports": []
+  },
+  "environment": {
+    "STRUCTURE_FACTORY_RUN_ID": "structure-factory-no-download-smoke",
+    "STRUCTURE_FACTORY_REPO_URL": "https://github.com/BioSymphony/structure-factory.git",
+    "STRUCTURE_FACTORY_GIT_REF": "structure-factory-prep-v0",
+    "STRUCTURE_FACTORY_VOLUME_ROOT": "/workspace/structure-factory",
+    "STRUCTURE_FACTORY_EXECUTION_PROFILE": "no-download-smoke",
+    "STRUCTURE_FACTORY_NO_DOWNLOAD": "1"
+  },
+  "smoke_checks": [
+    "repo_clone_manifest",
+    "python_tooling",
+    "gpu_visibility",
+    "network_volume_write_read",
+    "image_version_manifest",
+    "no_large_download_policy",
+    "stage_contract",
+    "stage_progress_ledger",
+    "input_audit",
+    "artifact_manifest",
+    "contract_self_check"
+  ],
+  "expected_artifacts": [
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/run-manifest.json",
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/validation/input-audit.json",
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/validation/toolcheck.json",
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/validation/gpu.json",
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/validation/storage.json",
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/stage-progress.jsonl",
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/validation/stage-contract-check.json",
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/validation/contract-self-check.json",
+    "/workspace/structure-factory/runs/structure-factory-no-download-smoke/provenance.md"
+  ],
+  "license_gates": [
+    "cryosparc",
+    "phenix",
+    "chimerax",
+    "motioncor",
+    "rosetta_pyrosetta",
+    "alphafold3"
+  ],
+  "remote_launch_allowed": false,
+  "public_template_status": "tracked_public_template",
+  "launch_authorization": {
+    "approved_at": "PENDING",
+    "approved_by": "PENDING-OPERATOR-GATE",
+    "operator_gate_required": true,
+    "public_repo_note": "Tracked launch manifests omit live execution state. Materialize an ignored runtime packet and obtain explicit human authorization before provider execution."
+  }
+}

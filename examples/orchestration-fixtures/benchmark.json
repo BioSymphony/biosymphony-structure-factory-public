@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "artifact_type": "benchmark_contract",
+  "benchmark_id": "orchestration-fixtures-openbind-style-fixture-v1",
+  "campaign_id": "screening-superpowers",
+  "benchmark_scope": {
+    "style": "OpenBind-inspired public fixture",
+    "purpose": "Keep redocking, cross-docking, cofolding, affinity prediction, and method disagreement as separate evidence slices.",
+    "candidate_claim_only": true,
+    "source_policy": "metadata-only repo fixture; no private ligands, private structures, raw movies, or model weights"
+  },
+  "slices": [
+    {
+      "slice_id": "redocking-controls",
+      "mode": "redocking",
+      "required_controls": ["known_active_control", "reference_ligand_box"],
+      "success_metrics": ["pose_validity_proxy", "rank_recovery_proxy"],
+      "claim_limit": "candidate"
+    },
+    {
+      "slice_id": "cross-docking-stress",
+      "mode": "cross_docking",
+      "required_controls": ["apo_receptor_member", "holo_receptor_member"],
+      "success_metrics": ["score_delta_proxy", "failure_reason_ledger"],
+      "claim_limit": "candidate"
+    },
+    {
+      "slice_id": "cofolding-focused",
+      "mode": "cofolding",
+      "required_controls": ["top_ranked_candidates", "method_disagreement_cases"],
+      "success_metrics": ["confidence_proxy", "input_scope_caveat"],
+      "claim_limit": "candidate"
+    },
+    {
+      "slice_id": "affinity-baseline",
+      "mode": "affinity_prediction",
+      "required_controls": ["simple_affinity_baselines", "decoy_control"],
+      "success_metrics": ["rank_correlation_proxy", "baseline_delta"],
+      "claim_limit": "candidate"
+    },
+    {
+      "slice_id": "method-disagreement-review",
+      "mode": "method_disagreement",
+      "required_controls": ["completed_open_methods", "blocked_method_ledger"],
+      "success_metrics": ["disagreement_band", "review_priority"],
+      "claim_limit": "candidate"
+    }
+  ],
+  "baselines": [
+    {
+      "method_id": "stdlib_descriptor_proxy",
+      "role": "always-on no-download descriptor sanity check",
+      "required": true
+    },
+    {
+      "method_id": "simple_affinity_baselines",
+      "role": "OpenBind-style baseline comparator",
+      "required": true
+    }
+  ],
+  "linked_artifacts": [
+    "examples/screening-superpowers/screening-manifest.json",
+    "examples/screening-superpowers/receptor-ensemble.json",
+    "examples/screening-superpowers/ligand-library.json"
+  ],
+  "claim_ceiling": "candidate",
+  "evidence_mode": "fixture_or_demo",
+  "policies": {
+    "allow_private_data": false,
+    "allow_raw_cryoem_downloads": false,
+    "expected_download_bytes": 0,
+    "single_model_score_is_truth": false
+  }
+}

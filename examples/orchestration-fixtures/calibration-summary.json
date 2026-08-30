@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "orchestration-fixtures-openbind-plinder-posebench-v1",
+  "target_id": "fixture-protease-pocket",
+  "source_target_id": "fixture-protease-pocket",
+  "record_source": "examples/orchestration-fixtures/benchmark-set.json",
+  "record_sha256": "d6c613d4087acc8cbbc5892e89268cdf3fbfb01e6b5fecc571ca7327402caf06",
+  "calibration_state": "fixture_only",
+  "ranking_authority": false,
+  "methods": [
+    "stdlib_descriptor_proxy",
+    "simple_affinity_baselines",
+    "rdkit",
+    "autodock_vina",
+    "boltz"
+  ],
+  "metrics": {
+    "fixture": {
+      "ranked_ligands": 4,
+      "failed_controls": 1,
+      "calibration_status": "fixture_only"
+    }
+  },
+  "claim_ceiling": "candidate",
+  "simple_baselines_included": true
+}

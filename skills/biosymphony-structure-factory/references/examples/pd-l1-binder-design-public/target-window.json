@@ -1,0 +1,29 @@
+{
+  "schema_version": "structure-factory-target-window-v1",
+  "target_window_id": "pd-l1-4zqk-chain-a-19-127",
+  "source_posture": "public_data",
+  "result_boundary": "planning",
+  "source": {
+    "pdb_id": "4ZQK",
+    "chain": "A",
+    "window": "19-127",
+    "source_type": "public_accession"
+  },
+  "target": {
+    "label": "PD-L1",
+    "organism": "Homo sapiens",
+    "sequence_window_description": "Public 4ZQK chain A target window used as a compact interface benchmark."
+  },
+  "hotspot_plan": [
+    {"residue": "A56", "rationale": "public interface-context hotspot candidate"},
+    {"residue": "A58", "rationale": "public interface-context hotspot candidate"},
+    {"residue": "A113", "rationale": "public interface-context hotspot candidate"},
+    {"residue": "A115", "rationale": "public interface-context hotspot candidate"},
+    {"residue": "A123", "rationale": "public interface-context hotspot candidate"}
+  ],
+  "boundaries": [
+    "This target-window file does not prove any generated binder binds PD-L1.",
+    "This target-window file does not establish inhibition, selectivity, safety, or therapeutic value.",
+    "Runtime materialization of coordinate files belongs outside git."
+  ]
+}

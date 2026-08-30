@@ -1,0 +1,49 @@
+{
+  "_note": "Schema example. Synthetic tranche showing the design-tranche.v1 shape. Operators replace the source candidate IDs and designs with real ones when scaffolding a real campaign.",
+  "schema_version": 1,
+  "tranche_id": "example-state-biased-design-fixture-v1",
+  "method_adapters": [
+    "proteinmpnn",
+    "boltz_variant_check"
+  ],
+  "source_scaffold": {
+    "registry_path": "examples/orchestration-fixtures/receptor-state-registry.json",
+    "source_candidate_ids": [
+      "EXAMPLE-RECEPTOR-1:inactive",
+      "EXAMPLE-RECEPTOR-1:active_like"
+    ],
+    "design_region": "public receptor-state metadata windows only",
+    "private_sequence_policy": "not_allowed"
+  },
+  "designs": [
+    {
+      "design_id": "fixture-design-001",
+      "sequence": "SYNTHETIC_FIXTURE_SEQUENCE_NOT_FOR_DESIGN",
+      "provenance": {
+        "evidence_mode": "fixture_or_demo",
+        "sequence_policy": "synthetic_fixture_only_not_a_biological_candidate",
+        "source_registry": "examples/orchestration-fixtures/receptor-state-registry.json",
+        "real_execution_authorized": false
+      },
+      "scores": {
+        "state_bias_proxy": 0.12,
+        "confidence_proxy": 0.18,
+        "claim_ceiling": "candidate"
+      }
+    }
+  ],
+  "claim_ceiling": "candidate",
+  "gates": [
+    "receptor_state_registry_validates",
+    "input_audit",
+    "provider_budget_gate_before_gpu_execution",
+    "weights_manifest_before_real_run",
+    "contract_self_check"
+  ],
+  "policies": {
+    "allow_private_sequences": false,
+    "allow_model_weight_commits": false,
+    "wet_lab_claims_allowed": false,
+    "expected_download_bytes": 0
+  }
+}

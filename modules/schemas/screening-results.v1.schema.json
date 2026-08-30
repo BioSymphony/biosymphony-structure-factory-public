@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/screening-results.v1.schema.json",
+  "title": "Structure Factory screening results summary v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "ligands_total",
+    "ligands_prepared",
+    "ligands_failed",
+    "receptor_members",
+    "pose_records",
+    "claim_level",
+    "evidence_mode"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "ligands_total": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "ligands_prepared": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "ligands_failed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "receptor_members": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "pose_records": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "top_ligand_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "top_consensus_score": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "claim_level": {
+      "enum": [
+        "candidate",
+        "processed",
+        "validated",
+        "publishable",
+        "insufficient_evidence",
+        "blocked"
+      ]
+    },
+    "evidence_mode": {
+      "enum": [
+        "provider_native",
+        "derived",
+        "fixture_or_demo",
+        "report_only",
+        "blocked_or_insufficient"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

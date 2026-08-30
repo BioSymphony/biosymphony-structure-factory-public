@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-round-report.schema.json",
+  "title": "Public synthetic binder-round report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "report_kind", "comparison_interpretation", "round_id", "source_posture", "result_boundary", "execution", "construction", "target", "toolchains", "candidate_count", "toolchain_counts", "candidates", "claims"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-round-report-v1"},
+    "report_kind": {"const": "synthetic_fixture"},
+    "comparison_interpretation": {"const": "not_evaluable"},
+    "round_id": {"type": "string"},
+    "source_posture": {"const": "synthetic_demo"},
+    "result_boundary": {"const": "public_synthetic_demo"},
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "provider_calls", "external_tool_invocations", "network_calls", "planned_topology"],
+      "properties": {
+        "mode": {"const": "public_synthetic_only"},
+        "provider_calls": {"const": 0},
+        "external_tool_invocations": {"const": 0},
+        "network_calls": {"const": 0},
+        "planned_topology": {"type": "string"}
+      }
+    },
+    "construction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "not_a_measurement"],
+      "properties": {"mode": {"const": "synthetic_fixture"}, "not_a_measurement": {"const": true}}
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_posture", "label", "public_accession", "window", "site"],
+      "properties": {
+        "input_posture": {"enum": ["public_reference", "synthetic"]},
+        "label": {"type": "string"},
+        "public_accession": {
+          "type": "string",
+          "pattern": "^(?:PDB:[A-Za-z0-9]{4}|UniProt:[A-Z0-9]{6,10}|AlphaFoldDB:[A-Za-z0-9_-]{6,}|SYNTHETIC:[A-Za-z0-9._-]+)$"
+        },
+        "window": {"type": "string"},
+        "site": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chain_id", "required_residues"],
+          "properties": {
+            "chain_id": {"type": "string", "pattern": "^[A-Za-z0-9]+$"},
+            "required_residues": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"type": "string", "pattern": "^-?[0-9]+(?:[A-Z]|--?[0-9]+)?$"}
+            }
+          }
+        }
+      }
+    },
+    "toolchains": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "candidate_count", "generator", "sequence_designer", "predictors", "scorers", "filters"],
+        "properties": {
+          "id": {"type": "string"},
+          "label": {"type": "string"},
+          "candidate_count": {"type": "integer", "minimum": 1},
+          "generator": {"$ref": "#/$defs/selection"},
+          "sequence_designer": {"$ref": "#/$defs/selection"},
+          "predictors": {"type": "array", "items": {"$ref": "#/$defs/selection"}},
+          "scorers": {"type": "array", "items": {"$ref": "#/$defs/selection"}},
+          "filters": {"type": "array", "items": {"$ref": "#/$defs/selection"}}
+        }
+      }
+    },
+    "candidate_count": {"type": "integer", "minimum": 1},
+    "toolchain_counts": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 1}
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "toolchain_id", "rank", "status", "scores", "source_posture", "result_boundary", "artifact_refs"],
+        "properties": {
+          "id": {"type": "string"},
+          "toolchain_id": {"type": "string"},
+          "rank": {"type": ["integer", "null"]},
+          "status": {"enum": ["completed", "failed", "not_executed"]},
+          "scores": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["cofold_confidence_proxy", "interface_confidence_proxy"],
+            "properties": {
+              "cofold_confidence_proxy": {"type": ["number", "null"]},
+              "interface_confidence_proxy": {"type": ["number", "null"]}
+            }
+          },
+          "source_posture": {"const": "synthetic_demo"},
+          "result_boundary": {"const": "public_synthetic_demo"},
+          "artifact_refs": {"type": "array", "maxItems": 0}
+        }
+      }
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supported", "not_supported"],
+      "properties": {
+        "supported": {"const": ["The public fixture passed the binder-round contract."]},
+        "not_supported": {"const": ["binding", "function", "selectivity", "safety", "therapeutic value", "clinical relevance"]}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"target": {"properties": {"input_posture": {"const": "public_reference"}}}}},
+      "then": {
+        "properties": {
+          "target": {
+            "properties": {
+              "public_accession": {"pattern": "^(?:PDB:[A-Za-z0-9]{4}|UniProt:[A-Z0-9]{6,10}|AlphaFoldDB:[A-Za-z0-9_-]{6,})$"}
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "target": {
+            "properties": {
+              "public_accession": {"pattern": "^SYNTHETIC:[A-Za-z0-9._-]+$"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tool_id", "variant_id", "registry_id", "evidence_level", "public_evidence", "license_gate", "runtime_status"],
+      "properties": {
+        "tool_id": {"type": "string"},
+        "variant_id": {"type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"},
+        "registry_id": {"type": ["string", "null"]},
+        "evidence_level": {"enum": ["listed", "documented", "contract_checked"]},
+        "public_evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "license_gate": {"type": "string"},
+        "runtime_status": {"const": "not_checked"}
+      }
+    }
+  }
+}

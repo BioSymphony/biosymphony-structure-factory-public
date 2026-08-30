@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "fal",
+  "provider_class": "serverless_function",
+  "profile_id": "fal-serverless-gpu-no-download",
+  "maps_campaign_profile": "no_download_smoke",
+  "blessed_path": false,
+  "workspace_root": "/workspace/structure-factory",
+  "artifact_root": "/workspace/structure-factory/runs/<run-id>",
+  "secret_mode": "operator_secret_store_or_provider_secret_refs",
+  "operator_gate_required": true,
+  "gpu_required": true,
+  "recommended_gpu": "H100",
+  "fallback_gpu": "A100-80GB",
+  "gpu_count": 1,
+  "execution_ready_requires": [
+    "repo_checkout",
+    "pinned_git_ref",
+    "fal_client_auth_via_operator_secret_store",
+    "input_audit",
+    "contract_self_check",
+    "stage_contract_check",
+    "explicit_operator_launch"
+  ],
+  "fal": {
+    "service": "serverless_gpu_job",
+    "client_ref": "STRUCTURE_FACTORY_FAL_CLIENT",
+    "credential_source": "operator_secret_store_reference",
+    "secret_storage_policy": "do_not_write_provider_credentials_to_repo_tracker_logs_or_artifacts",
+    "scope_check_required": true,
+    "launch_preflight_required": true,
+    "artifact_export_required": true,
+    "cleanup_proof_required": true,
+    "resources": {
+      "gpu": "H100",
+      "gpu_count": 1,
+      "max_concurrency": 1,
+      "timeout_seconds": 900,
+      "retries": 0
+    },
+    "budget": {
+      "max_authorized_spend_usd": "<operator-set>",
+      "max_runtime_minutes": 15,
+      "canary_only": true
+    },
+    "required_tags": [
+      "campaign=<campaign_id>",
+      "provider=fal",
+      "run_id=<run_id>"
+    ]
+  },
+  "notes": "FAL serverless GPU profile for bounded canaries and small jobs. The user supplies an authenticated client or CLI through the runtime adapter, chooses the model and license posture, sets cost and time limits, exports artifacts with hashes, and records cleanup. A completed remote call is not scientific validation. Keep credentials, account details, request identifiers, provider logs, costs, and raw artifacts outside public git."
+}

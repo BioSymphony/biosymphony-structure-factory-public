@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "manifest_kind": "symphony_runpod_launch",
+  "manifest_id": "esmfold2-no-download-toolcheck-public-template",
+  "public_template_status": "tracked_public_template",
+  "remote_launch_allowed": false,
+  "provider": {
+    "name": "runpod",
+    "adapter": "runpod_pod_v1"
+  },
+  "launch_authorization": {
+    "approved_at": "PENDING",
+    "approved_by": "PENDING-OPERATOR-GATE",
+    "public_repo_note": "This tracked template contains no live bindings or authorization. Materialize the ESMFold2 provider packet under ignored .runtime space, validate it, and obtain explicit human authorization before execution."
+  },
+  "repo": {
+    "source": "git_remote_or_snapshot",
+    "url_or_path": "https://github.com/BioSymphony/structure-factory.git",
+    "commit_or_snapshot": "PENDING-PINNED-COMMIT",
+    "workdir": "/workspace/structure-factory"
+  },
+  "run_id": "structure-factory-esmfold2-no-download-toolcheck",
+  "runpod": {
+    "name": "structure-factory-esmfold2-toolcheck",
+    "dataCenterIds": [],
+    "gpuTypeIds": [],
+    "cloudType": "SECURE",
+    "networkVolumeId": "",
+    "env": {
+      "STRUCTURE_FACTORY_RUN_ID": "structure-factory-esmfold2-no-download-toolcheck",
+      "STRUCTURE_FACTORY_REPO_SOURCE": "git_remote_or_snapshot",
+      "STRUCTURE_FACTORY_EXECUTION_PROFILE": "esmfold2-no-download-toolcheck",
+      "STRUCTURE_FACTORY_NO_DOWNLOAD": "1"
+    },
+    "registryAuth": {
+      "enabled": false,
+      "runtime_secret_refs": []
+    }
+  },
+  "stage_contract_ref": "runpod/stage-contracts/esmfold2-no-download-toolcheck.stage-contract.json",
+  "startup": {
+    "commands": [
+      "echo 'Tracked template has no runtime payload. Materialize an ignored ESMFold2 runtime packet and obtain explicit human authorization before execution.'",
+      "exit 64"
+    ]
+  },
+  "artifact_egress": {
+    "requires_network_volume": false,
+    "expected_artifacts": [
+      "structure-factory/runs/esmfold2-no-download-toolcheck/status.json",
+      "structure-factory/runs/esmfold2-no-download-toolcheck/stage-progress.jsonl",
+      "structure-factory/runs/esmfold2-no-download-toolcheck/validation/model_metadata_probe.json",
+      "structure-factory/runs/esmfold2-no-download-toolcheck/claim_ledger.json",
+      "structure-factory/runs/esmfold2-no-download-toolcheck/artifact_index.json"
+    ],
+    "public_template_note": "Artifact roots, hashes, provider IDs, logs, accepted-license state, and cleanup proofs are runtime closeout records and are not committed here."
+  },
+  "worker_coordination": {
+    "resource_name_prefix": "structure-factory-esmfold2-toolcheck",
+    "single_mutating_worker": true,
+    "read_only_monitors_allowed": true
+  },
+  "monitoring": {
+    "record_pod_fields": [
+      "id",
+      "name",
+      "desiredStatus",
+      "costPerHr",
+      "adjustedCostPerHr",
+      "runtime.uptimeInSeconds"
+    ],
+    "required_signals": [
+      "provider_actual_status",
+      "runtime_uptime_seconds",
+      "image_pull_success_or_failure",
+      "stage_progress_heartbeat"
+    ]
+  },
+  "closeout": {
+    "stop_or_delete_pod": true,
+    "retain_pod": false,
+    "required_before_success": [
+      "stage_progress",
+      "artifact_manifest",
+      "hashes",
+      "cleanup_proof",
+      "result_boundary"
+    ]
+  },
+  "public_safety": {
+    "no_literal_secrets": true,
+    "no_concrete_provider_resources": true,
+    "no_private_volume_assumptions": true,
+    "no_prior_run_artifacts": true,
+    "no_accepted_license_state": true,
+    "no_model_weights": true
+  }
+}

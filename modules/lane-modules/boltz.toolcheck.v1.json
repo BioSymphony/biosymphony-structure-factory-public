@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "boltz",
+  "mode": "toolcheck",
+  "required": false,
+  "license_gate": "none",
+  "license_class": "open_source_mit",
+  "skip_policy": "warn_when_missing_in_prep",
+  "fail_policy": "fail_when_required_by_execution_profile",
+  "smoke_command": "boltz --help",
+  "image_family": "ai-design",
+  "source_policy": {
+    "pip_package": "boltz[cuda]==2.2.1",
+    "upstream_repo": "https://github.com/jwohlwend/boltz",
+    "pinned_release_tag": "v2.2.1",
+    "pinned_commit_sha": "cb04aeccdd480fd4db707f0bbafde538397fa2ac",
+    "pin_policy": "keep bootstrap, entrypoints, and registry aligned before paid execution"
+  },
+  "weights_policy": {
+    "source": "huggingface_public_release",
+    "cache_path": "/workspace/structure-factory/weights/boltz",
+    "pin_policy": "pin_release_sha_in_software_registry_before_paid_execution"
+  },
+  "campaign_use": [],
+  "notes": "Open-source biomolecular prediction lane. Status remains planned until Boltz is verified on the ai-design image and the release SHA is pinned."
+}

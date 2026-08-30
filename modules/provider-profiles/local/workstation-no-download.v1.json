@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "local",
+  "provider_class": "workstation",
+  "profile_id": "local-workstation-no-download",
+  "maps_campaign_profile": "no_download_smoke",
+  "blessed_path": false,
+  "workspace_root": ".",
+  "artifact_root": ".runtime/structure-factory-local/runs/<run-id>",
+  "secret_mode": "local_environment_or_keychain",
+  "operator_gate_required": false,
+  "gpu_required": false,
+  "mock_gpu_allowed": true,
+  "raw_downloads_allowed": false,
+  "image_strategy": "host_environment",
+  "execution_ready_requires": [
+    "repo_checkout",
+    "input_audit",
+    "contract_self_check"
+  ],
+  "notes": "Local is for prep, validation, small map/model review, and GUI inspection. Raw EMPIAR subsets are not authorized by this profile."
+}

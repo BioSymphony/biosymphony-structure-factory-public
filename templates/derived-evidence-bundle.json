@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "evidence_mode": "derived",
+  "bundle_id": "campaign-wave-shard-derived-metric",
+  "created_at": "YYYY-MM-DDTHH:MM:SSZ",
+  "created_by": "agent-or-operator",
+  "reason": "Local reanalysis, rescore, aggregation, conversion, or correction after provider execution.",
+  "source_artifacts": [
+    {
+      "path": ".runtime/example/artifacts/delta_vs_experiment.json",
+      "origin": "provider_native",
+      "run_id": "provider-or-bridge-run-id",
+      "sha256": "SOURCE_SHA256",
+      "bytes": 0,
+      "immutable_archive_path": ".runtime/example/artifacts/runpod-execution.tar.gz",
+      "immutable_archive_sha256": "ARCHIVE_SHA256"
+    }
+  ],
+  "derivation": {
+    "repo_ref": "40-character-git-sha-or-local-ref",
+    "command": "python3 scripts/structure_factory/example_rescore.py --input ... --output ...",
+    "parameters": {},
+    "environment": {
+      "python": "python-version",
+      "platform": "platform-summary"
+    }
+  },
+  "outputs": [
+    {
+      "path": ".runtime/example/derived/delta_vs_experiment.rescored.json",
+      "sha256": "OUTPUT_SHA256",
+      "bytes": 0,
+      "format": "json",
+      "claim_level": "computational_candidate"
+    }
+  ],
+  "claim_impact": {
+    "previous_claim": "claim before derivation, if any",
+    "updated_claim": "claim after derivation",
+    "downgrade_or_caveat": "Report states that this metric is derived, not provider-native."
+  },
+  "status": "derived"
+}

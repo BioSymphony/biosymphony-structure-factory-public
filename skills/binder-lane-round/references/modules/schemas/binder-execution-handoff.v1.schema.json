@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-execution-handoff.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "round_id", "plan_sha256", "topology", "optimization_horizon", "provider_calls", "credentials_embedded", "concrete_provider_resources_embedded", "packages", "launch_boundary"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-execution-handoff-v1"},
+    "round_id": {"type": "string"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "topology": {"type": "string"},
+    "optimization_horizon": {"$ref": "#/$defs/optimization_horizon"},
+    "provider_calls": {"const": 0},
+    "credentials_embedded": {"const": false},
+    "concrete_provider_resources_embedded": {"const": false},
+    "packages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["package_id", "round_index", "stage", "route_id", "toolchain_ids", "tools_by_toolchain", "backend", "execution_method", "profile_ref", "profile_sha256", "operator_adapter_required", "operator_gate_required", "authorization", "authorization_action", "license_review_status", "execution_state", "input_contract_ids", "output_contract_ids", "expected_record_counts_by_toolchain", "depends_on_package_ids", "transfer", "required_closeout", "closeout_contract"],
+        "properties": {
+          "package_id": {"type": "string"},
+          "round_index": {"type": "integer", "minimum": 1},
+          "stage": {"type": "string"},
+          "route_id": {"type": "string"},
+          "toolchain_ids": {"type": "array", "items": {"type": "string"}},
+          "tools_by_toolchain": {"type": "object", "additionalProperties": {"type": "array", "items": {"$ref": "#/$defs/tool_selection"}}},
+          "backend": {"type": "string"},
+          "execution_method": {"enum": ["platform_skill", "hosted_api", "self_hosted"]},
+          "platform_skill_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}(?::[a-z0-9][a-z0-9._-]{0,95})?$"},
+          "profile_ref": {"type": ["string", "null"]},
+          "profile_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+          "operator_adapter_required": {"type": "boolean"},
+          "operator_gate_required": {"type": "boolean"},
+          "authorization": {"const": "required_at_execution"},
+          "authorization_action": {"enum": ["authorize_local_adapter_execution", "authorize_external_or_provider_dispatch"]},
+          "license_review_status": {"const": "not_recorded"},
+          "execution_state": {"const": "not_executed"},
+          "input_contract_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "output_contract_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "expected_record_counts_by_toolchain": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 1}},
+          "depends_on_package_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+          "transfer": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["data_class", "source_package_ids", "destination_package_id", "credentials_embedded"],
+            "properties": {
+              "data_class": {"const": "public_or_synthetic_only"},
+              "source_package_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+              "destination_package_id": {"type": "string"},
+              "credentials_embedded": {"const": false}
+            }
+          },
+          "required_closeout": {"const": ["stage_event", "output_count", "artifact_hashes", "validation_notes", "failure_rows", "cleanup_result"]},
+          "closeout_contract": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["failure_rows", "cleanup_result"],
+            "properties": {
+              "failure_rows": {"const": "one_row_per_failed_or_missing_candidate"},
+              "cleanup_result": {"enum": ["not_applicable_for_local", "required_for_external_or_provider_dispatch"]}
+            }
+          },
+          "adapter_contract_ref": {"type": "string"},
+          "adapter_contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "api_policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["terms_review_required", "input_retention_review_required", "runtime_secret_reference_required"],
+            "properties": {
+              "terms_review_required": {"const": true},
+              "input_retention_review_required": {"const": true},
+              "runtime_secret_reference_required": {"const": true}
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"execution_method": {"const": "platform_skill"}}, "required": ["execution_method"]},
+            "then": {"required": ["platform_skill_id"]},
+            "else": {"not": {"required": ["platform_skill_id"]}}
+          },
+          {
+            "oneOf": [
+              {"properties": {"backend": {"const": "local"}, "execution_method": {"enum": ["platform_skill", "self_hosted"]}}},
+              {"properties": {"backend": {"const": "api"}, "execution_method": {"enum": ["platform_skill", "hosted_api"]}}},
+              {"properties": {"backend": {"enum": ["fal", "neocloud", "runpod", "aws", "modal", "lambda", "cloud_vm", "ssh_hpc"]}, "execution_method": {"enum": ["platform_skill", "hosted_api", "self_hosted"]}}}
+            ]
+          }
+        ]
+      }
+    },
+    "launch_boundary": {"const": "Generating this handoff makes no provider calls. Dry-run each adapter, then run it only after the user or operator grants explicit runtime authorization and completes the listed reviews."}
+  },
+  "$defs": {
+    "optimization_horizon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_round_index", "maximum_round_count", "primary_metric_id", "stopping_rule", "current_round_budget_usd", "later_round_state"],
+      "properties": {
+        "current_round_index": {"type": "integer", "minimum": 1},
+        "maximum_round_count": {"type": "integer", "minimum": 1},
+        "primary_metric_id": {"type": "string"},
+        "stopping_rule": {"type": "object"},
+        "current_round_budget_usd": {"type": ["number", "null"], "minimum": 0},
+        "later_round_state": {"const": "conditional_on_stopping_rule"}
+      }
+    },
+    "tool_selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tool_id", "variant_id"],
+      "properties": {
+        "tool_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"},
+        "variant_id": {"type": ["string", "null"], "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"}
+      }
+    }
+  }
+}

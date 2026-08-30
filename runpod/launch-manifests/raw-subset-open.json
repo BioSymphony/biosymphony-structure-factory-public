@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "manifest_id": "structure-factory-raw-subset-open-empiar-13124",
+  "execution_profile": "raw-subset-open",
+  "provider": "runpod",
+  "provider_class": "pod",
+  "run_id": "structure-factory-empiar-13124-raw-subset-open-100",
+  "campaign_id": "structure-factory-empiar-13124-raw-subset-open",
+  "stage_contract": "runpod/stage-contracts/raw-subset-open.stage-contract.json",
+  "progress_ledger": "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/stage-progress.jsonl",
+  "repo": {
+    "url": "https://github.com/BioSymphony/structure-factory.git",
+    "git_ref": "structure-factory-prep-v0",
+    "delivery": "public_git_clone"
+  },
+  "data_policy": {
+    "allow_large_downloads": true,
+    "allow_raw_cryoem_downloads": true,
+    "allow_private_data": false,
+    "expected_download_bytes": 10500000000,
+    "max_download_bytes": 11000000000
+  },
+  "download_plan": {
+    "data_module": "modules/data-modules/empiar-13124.raw-subset.v1.json",
+    "subset_profile": "raw_movies_100",
+    "max_files": 100,
+    "deterministic_rule": "lexicographic_first_n_raw_movies_from_empiar_file_listing",
+    "allow_processed_inputs": false,
+    "destination_root": "/workspace/structure-factory/scratch/datasets/empiar-13124"
+  },
+  "fanout_policy": {
+    "max_raw_movie_files": 100,
+    "max_download_bytes": 11000000000,
+    "max_motion_frames": 5000,
+    "max_context_micrographs": 100
+  },
+  "scratch_policy": {
+    "scratch_only": true,
+    "delete_after_export": true,
+    "export_only_small_artifacts": true
+  },
+  "runpod": {
+    "mode": "pod",
+    "recommended_gpu": "NVIDIA L40S",
+    "fallback_gpu": "NVIDIA A100-SXM4-40GB",
+    "gpu_count": 1,
+    "container_disk_gb": 500,
+    "volume_mount": "/workspace",
+    "network_volume_required": false,
+    "template_family": "cryo-core",
+    "image_name": "docker.io/library/ubuntu:22.04",
+    "image_visibility": "public",
+    "image_digest_required_for_real": true,
+    "registry_auth": {
+      "required": false,
+      "provider": "public_registry",
+      "runtime_secret_refs": [],
+      "credential_policy": "none"
+    },
+    "monitoring": {
+      "desired_status_only_ok": false,
+      "progress_ledger": "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/stage-progress.jsonl",
+      "required_signals": [
+        "provider_actual_status",
+        "runtime_uptime_seconds",
+        "image_pull_success_or_failure",
+        "stage_progress_heartbeat"
+      ]
+    },
+    "ports": []
+  },
+  "environment": {
+    "STRUCTURE_FACTORY_RUN_ID": "structure-factory-empiar-13124-raw-subset-open-100",
+    "STRUCTURE_FACTORY_REPO_URL": "https://github.com/BioSymphony/structure-factory.git",
+    "STRUCTURE_FACTORY_GIT_REF": "structure-factory-prep-v0",
+    "STRUCTURE_FACTORY_VOLUME_ROOT": "/workspace/structure-factory",
+    "STRUCTURE_FACTORY_EXECUTION_PROFILE": "raw-subset-open",
+    "STRUCTURE_FACTORY_ALLOW_RAW_DOWNLOADS": "PENDING_OPERATOR_AUTHORIZATION",
+    "STRUCTURE_FACTORY_SUBSET_PROFILE": "raw_movies_100",
+    "STRUCTURE_FACTORY_OPERATOR_AUTHORIZED": "PENDING_OPERATOR_AUTHORIZATION"
+  },
+  "smoke_checks": [
+    "repo_clone_manifest",
+    "python_tooling",
+    "gpu_visibility",
+    "scratch_write_read",
+    "image_version_manifest",
+    "operator_authorization_gate",
+    "raw_subset_boundary",
+    "fanout_estimate",
+    "data_intake_ledger",
+    "stage_contract",
+    "stage_progress_ledger",
+    "input_audit",
+    "artifact_manifest",
+    "contract_self_check"
+  ],
+  "expected_artifacts": [
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/run-manifest.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/data-intake-ledger.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/validation/input-audit.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/validation/fanout-estimate.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/validation/toolcheck.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/validation/versions.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/validation/storage.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/stage-progress.jsonl",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/validation/stage-contract-check.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/validation/contract-self-check.json",
+    "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-open-100/provenance.md"
+  ],
+  "license_gates": [
+    "cryosparc",
+    "phenix",
+    "chimerax",
+    "motioncor3",
+    "rosetta_pyrosetta",
+    "alphafold3"
+  ],
+  "remote_launch_allowed": false,
+  "public_template_status": "tracked_public_template",
+  "launch_authorization": {
+    "approved_at": "PENDING",
+    "approved_by": "PENDING-OPERATOR-GATE",
+    "operator_gate_required": true,
+    "public_repo_note": "Tracked launch manifests omit live execution state. Materialize an ignored runtime packet and obtain explicit human authorization before provider execution."
+  }
+}

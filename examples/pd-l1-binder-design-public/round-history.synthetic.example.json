@@ -1,0 +1,16 @@
+[
+  {
+    "round_index": 1,
+    "primary_metric_value": 0.42,
+    "actual_spend_usd": 0.0,
+    "closeout_complete": true,
+    "metric_provenance": {
+      "metric_id": "cofold_confidence_proxy",
+      "metric_source": "synthetic_fixture",
+      "source_artifact_sha256": null,
+      "calibration_state": "not_applicable",
+      "calibration_scope_id": "synthetic-demo",
+      "calibration_artifact_sha256": null
+    }
+  }
+]

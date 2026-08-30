@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/validation-ledger.v1.schema.json",
+  "title": "Structure Factory validation ledger v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "overall_claim_level": {
+      "enum": [
+        "candidate",
+        "processed",
+        "validated",
+        "publishable",
+        "insufficient_evidence",
+        "blocked"
+      ]
+    },
+    "claim_level": {
+      "enum": [
+        "candidate",
+        "processed",
+        "validated",
+        "publishable",
+        "insufficient_evidence",
+        "blocked"
+      ]
+    },
+    "evidence_mode": {
+      "enum": [
+        "provider_native",
+        "derived",
+        "fixture_or_demo",
+        "report_only",
+        "blocked_or_insufficient"
+      ]
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "anyOf": [
+          {
+            "required": [
+              "claim"
+            ]
+          },
+          {
+            "required": [
+              "name"
+            ]
+          }
+        ],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "level": {
+            "enum": [
+              "candidate",
+              "processed",
+              "validated",
+              "publishable",
+              "insufficient_evidence",
+              "blocked"
+            ]
+          },
+          "claim_level": {
+            "enum": [
+              "candidate",
+              "processed",
+              "validated",
+              "publishable",
+              "insufficient_evidence",
+              "blocked"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence_artifact": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

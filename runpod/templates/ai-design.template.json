@@ -1,0 +1,14 @@
+{
+  "template_name": "biosymphony-structure-ai-design",
+  "image_family": "ai-design",
+  "image_name": "docker.io/nvidia/cuda:12.4.1-runtime-ubuntu22.04",
+  "gpu_class": "L40S/A100/H100 depending on model size",
+  "volume_mount": "/workspace",
+  "ports": [
+    "8888/http"
+  ],
+  "startup_command": "bash /opt/structure-factory/entrypoints/no-download-smoke.sh",
+  "purpose": "Boltz, Chai, AlphaFold-gated, ProteinMPNN, LigandMPNN, RFdiffusion, and model-comparison support.",
+  "license_policy": "Open-source lanes may be baked; gated weights and restricted tools stay runtime-provided.",
+  "public_template_note": "Tracked placeholder image. Choose and digest-pin the runtime image in an ignored packet after license review and explicit human authorization."
+}

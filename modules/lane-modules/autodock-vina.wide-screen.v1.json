@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "autodock-vina-wide-screen",
+  "tool": "autodock_vina",
+  "execution_profile": "screening-wide-docking",
+  "purpose": "Open-default wide-screen docking baseline for receptor ensembles before focused Boltz or gated ML-docking tranches.",
+  "required_image_family": "md-docking",
+  "license_posture": "open-default",
+  "execution_ready_requires": [
+    "toolcheck_pass",
+    "receptor_ensemble_manifest",
+    "ligand_prep_complete",
+    "input_audit",
+    "contract_self_check"
+  ],
+  "required_outputs": [
+    "pose_predictions.jsonl",
+    "method_summary.json",
+    "failure_report.json"
+  ],
+  "claim_ceiling": "candidate",
+  "notes": "Vina scores are ranking evidence only. A docking score is not an affinity or mechanism claim."
+}

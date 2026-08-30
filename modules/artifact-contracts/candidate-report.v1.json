@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "module_type": "artifact_contract",
+  "contract_id": "candidate-report.v1",
+  "purpose": "Selective report contract for promoted screening candidates, controls, method-disagreement cases, and instructive failures.",
+  "required_for_candidate_report": [
+    "candidate_report_manifest.json",
+    "screening_manifest_ref.json",
+    "candidate_evidence.json",
+    "pose_summary.json",
+    "method_disagreement.json",
+    "validation_ledger.json",
+    "provenance.md"
+  ],
+  "required_at_closeout": [
+    "validation/input-audit.json",
+    "validation/contract-self-check.json"
+  ],
+  "maturity_ladder": {
+    "L0": "candidate_selected",
+    "L1": "source_scores_joined",
+    "L2": "pose_and_affinity_context_summarized",
+    "L3": "method_disagreement_recorded",
+    "L4": "claim_ceiling_applied",
+    "L5": "human_review_ready"
+  },
+  "claim_levels": [
+    "candidate",
+    "processed",
+    "validated",
+    "publishable",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "export_policy": {
+    "raw_cryoem_movies": "do_not_export",
+    "private_ligand_libraries": "do_not_export",
+    "model_weights": "never_export",
+    "score_tables_reports_and_small_reports": "export_small_artifacts",
+    "secrets_and_license_material": "never_export"
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "manifest_type": "protein_binder_design_manifest",
+  "campaign_id": "pd-l1-pd1-binder-design",
+  "run_id": "pd-l1-pd1-public-binder-window-canary",
+  "intent": {
+    "mode": "protein_binder_design",
+    "natural_language_goal": "design computational protein binder candidates against public human PD-L1 surfaces for benchmark validation",
+    "generation_lane": "genie3",
+    "crosscheck_lane": "boltz",
+    "claim_ceiling": "candidate"
+  },
+  "public_accession_candidates": [
+    {
+      "label": "PD-L1 / PD-1 complex",
+      "pdb": "4ZQK",
+      "emdb": "n/a",
+      "resolution_angstrom": 2.0,
+      "year": 2015,
+      "role": "primary PD-L1 / PD-1 reference and chain A target source"
+    },
+    {
+      "label": "PD-L1 with deposited de novo binder",
+      "pdb": "8ZNL",
+      "emdb": "n/a",
+      "resolution_angstrom": 1.77,
+      "year": 2024,
+      "role": "positive control reference: deposited 58-aa de novo binder with picomolar KD; used to validate Boltz cofold plumbing"
+    },
+    {
+      "label": "PD-L1 alone (monomer state)",
+      "pdb": "5C3T",
+      "emdb": "n/a",
+      "resolution_angstrom": 2.20,
+      "role": "monomer-state PD-L1 reference for comparison"
+    }
+  ],
+  "target_window_hypotheses": [
+    {
+      "window_id": "pd-l1-binder-window",
+      "source_pdbs": ["4ZQK"],
+      "entities": ["PD-L1"],
+      "design_goal": "protein binder candidates against the PD-L1 IgV-domain face that engages PD-1 (chain A residues 19-127)",
+      "first_pass": true,
+      "hotspot_residues_pdb": [
+        "A19",
+        "A26",
+        "A54",
+        "A66",
+        "A113",
+        "A121",
+        "A122",
+        "A123",
+        "A124",
+        "A125"
+      ],
+      "risk_notes": [
+        "claim ceiling is candidate; no binding/inhibition claims without experimental validation",
+        "PD-L1 is widely targeted; novel binders must be checked against deposited structures for inadvertent recapitulation"
+      ]
+    }
+  ],
+  "workflow": [
+    {
+      "stage_id": "public_accession_resolution",
+      "method": "RCSB metadata resolver for PD-L1 / PD-1 references (4ZQK, 8ZNL, 5C3T)",
+      "expected_artifacts": ["resolved_accessions.json", "entity_registry.json"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "target_window_resolution",
+      "method": "load committed pd-l1-binder-window target file and verify chain A residues 19-127 + 10 hotspot residues",
+      "expected_artifacts": ["target_window.json", "hotspot_registry.json"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "structural_input_audit",
+      "method": "fetch 4ZQK from RCSB, audit chain A coordinates and hotspot solvent exposure",
+      "expected_artifacts": ["validation/target_intake.json", "receptor_windows/4ZQK_chainA.pdb"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "genie3_install",
+      "method": "clone Genie 3 at pinned SHA, install dependencies, fetch operator-gated weights",
+      "expected_artifacts": ["validation/genie3_install.json", "validation/genie3_weights_fetch.json", "weights_manifest.json"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "genie3_generation_canary",
+      "method": "Genie 3 canary generation: 1 problem x small n_sample for plumbing verification before extended wave",
+      "expected_artifacts": ["validation/genie3_generation_canary.json", "design_candidates_canary/"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "boltz_crosscheck_canary",
+      "method": "Boltz cofold cross-check on canary candidates plus PD-L1 receptor to validate scoring pipeline",
+      "expected_artifacts": ["validation/boltz_crosscheck_canary.json", "boltz_crosscheck_canary/"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "genie3_generation_extended",
+      "method": "Genie 3 extended generation: 8 problems x n_sample=32 with direction_scale=2.0 hotspot steering on 5 PD-L1 interface residues; binder length window 60-90 aa",
+      "expected_artifacts": ["genie3_manifest.json", "design_candidates/"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "boltz_crosscheck_extended",
+      "method": "sequence-level pre-filter (length/charge/GRAVY/novelty vs 8ZNL) trims 256 -> top 32 forward to Boltz cofold cross-check and interface scoring",
+      "expected_artifacts": ["boltz_crosscheck/", "interface_scores.jsonl"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "ranking_synthesis",
+      "method": "rank top 32 candidates by Genie 3 / Boltz agreement, hotspot recapitulation, and disagreement signals",
+      "expected_artifacts": ["candidate_ranking.json", "candidate_ranking.md", "candidate_ranking_top32.json"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "report",
+      "method": "compose Markdown report with candidate ranking, validation artifacts, and operator notes",
+      "expected_artifacts": ["report/README.md", "operator_closeout.md", "artifact_index.json"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "validation_review",
+      "method": "validation ledger emission and forbidden-claim scan across all candidate text",
+      "expected_artifacts": ["validation_ledger.json"],
+      "claim_level": "candidate"
+    },
+    {
+      "stage_id": "contract_self_check",
+      "method": "stage-contract self-check verifying all required outputs and done markers",
+      "expected_artifacts": ["validation/contract-self-check.json"],
+      "claim_level": "candidate"
+    }
+  ],
+  "negative_controls": [
+    "buried or low-solvent-accessible PD-L1 surfaces",
+    "shuffled generated candidates",
+    "unrelated public IgV-domain surfaces",
+    "Boltz fold-confidence and interface-confidence disagreement cases",
+    "novelty check against deposited 8ZNL binder to flag inadvertent recapitulation"
+  ],
+  "execution_policy": {
+    "allow_private_data": false,
+    "allow_raw_movie_downloads": false,
+    "allow_model_weight_downloads_without_operator_gate": false,
+    "allow_paid_compute": false,
+    "expected_download_bytes": 0,
+    "operator_gate_required_for_weighted_or_provider_execution": true
+  },
+  "claim_policy": {
+    "allowed_claims": ["candidate", "insufficient_evidence", "blocked"],
+    "forbidden_claims": [
+      "validated binder",
+      "therapeutic effect",
+      "PD-L1 inhibition",
+      "immune checkpoint blockade",
+      "wet-lab synthesis recommendation"
+    ]
+  }
+}

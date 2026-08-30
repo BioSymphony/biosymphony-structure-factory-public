@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "boltz-focused-screen",
+  "tool": "boltz",
+  "execution_profile": "screening-focused-cofolding",
+  "purpose": "Focused Boltz-2 cofolding and affinity-aware scoring for selected tranches after cheap baselines and canaries.",
+  "required_image_family": "ai-design",
+  "license_posture": "open-default",
+  "execution_ready_requires": [
+    "toolcheck_pass",
+    "weights_cache_or_auto_download_policy",
+    "input_audit",
+    "contract_self_check",
+    "explicit_operator_launch"
+  ],
+  "required_outputs": [
+    "boltz_predictions/",
+    "affinity_predictions.jsonl",
+    "method_summary.json",
+    "failure_report.json"
+  ],
+  "claim_ceiling": "candidate",
+  "notes": "Prediction-only results remain candidate evidence. Use Boltz after canary and calibration, not as the only ranking method."
+}

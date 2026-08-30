@@ -1,0 +1,14 @@
+{
+  "template_name": "biosymphony-structure-cryosparc",
+  "image_family": "cryosparc",
+  "image_name": "docker.io/library/ubuntu:22.04",
+  "gpu_class": "L40S/A100 for real jobs; use only after license setup",
+  "volume_mount": "/workspace",
+  "ports": [
+    "39000/http"
+  ],
+  "startup_command": "bash /opt/structure-factory/entrypoints/license-gated-placeholder.sh",
+  "purpose": "License-gated CryoSPARC master/worker planning lane.",
+  "license_policy": "Runtime license only. Do not bake license IDs or private installers into image.",
+  "public_template_note": "Tracked placeholder image. Choose and digest-pin the runtime image in an ignored packet after license review and explicit human authorization."
+}

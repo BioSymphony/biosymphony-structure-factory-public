@@ -1,0 +1,22 @@
+{
+  "name": "biosymphony-structure-factory",
+  "owner": {
+    "name": "BioSymphony"
+  },
+  "metadata": {
+    "version": "0.1.0",
+    "description": "Public-safe structural biology campaign planning skills."
+  },
+  "plugins": [
+    {
+      "name": "biosymphony-structure-factory",
+      "displayName": "BioSymphony Structure Factory",
+      "source": "./",
+      "description": "Plan public-safe structural biology campaigns.",
+      "category": "life-sciences",
+      "tags": ["structural-biology", "campaign-planning", "agents"],
+      "strict": false,
+      "skills": ["./skills/biosymphony-structure-factory", "./skills/binder-lane-round"]
+    }
+  ]
+}

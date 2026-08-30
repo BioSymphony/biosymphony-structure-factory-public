@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-control-calibration.schema.json",
+  "title": "Binder control calibration record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_type", "scope_id", "method", "status", "selected_metric_id", "calibration_state", "round_decision_ready", "prediction_index", "selected_rows", "diagnostic", "gates", "readiness", "source_posture", "result_boundary", "provider_calls", "interpretation_limit"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-control-calibration-v1"},
+    "record_type": {"const": "binder-control-calibration"},
+    "scope_id": {"$ref": "#/$defs/id"},
+    "method": {"enum": ["derived", "adopted"]},
+    "status": {"enum": ["ready", "ready_with_optional_gaps", "blocked"]},
+    "selected_metric_id": {"$ref": "#/$defs/id"},
+    "calibration_state": {"enum": ["calibrated", "borrowed", "uncalibrated"]},
+    "round_decision_ready": {"type": "boolean"},
+    "source_calibration": {"$ref": "#/$defs/source_calibration"},
+    "prediction_index": {"type": ["object", "null"]},
+    "selected_rows": {"type": "array", "items": {"type": "object"}},
+    "diagnostic": {"type": ["object", "null"]},
+    "gates": {"type": "array", "items": {"$ref": "#/$defs/gate"}},
+    "readiness": {"$ref": "#/$defs/readiness"},
+    "source_posture": {"enum": ["public_data", "synthetic_demo", "mixed"]},
+    "result_boundary": {"const": "planning"},
+    "provider_calls": {"const": 0},
+    "interpretation_limit": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"},
+    "source_calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_id", "artifact_sha256", "adoption_reason"],
+      "properties": {
+        "scope_id": {"$ref": "#/$defs/id"},
+        "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "adoption_reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["predictor_id", "metric_id", "direction", "unit", "operator", "threshold", "derivation"],
+      "properties": {
+        "predictor_id": {"$ref": "#/$defs/id"},
+        "metric_id": {"$ref": "#/$defs/id"},
+        "direction": {"enum": ["higher_is_better", "lower_is_better"]},
+        "unit": {"type": "string", "minLength": 1},
+        "operator": {"enum": [">=", "<="]},
+        "threshold": {"type": "number"},
+        "derivation": {"enum": ["midpoint_between_worst_positive_and_best_negative", "adopted_from_declared_source"]}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "blocking_reasons", "optional_gaps", "next_actions"],
+      "properties": {
+        "state": {"enum": ["ready", "ready_with_optional_gaps", "blocked"]},
+        "blocking_reasons": {"type": "array", "items": {"type": "string"}},
+        "optional_gaps": {"type": "array", "items": {"type": "string"}},
+        "next_actions": {"type": "array", "items": {"$ref": "#/$defs/id"}}
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/calibration-summary.v1.schema.json",
+  "title": "Structure Factory calibration summary v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "benchmark_id",
+    "target_id",
+    "source_target_id",
+    "record_source",
+    "record_sha256",
+    "calibration_state",
+    "ranking_authority",
+    "methods",
+    "metrics",
+    "claim_ceiling",
+    "simple_baselines_included"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "benchmark_id": { "type": "string", "minLength": 1 },
+    "target_id": { "type": "string", "minLength": 1 },
+    "source_target_id": { "type": "string", "minLength": 1 },
+    "record_source": { "type": "string", "minLength": 1 },
+    "record_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "calibration_state": {
+      "enum": ["target_matched", "borrowed", "fixture_only", "unverified"]
+    },
+    "ranking_authority": { "type": "boolean" },
+    "methods": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "metrics": { "type": "object" },
+    "claim_ceiling": { "enum": ["candidate", "calibrated", "validated"] },
+    "simple_baselines_included": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}

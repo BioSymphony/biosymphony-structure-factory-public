@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="t d" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif">
+  <title id="t">Where Structure Factory sits</title>
+  <desc id="d">Your orchestrator drives Structure Factory. Structure Factory provides the skill, CLI, scaffolds, contracts, validators, and tool cards that hand checked plans to design, fold, and render tools, compute providers, and trackers.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#eff6ff"/>
+    </linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="9" flood-color="#0f172a" flood-opacity="0.13"/>
+    </filter>
+    <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="560" fill="url(#bg)"/>
+
+  <text x="60" y="58" font-size="32" font-weight="800" fill="#0f172a">Where Structure Factory sits</text>
+  <text x="60" y="90" font-size="17" fill="#475569">The skill layer between your agent, tools, compute providers, and trackers.</text>
+
+  <!-- arrows behind cards -->
+  <g fill="none" stroke="#64748b" stroke-width="2.5" marker-end="url(#ar)">
+    <path d="M 330 300 H 396"/>
+    <path d="M 764 250 C 800 250 800 188 832 188"/>
+    <path d="M 764 300 H 832"/>
+    <path d="M 764 350 C 800 350 800 412 832 412"/>
+  </g>
+
+  <!-- left: orchestrator (blue) -->
+  <g filter="url(#sh)"><rect x="56" y="158" width="274" height="284" rx="14" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/></g>
+  <rect x="56" y="158" width="274" height="46" rx="14" fill="#dbeafe"/>
+  <text x="78" y="187" font-size="17" font-weight="800" fill="#1d4ed8">YOUR ORCHESTRATOR</text>
+  <g font-size="15" fill="#334155">
+    <text x="78" y="244">Claude Code</text>
+    <text x="78" y="276">Codex</text>
+    <text x="78" y="308">Symphony + Linear</text>
+    <text x="78" y="340">/goal command stacks</text>
+    <text x="78" y="372">any skill-reading runtime</text>
+  </g>
+  <text x="78" y="416" font-size="13" font-style="italic" fill="#64748b">reads the skill, calls bsf</text>
+
+  <!-- center: Structure Factory (star) -->
+  <g filter="url(#sh)"><rect x="396" y="138" width="368" height="324" rx="16" fill="#ffffff" stroke="#0d9488" stroke-width="2.5"/></g>
+  <rect x="396" y="138" width="368" height="58" rx="16" fill="#ccfbf1"/>
+  <text x="580" y="166" text-anchor="middle" font-size="19" font-weight="800" fill="#0f766e">BioSymphony Structure Factory</text>
+  <text x="580" y="186" text-anchor="middle" font-size="13" fill="#0f766e">scaffolds goals &#183; validates &#183; prepares provider runs</text>
+  <g font-size="14.5" fill="#0f172a">
+    <text x="580" y="236" text-anchor="middle" font-weight="700">SKILL.md</text>
+    <text x="580" y="236" text-anchor="middle" fill="#0f172a"></text>
+    <text x="420" y="278">&#8226; bsf CLI (scaffold, validate, audit)</text>
+    <text x="420" y="308">&#8226; campaign scaffolds &amp; wave plans</text>
+    <text x="420" y="338">&#8226; contracts + JSON schemas</text>
+    <text x="420" y="368">&#8226; validators + audit gates</text>
+    <text x="420" y="398">&#8226; tool cards (design / fold / render)</text>
+    <text x="420" y="428">&#8226; provider profiles (budget, cleanup)</text>
+  </g>
+
+  <!-- right: three targets -->
+  <!-- tools (slate) -->
+  <g filter="url(#sh)"><rect x="832" y="150" width="312" height="92" rx="13" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/></g>
+  <text x="852" y="180" font-size="15" font-weight="800" fill="#334155">DESIGN &#183; FOLD &#183; RENDER TOOLS</text>
+  <text x="852" y="206" font-size="13.5" fill="#475569">Genie3 &#183; RFdiffusion &#183; MPNN &#183; Boltz</text>
+  <text x="852" y="227" font-size="13.5" fill="#475569">Chai &#183; ESMFold2 &#183; ChimeraX &#183; PyMOL</text>
+
+  <!-- compute (amber) -->
+  <g filter="url(#sh)"><rect x="832" y="262" width="312" height="92" rx="13" fill="#ffffff" stroke="#fdba74" stroke-width="2"/></g>
+  <text x="852" y="292" font-size="15" font-weight="800" fill="#c2410c">COMPUTE PROVIDERS</text>
+  <text x="852" y="318" font-size="13.5" fill="#475569">local &#183; neocloud: RunPod, Lambda, Modal</text>
+  <text x="852" y="339" font-size="13.5" fill="#475569">AWS Batch / EC2 &#183; SSH / HPC &#183; cloud VM</text>
+
+  <!-- trackers (blue) -->
+  <g filter="url(#sh)"><rect x="832" y="374" width="312" height="76" rx="13" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/></g>
+  <text x="852" y="404" font-size="15" font-weight="800" fill="#1d4ed8">TRACKERS</text>
+  <text x="852" y="430" font-size="13.5" fill="#475569">Linear &#183; GitHub Issues &#183; Notion</text>
+
+  <text x="600" y="506" text-anchor="middle" font-size="14.5" fill="#475569">Your agent reads the skill and drives Structure Factory; Structure Factory hands each tool, provider, and tracker a checked, contract-shaped plan.</text>
+</svg>

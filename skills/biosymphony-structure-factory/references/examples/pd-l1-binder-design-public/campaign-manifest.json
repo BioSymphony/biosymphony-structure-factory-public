@@ -1,0 +1,54 @@
+{
+  "campaign_id": "pd-l1-binder-design-public",
+  "title": "PD-L1 Binder Design Public Fast Path",
+  "result_boundary": "computational_candidate",
+  "wet_lab_execution": false,
+  "therapeutic_conclusions": false,
+  "system": {
+    "privacy": "public_or_synthetic_only",
+    "source_posture": "public accession metadata plus synthetic candidate-ranking fixture",
+    "heavy_artifact_policy": "no generated structure files, weights, provider logs, or raw data in git"
+  },
+  "target": {
+    "label": "PD-L1 target window",
+    "public_accession": "PDB:4ZQK",
+    "chain": "A",
+    "window": "19-127",
+    "organism": "Homo sapiens",
+    "notes": "Public protein-protein interface benchmark; coordinate materialization belongs in runtime or ignored local cache."
+  },
+  "lanes": [
+    {
+      "id": "target_intake",
+      "purpose": "Define public target window, hotspot plan, and input audit.",
+      "result_boundary": "planning"
+    },
+    {
+      "id": "generation_canary",
+      "purpose": "Run a tiny hotspot-conditioned binder-generation tranche before wider spend.",
+      "result_boundary": "computational_candidate"
+    },
+    {
+      "id": "cofold_ranking",
+      "purpose": "Cofold generated candidates and rank with confidence and failure rows preserved.",
+      "result_boundary": "computational_candidate"
+    },
+    {
+      "id": "review_report",
+      "purpose": "Render candidate ranking and report with explicit run boundaries.",
+      "result_boundary": "computational_candidate"
+    }
+  ],
+  "expected_artifacts": [
+    "target-window.json",
+    "stage-contract.json",
+    "candidate-ranking.example.json",
+    "binder-round-request.json",
+    "validation-notes.md"
+  ],
+  "operator_gates": [
+    "current tool license and use-context review before GPU execution",
+    "explicit budget and cleanup policy before paid provider launch",
+    "public-only MSA/service use unless operator supplies approved private data route"
+  ]
+}

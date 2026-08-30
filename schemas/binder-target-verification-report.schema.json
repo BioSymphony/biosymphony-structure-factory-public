@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-target-verification-report.schema.json",
+  "title": "Binder target verification report",
+  "$comment": "This schema describes a plan-bound local target-check report. It excludes structure paths and sequence payloads, and it does not establish biological suitability or provider readiness.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ok",
+    "schema_version",
+    "plan_sha256",
+    "target_contract_sha256",
+    "target_contract",
+    "format",
+    "structure_sha256",
+    "chain_id",
+    "coordinate_residue_count",
+    "first_coordinate_residue",
+    "last_coordinate_residue",
+    "required_residue_count",
+    "required_residues_verified",
+    "sequence_basis",
+    "sequence_length",
+    "sequence_sha256",
+    "sequence_verified",
+    "provider_calls"
+  ],
+  "properties": {
+    "ok": {"const": true},
+    "schema_version": {"const": "structure-factory-target-verification-v2"},
+    "plan_sha256": {"$ref": "#/$defs/sha256"},
+    "target_contract_sha256": {"$ref": "#/$defs/sha256"},
+    "target_contract": {"$ref": "#/$defs/target_contract"},
+    "format": {"enum": ["pdb", "mmcif"]},
+    "structure_sha256": {"$ref": "#/$defs/sha256"},
+    "chain_id": {"type": "string", "pattern": "^[A-Za-z0-9]+$"},
+    "coordinate_residue_count": {"type": "integer", "minimum": 1},
+    "first_coordinate_residue": {"$ref": "#/$defs/residue_label"},
+    "last_coordinate_residue": {"$ref": "#/$defs/residue_label"},
+    "required_residue_count": {"type": "integer", "minimum": 1},
+    "required_residues_verified": {"const": true},
+    "sequence_basis": {"enum": ["coordinates", "entity"]},
+    "sequence_length": {"type": "integer", "minimum": 1},
+    "sequence_sha256": {"$ref": "#/$defs/sha256"},
+    "sequence_verified": {"type": "boolean"},
+    "provider_calls": {"const": 0}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "residue_label": {"type": "string", "pattern": "^-?[0-9]+[A-Z]?$"},
+    "residue_selection": {"type": "string", "pattern": "^-?[0-9]+(?:[A-Z]|--?[0-9]+)?$"},
+    "target_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_posture", "label", "public_accession", "window", "site"],
+      "properties": {
+        "input_posture": {"enum": ["public_reference", "synthetic"]},
+        "label": {"type": "string", "minLength": 1},
+        "public_accession": {
+          "type": "string",
+          "pattern": "^(?:PDB:[A-Za-z0-9]{4}|UniProt:[A-Z0-9]{6,10}|AlphaFoldDB:[A-Za-z0-9_-]{6,}|SYNTHETIC:[A-Za-z0-9._-]+)$"
+        },
+        "window": {"type": "string", "minLength": 1},
+        "site": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chain_id", "required_residues"],
+          "properties": {
+            "chain_id": {"type": "string", "pattern": "^[A-Za-z0-9]+$"},
+            "required_residues": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/residue_selection"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

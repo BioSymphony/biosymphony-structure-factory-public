@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "artifact_type": "active_learning_plan",
+  "active_learning_id": "orchestration-fixtures-active-learning-fixture-v1",
+  "campaign_id": "screening-superpowers",
+  "run_id": "screening-superpowers-fixture",
+  "source_artifacts": [
+    "examples/orchestration-fixtures/benchmark.json",
+    "examples/screening-superpowers/screening-manifest.json",
+    ".runtime/screening-superpowers-fixture/consensus_ranking.csv"
+  ],
+  "selection_axes": [
+    "consensus_score",
+    "control_balance",
+    "scaffold_diversity",
+    "method_disagreement_proxy",
+    "failure_rescue"
+  ],
+  "tranches": [
+    {
+      "tranche_id": "top-ranked-candidates",
+      "role": "top_ranked",
+      "selection_axis": "consensus_score",
+      "candidate_ids": ["FIX-ACT-001", "FIX-FRG-001"],
+      "recommended_next_action": "promote compact candidate reports after fixture result validation",
+      "claim_level": "candidate"
+    },
+    {
+      "tranche_id": "controls-and-calibration",
+      "role": "controls",
+      "selection_axis": "control_balance",
+      "candidate_ids": ["FIX-ACT-001", "FIX-DEC-001", "FIX-FRG-001"],
+      "recommended_next_action": "carry through every calibration slice",
+      "claim_level": "candidate"
+    },
+    {
+      "tranche_id": "scaffold-diversity",
+      "role": "scaffold_diversity",
+      "selection_axis": "scaffold_diversity",
+      "candidate_ids": ["FIX-FRG-001", "FIX-DEC-001"],
+      "recommended_next_action": "keep representative chemistry in follow-up batches",
+      "claim_level": "candidate"
+    },
+    {
+      "tranche_id": "method-disagreement-review",
+      "role": "method_disagreement",
+      "selection_axis": "method_disagreement_proxy",
+      "candidate_ids": ["FIX-ACT-001", "FIX-FRG-001"],
+      "recommended_next_action": "review alternate method outputs before any real hit claim",
+      "claim_level": "candidate"
+    },
+    {
+      "tranche_id": "failure-rescue",
+      "role": "rescue",
+      "selection_axis": "clean_degradation",
+      "candidate_ids": ["FIX-BAD-001"],
+      "recommended_next_action": "keep invalid-control failure visible in the ledger",
+      "claim_level": "blocked"
+    }
+  ],
+  "claim_level": "candidate",
+  "evidence_mode": "fixture_or_demo"
+}

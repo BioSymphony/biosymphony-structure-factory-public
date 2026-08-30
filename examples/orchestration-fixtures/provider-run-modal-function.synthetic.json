@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "provider": "modal_function",
+  "run_id": "synthetic-modal-function-contract",
+  "provider_run_id": null,
+  "status": "planned",
+  "result_boundary": "public_synthetic_demo",
+  "source_posture": "synthetic_demo",
+  "evidence_mode": "fixture_or_demo",
+  "errors": []
+}

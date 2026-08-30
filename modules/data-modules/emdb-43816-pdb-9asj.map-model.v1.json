@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "module_type": "data_module",
+  "id": "emdb-43816-pdb-9asj",
+  "source": "EMDB_PDB",
+  "profile": "map_model_report",
+  "public_status": "public",
+  "title": "DNA polymerase theta helicase domain with AMP-PNP",
+  "source_urls": {
+    "emdb": "https://www.ebi.ac.uk/emdb/EMD-43816",
+    "pdb": "https://www.rcsb.org/structure/9ASJ",
+    "empiar_origin": "https://www.ebi.ac.uk/empiar/EMPIAR-12227/"
+  },
+  "accessions": {
+    "emdb": "EMD-43816",
+    "pdb": "9ASJ",
+    "empiar_origin": "EMPIAR-12227"
+  },
+  "data_classes": ["emdb_map", "pdb_model", "metadata"],
+  "storage_policy": "runpod_scratch_only_for_demo",
+  "git_policy": "never_commit_raw_or_generated_data",
+  "download_policy": {
+    "enabled": true,
+    "expected_download_bytes_max": 1500000000,
+    "requires_explicit_execution_issue": true,
+    "allow_raw_cryoem_downloads": false,
+    "download_to": "/workspace/structure-factory/scratch/map-model/emdb-43816-pdb-9asj"
+  },
+  "artifact_expectations": [
+    "report_manifest.json",
+    "validation/map_model_fit.json",
+    "figures/",
+    "methods.md",
+    "validation_ledger.md",
+    "provenance.md"
+  ],
+  "ledger_fields": [
+    "emdb_accession",
+    "pdb_accession",
+    "source_urls",
+    "download_method",
+    "storage_path",
+    "checksum_policy",
+    "citation"
+  ]
+}

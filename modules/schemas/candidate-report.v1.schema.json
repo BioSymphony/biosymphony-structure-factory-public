@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/candidate-report.v1.schema.json",
+  "title": "Structure Factory candidate report v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "candidate_report_id",
+    "ligand_id",
+    "rank",
+    "selection_reason",
+    "source_screening_manifest",
+    "candidate_evidence",
+    "claim_level",
+    "evidence_mode"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "candidate_report_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ligand_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rank": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "selection_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_screening_manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_evidence": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "ligand_id",
+        "status"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "ligand_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claim_level": {
+          "enum": [
+            "candidate",
+            "processed",
+            "validated",
+            "publishable",
+            "insufficient_evidence",
+            "blocked"
+          ]
+        },
+        "evidence_mode": {
+          "enum": [
+            "provider_native",
+            "derived",
+            "fixture_or_demo",
+            "report_only",
+            "blocked_or_insufficient"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "claim_level": {
+      "enum": [
+        "candidate",
+        "processed",
+        "validated",
+        "publishable",
+        "insufficient_evidence",
+        "blocked"
+      ]
+    },
+    "evidence_mode": {
+      "enum": [
+        "provider_native",
+        "derived",
+        "fixture_or_demo",
+        "report_only",
+        "blocked_or_insufficient"
+      ]
+    },
+    "caveat": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

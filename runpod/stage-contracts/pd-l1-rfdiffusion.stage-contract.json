@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "contract_id": "pd-l1-rfdiffusion.stage-contract.v1",
+  "manifest_id": "structure-factory-pd-l1-rfdiffusion-canary",
+  "run_id": "structure-factory-pd-l1-rfdiffusion-canary",
+  "campaign_id": "pd-l1-pd1-binder-design",
+  "wave": "design",
+  "execution_profile": "rfdiffusion-binder-design",
+  "progress_ledger": "/workspace/runpod-execution/artifacts/stage-progress.jsonl",
+  "success_claim": "RFdiffusion backbones (canary: 8; full: 256) against PD-L1 4ZQK chain A with strict 5-hotspot constraint, followed by ProteinMPNN sequence design. Result boundary is at most candidate; iPTM scoring is performed by a separate Boltz wave.",
+  "fail_closed": true,
+  "gpu_requirements": {
+    "vram_gb_min": 16,
+    "vram_gb_recommended": 24,
+    "compute_capability_min": "8.0",
+    "tested_on": [
+      "NVIDIA A100-SXM4-80GB",
+      "NVIDIA L40S"
+    ],
+    "cloud_type": "SECURE"
+  },
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "target_pdb_sha256_change",
+      "rfdiffusion_weights_sha256_change",
+      "rfdiffusion_repo_commit_change",
+      "repo_commit_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "manifest_preflight",
+      "description": "Verify the stage contract exists, record its sha256, and capture the requested RFdiffusion parameters (num_designs, contigs, hotspots, seed).",
+      "required": true,
+      "expected_outputs": [
+        "validation/manifest-preflight.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/manifest-preflight.json",
+      "done_marker": "validation/manifest-preflight.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-rfdiffusion.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "input_audit",
+      "description": "Hash the target PDB (PD-L1 chain A), enumerate chains/resnums, and record the hotspot list and contigmap.contigs string used at design time.",
+      "required": true,
+      "expected_outputs": [
+        "validation/input-audit.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "validation/input-audit.json",
+      "done_marker": "validation/input-audit.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-rfdiffusion.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "rfdiffusion_install",
+      "description": "Clone RFdiffusion to /workspace/software/rfdiffusion, pip-install pinned deps (e3nn 0.5.1, hydra 1.3.2, dgl 2.0.0+cu121, etc.) and SE3Transformer, and install RFdiffusion editable. Sentinel-guarded so re-runs at the same SHA are a no-op.",
+      "required": true,
+      "expected_outputs": [
+        "validation/rfdiffusion_install.json"
+      ],
+      "timeout_minutes": 20,
+      "checkpoint_marker": "validation/rfdiffusion_install.json",
+      "done_marker": "validation/rfdiffusion_install.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-rfdiffusion.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "rfdiffusion_weights_check",
+      "description": "Record the RFdiffusion weights cache state at /workspace/software/weights/rfdiffusion and fail-closed if Complex_base_ckpt.pt (the PPI / binder default) is absent.",
+      "required": true,
+      "expected_outputs": [
+        "validation/rfdiffusion_weights_manifest.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/rfdiffusion_weights_manifest.json",
+      "done_marker": "validation/rfdiffusion_weights_manifest.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-rfdiffusion.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "rfdiffusion_design",
+      "description": "Invoke scripts/run_inference.py with inference.input_pdb, inference.output_prefix, inference.num_designs, inference.ckpt_override_path=Complex_base_ckpt.pt, contigmap.contigs, ppi.hotspot_res, denoiser.noise_scale_ca=0, denoiser.noise_scale_frame=0. Record the exact CLI invocation and exit code.",
+      "required": true,
+      "expected_outputs": [
+        "logs/rfdiffusion_design.log"
+      ],
+      "timeout_minutes": 240,
+      "checkpoint_marker": "logs/rfdiffusion_design.log",
+      "done_marker": "logs/rfdiffusion_design.log",
+      "resume_command": "bash runpod/entrypoints/pd-l1-rfdiffusion.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "rfdiffusion_postprocess",
+      "description": "Enumerate design_*.pdb under the output prefix, sha256 each one, and emit rfdiffusion/rfdiffusion_manifest.json with designer=rfdiffusion, rfdiffusion_sha, checkpoint, num_designs_produced, and the per-design hash table.",
+      "required": true,
+      "expected_outputs": [
+        "rfdiffusion/rfdiffusion_manifest.json",
+        "validation/rfdiffusion_postprocess.json"
+      ],
+      "timeout_minutes": 15,
+      "checkpoint_marker": "rfdiffusion/rfdiffusion_manifest.json",
+      "done_marker": "rfdiffusion/rfdiffusion_manifest.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-rfdiffusion.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "mpnn_sequence_design",
+      "description": "Run ProteinMPNN over each RFdiffusion backbone (protein_mpnn_run.py with num_seq_per_target=2, sampling_temp=0.1, seed=37); concatenate FASTAs into mpnn/sequences.fasta. ProteinMPNN env on NV is preferred; falls back to inline clone if absent.",
+      "required": true,
+      "expected_outputs": [
+        "mpnn/sequences.fasta",
+        "validation/mpnn_sequence_design.json"
+      ],
+      "timeout_minutes": 60,
+      "checkpoint_marker": "mpnn/sequences.fasta",
+      "done_marker": "mpnn/sequences.fasta",
+      "resume_command": "bash runpod/entrypoints/pd-l1-rfdiffusion.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "contract_self_check",
+      "description": "Verify all required artifacts are present and non-empty, confirm at least one non-empty design_*.pdb, hash every artifact under runpod-execution/artifacts, and write status.json with num_designs_produced and the missing-artifact list. Fail closed on missing artifacts or zero non-empty designs.",
+      "required": true,
+      "expected_outputs": [
+        "validation/contract-self-check.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/contract-self-check.json",
+      "done_marker": "validation/contract-self-check.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-rfdiffusion.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    }
+  ],
+  "expected_outputs": [
+    "runpod-execution/status.json",
+    "runpod-execution/artifacts/rfdiffusion/design_*.pdb",
+    "runpod-execution/artifacts/rfdiffusion/rfdiffusion_manifest.json",
+    "runpod-execution/artifacts/mpnn/sequences.fasta",
+    "runpod-execution/artifacts/validation/manifest-preflight.json",
+    "runpod-execution/artifacts/validation/input-audit.json",
+    "runpod-execution/artifacts/validation/rfdiffusion_install.json",
+    "runpod-execution/artifacts/validation/rfdiffusion_weights_manifest.json",
+    "runpod-execution/artifacts/validation/rfdiffusion_postprocess.json",
+    "runpod-execution/artifacts/validation/mpnn_sequence_design.json",
+    "runpod-execution/artifacts/validation/contract-self-check.json",
+    "runpod-execution/artifacts/stage-progress.jsonl",
+    "runpod-execution/artifacts/executed-commands.jsonl"
+  ],
+  "exact_commands": [
+    "bash runpod/entrypoints/pd-l1-rfdiffusion.sh"
+  ],
+  "done_markers": [
+    "runpod-execution/status.json reports ok",
+    "runpod-execution/artifacts/validation/contract-self-check.json reports ok true",
+    "runpod-execution/artifacts/rfdiffusion/rfdiffusion_manifest.json exists and num_designs_produced >= 1",
+    "runpod-execution/artifacts/mpnn/sequences.fasta exists and is non-empty"
+  ],
+  "claim_levels_allowed": [
+    "candidate",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "default_claim_level": "candidate",
+  "license_gates_required": [],
+  "no_false_success_notes": [
+    "RFdiffusion (BSD) + ProteinMPNN (MIT) only; AlphaFold 3 substitution is forbidden by campaign policy.",
+    "These backbones+sequences are candidates only; iPTM gating happens in a downstream Boltz cofold wave with --use_msa_server --write_full_pae.",
+    "A produced backbone is not a binder; campaign policy caps claims at candidate until a Boltz iPTM ranking passes."
+  ]
+}

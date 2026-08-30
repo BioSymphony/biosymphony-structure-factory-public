@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-failure-record.schema.json",
+  "title": "Binder lane structured failure record",
+  "$comment": "This schema describes public remediation guidance. It does not expose input values, credentials, provider resource identifiers, paths, logs, or runtime readiness.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["check_id", "category", "summary", "next_actions"],
+  "properties": {
+    "check_id": {
+      "enum": [
+        "metric-provenance",
+        "target-verification",
+        "execution-authorization",
+        "budget-boundary",
+        "artifact-closeout",
+        "adapter-readiness",
+        "use-constraint",
+        "public-safety-boundary",
+        "remote-contract",
+        "binder-input"
+      ]
+    },
+    "category": {
+      "enum": [
+        "metric_calibration",
+        "target_identity",
+        "authorization",
+        "budget",
+        "artifact_integrity",
+        "runtime_readiness",
+        "terms_and_license",
+        "data_and_path_safety",
+        "remote_contract",
+        "invalid_input"
+      ]
+    },
+    "summary": {"type": "string", "minLength": 1, "maxLength": 512},
+    "next_actions": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/action"}
+    }
+  },
+  "allOf": [
+    {"$ref": "#/$defs/metric_provenance"},
+    {"$ref": "#/$defs/target_verification"},
+    {"$ref": "#/$defs/execution_authorization"},
+    {"$ref": "#/$defs/budget_boundary"},
+    {"$ref": "#/$defs/artifact_closeout"},
+    {"$ref": "#/$defs/adapter_readiness"},
+    {"$ref": "#/$defs/use_constraint"},
+    {"$ref": "#/$defs/public_safety_boundary"},
+    {"$ref": "#/$defs/remote_contract"},
+    {"$ref": "#/$defs/binder_input"}
+  ],
+  "$defs": {
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{0,63}$"},
+        "description": {"type": "string", "minLength": 1, "maxLength": 512}
+      }
+    },
+    "metric_provenance": {
+      "if": {"properties": {"check_id": {"const": "metric-provenance"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "metric_calibration"}}}
+    },
+    "target_verification": {
+      "if": {"properties": {"check_id": {"const": "target-verification"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "target_identity"}}}
+    },
+    "execution_authorization": {
+      "if": {"properties": {"check_id": {"const": "execution-authorization"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "authorization"}}}
+    },
+    "budget_boundary": {
+      "if": {"properties": {"check_id": {"const": "budget-boundary"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "budget"}}}
+    },
+    "artifact_closeout": {
+      "if": {"properties": {"check_id": {"const": "artifact-closeout"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "artifact_integrity"}}}
+    },
+    "adapter_readiness": {
+      "if": {"properties": {"check_id": {"const": "adapter-readiness"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "runtime_readiness"}}}
+    },
+    "use_constraint": {
+      "if": {"properties": {"check_id": {"const": "use-constraint"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "terms_and_license"}}}
+    },
+    "public_safety_boundary": {
+      "if": {"properties": {"check_id": {"const": "public-safety-boundary"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "data_and_path_safety"}}}
+    },
+    "remote_contract": {
+      "if": {"properties": {"check_id": {"const": "remote-contract"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "remote_contract"}}}
+    },
+    "binder_input": {
+      "if": {"properties": {"check_id": {"const": "binder-input"}}, "required": ["check_id"]},
+      "then": {"properties": {"category": {"const": "invalid_input"}}}
+    }
+  }
+}

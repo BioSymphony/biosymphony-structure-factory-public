@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/protein-binder-design-manifest.v1.schema.json",
+  "title": "Structure Factory protein binder design manifest v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_type",
+    "campaign_id",
+    "run_id",
+    "intent",
+    "public_accession_candidates",
+    "target_window_hypotheses",
+    "workflow",
+    "execution_policy",
+    "claim_policy"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "manifest_type": { "const": "protein_binder_design_manifest" },
+    "campaign_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "intent": {
+      "type": "object",
+      "required": ["mode", "natural_language_goal", "generation_lane", "crosscheck_lane", "claim_ceiling"],
+      "properties": {
+        "mode": { "const": "protein_binder_design" },
+        "natural_language_goal": { "type": "string", "minLength": 1 },
+        "generation_lane": { "type": "string", "minLength": 1 },
+        "crosscheck_lane": { "type": "string", "minLength": 1 },
+        "claim_ceiling": { "enum": ["candidate", "insufficient_evidence", "blocked"] }
+      },
+      "additionalProperties": true
+    },
+    "public_accession_candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["label", "pdb", "emdb", "role"],
+        "properties": {
+          "label": { "type": "string", "minLength": 1 },
+          "pdb": { "type": "string", "minLength": 1 },
+          "emdb": { "type": "string", "minLength": 1 },
+          "role": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "target_window_hypotheses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["window_id", "source_pdbs", "entities", "design_goal", "first_pass"],
+        "properties": {
+          "window_id": { "type": "string", "minLength": 1 },
+          "source_pdbs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "entities": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "design_goal": { "type": "string", "minLength": 1 },
+          "first_pass": { "type": "boolean" },
+          "risk_notes": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "workflow": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["stage_id", "method", "expected_artifacts", "claim_level"],
+        "properties": {
+          "stage_id": { "type": "string", "minLength": 1 },
+          "method": { "type": "string", "minLength": 1 },
+          "expected_artifacts": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+          "claim_level": { "enum": ["candidate", "insufficient_evidence", "blocked"] }
+        },
+        "additionalProperties": true
+      }
+    },
+    "negative_controls": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "execution_policy": {
+      "type": "object",
+      "required": [
+        "allow_private_data",
+        "allow_raw_movie_downloads",
+        "allow_model_weight_downloads_without_operator_gate",
+        "allow_paid_compute",
+        "expected_download_bytes",
+        "operator_gate_required_for_weighted_or_provider_execution"
+      ],
+      "properties": {
+        "allow_private_data": { "type": "boolean" },
+        "allow_raw_movie_downloads": { "type": "boolean" },
+        "allow_model_weight_downloads_without_operator_gate": { "type": "boolean" },
+        "allow_paid_compute": { "type": "boolean" },
+        "expected_download_bytes": { "type": "integer", "minimum": 0 },
+        "operator_gate_required_for_weighted_or_provider_execution": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "claim_policy": {
+      "type": "object",
+      "required": ["allowed_claims", "forbidden_claims"],
+      "properties": {
+        "allowed_claims": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "forbidden_claims": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

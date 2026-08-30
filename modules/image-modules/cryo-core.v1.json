@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "module_type": "image_module",
+  "family": "cryo-core",
+  "purpose": "Open-source cryo-EM prep, toolcheck, and future reconstruction lanes.",
+  "required_for_profiles": ["no_download_smoke"],
+  "candidate_tools": ["relion", "warp_m", "topaz", "ctffind", "gctf", "cryodrgn"],
+  "execution_ready_requires": ["oci_digest", "toolcheck_pass", "license_audit"]
+}

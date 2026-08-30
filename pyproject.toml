@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biosymphony-structure-factory"
+version = "0.1.0a0"
+description = "AI-agent toolkit for structural biology workflows: binder design, structure mapping, screening, protein modeling, and cloud-scale runs."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "BioSymphony contributors" }]
+keywords = [
+  "structural-biology",
+  "protein-design",
+  "binder-design",
+  "cryo-em",
+  "runpod",
+  "linear",
+  "symphony",
+  "agentic-ai",
+  "ai-agents",
+  "structure-prediction",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/BioSymphony/structure-factory"
+Repository = "https://github.com/BioSymphony/structure-factory"
+Issues = "https://github.com/BioSymphony/structure-factory/issues"
+
+[project.scripts]
+bsf = "biosymphony_structure_factory.cli:main"
+bsf-status-filter = "biosymphony_structure_factory.candidate_filters:status_main"
+bsf-diversity-filter = "biosymphony_structure_factory.candidate_filters:diversity_main"
+bsf-esmfold2-predict = "biosymphony_structure_factory.binder_esmfold2_adapter:main"
+bsf-supplied-backbone = "biosymphony_structure_factory.binder_supplied_backbone_adapter:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]

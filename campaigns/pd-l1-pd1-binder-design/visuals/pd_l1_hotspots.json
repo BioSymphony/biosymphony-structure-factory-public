@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "source_pdb": "4ZQK",
+  "target_chain": "A",
+  "uniprot_numbering": true,
+  "note": "PD-L1 hotspot residue lists for PyMOL rendering. Each list is a different selection rule. The strict_10 list is the canonical structural interface (≤3.5 Å min atom-atom distance to chain B in 4ZQK).",
+  "lists": {
+    "strict_10": {
+      "chain": "A",
+      "residues": [19, 26, 54, 66, 113, 121, 122, 123, 124, 125],
+      "count": 10,
+      "rule": "all chain A residues with min_atom_atom_distance ≤ 3.5 Å to chain B in 4ZQK",
+      "use_for": "general PyMOL visualization — full structural interface"
+    },
+    "top_5_strict": {
+      "chain": "A",
+      "residues": [122, 125, 113, 121, 123],
+      "count": 5,
+      "rule": "top 5 by closest distance (sorted: A122 2.557, A125 2.613, A113 2.645, A121 2.678, A123 2.699 Å)",
+      "use_for": "RFdiffusion ppi.hotspot_res steering — 3-5 is the sweet spot"
+    },
+    "literature_5": {
+      "chain": "A",
+      "residues": [56, 58, 113, 115, 123],
+      "count": 5,
+      "rule": "literature-cited hotspots Y56/E58/R113/M115/Y123 (e.g. Lin 2017, Zak 2015)",
+      "use_for": "publication-quality renders that match original PD-L1 / PD-1 papers"
+    }
+  }
+}

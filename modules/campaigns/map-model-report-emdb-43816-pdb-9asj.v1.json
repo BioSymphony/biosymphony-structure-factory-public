@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "module_type": "campaign_manifest",
+  "campaign_id": "structure-factory-emdb-43816-pdb-9asj-report",
+  "campaign_family": "publishable-figure-report",
+  "run_profile": "map_model_report",
+  "data_modules": [
+    "modules/data-modules/emdb-43816-pdb-9asj.map-model.v1.json"
+  ],
+  "image_modules": [
+    "modules/image-modules/model-build.v1.json"
+  ],
+  "lane_modules": [
+    "modules/lane-modules/modelangelo.toolcheck.v1.json",
+    "modules/lane-modules/phenix.license-gate.v1.json",
+    "modules/lane-modules/chimerax.license-gate.v1.json"
+  ],
+  "smoke_suites": [
+    "modules/smoke-checks/no-download.v1.json"
+  ],
+  "artifact_contract": "modules/artifact-contracts/structure-report.v1.json",
+  "artifact_plan": {
+    "data_module": "modules/data-modules/emdb-43816-pdb-9asj.map-model.v1.json",
+    "allow_raw_cryoem_downloads": false,
+    "expected_outputs": ["validation", "figures", "methods", "validation_ledger", "provenance"]
+  },
+  "policies": {
+    "allow_large_downloads": true,
+    "allow_raw_cryoem_downloads": false,
+    "allow_private_data": false,
+    "expected_download_bytes": 1500000000
+  }
+}

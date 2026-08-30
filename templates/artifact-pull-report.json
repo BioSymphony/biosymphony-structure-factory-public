@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "provider": "runpod",
+  "run_id": "provider-or-bridge-run-id",
+  "manifest_path": "runpod/bridge-manifests/example.json",
+  "pulled_at": "YYYY-MM-DDTHH:MM:SSZ",
+  "artifacts": [
+    {
+      "declared_path": "artifacts/status.json",
+      "local_path": ".runtime/example/artifacts/status.json",
+      "required": true,
+      "url": "provider-or-proxy-url",
+      "http_status": 200,
+      "bytes": 0,
+      "sha256": "LOCAL_SHA256",
+      "expected_sha256": "EXPECTED_SHA256_OR_NULL",
+      "hash_status": "MATCH",
+      "format": "json",
+      "format_ok": true,
+      "proxy_error_body": false,
+      "accepted": true,
+      "error_class": null
+    }
+  ],
+  "overall_status": "OK",
+  "cleanup": {
+    "requested": true,
+    "verified": true,
+    "retained_resource_authorization": null
+  }
+}

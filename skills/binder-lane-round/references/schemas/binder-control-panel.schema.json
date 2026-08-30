@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-control-panel.schema.json",
+  "title": "Binder measured-control panel",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "scope_id", "selected_metric_id", "minimum_controls_per_class", "required_predictors", "required_seeds", "metrics", "controls", "source_posture", "result_boundary"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-control-panel-v1"},
+    "scope_id": {"$ref": "#/$defs/id"},
+    "selected_metric_id": {"$ref": "#/$defs/id"},
+    "minimum_controls_per_class": {"type": "integer", "minimum": 1, "maximum": 100},
+    "required_predictors": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "required_seeds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer", "minimum": 0}},
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "direction", "unit", "required_control_ids"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "direction": {"enum": ["higher_is_better", "lower_is_better"]},
+          "unit": {"type": "string", "minLength": 1, "maxLength": 80},
+          "required_control_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+        }
+      }
+    },
+    "controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "class", "requirement", "source_posture", "source_id"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "class": {"enum": ["positive", "negative"]},
+          "requirement": {"enum": ["required", "optional"]},
+          "source_posture": {"enum": ["public_data", "synthetic_demo"]},
+          "source_id": {"$ref": "#/$defs/id"}
+        }
+      }
+    },
+    "source_posture": {"enum": ["public_data", "synthetic_demo", "mixed"]},
+    "result_boundary": {"const": "planning"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"}
+  }
+}

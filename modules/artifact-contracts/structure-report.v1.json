@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "module_type": "artifact_contract",
+  "contract_id": "structure-report.v1",
+  "required_for_smoke": [
+    "run-manifest.json",
+    "stage-progress.jsonl",
+    "validation/toolcheck.json",
+    "validation/gpu.json",
+    "validation/storage.json",
+    "validation/license-gates.json",
+    "provenance.md"
+  ],
+  "required_for_raw_subset_demo": [
+    "run-manifest.json",
+    "stage-progress.jsonl",
+    "data-intake-ledger.json",
+    "validation/fanout-estimate.json",
+    "validation/toolcheck.json",
+    "validation/versions.json",
+    "validation/storage.json",
+    "motion_correction_qc/",
+    "ctf_qc/",
+    "provenance.md"
+  ],
+  "required_for_map_model_report": [
+    "report_manifest.json",
+    "data-intake-ledger.json",
+    "executed-commands.jsonl",
+    "validation/map_model_fit.json",
+    "stage-progress.jsonl",
+    "figures/",
+    "methods.md",
+    "validation_ledger.md",
+    "provenance.md"
+  ],
+  "required_for_full_report": [
+    "report_manifest.json",
+    "run_manifest.json",
+    "stage-progress.jsonl",
+    "maps/",
+    "models/",
+    "validation/",
+    "figures/",
+    "methods.md",
+    "validation_ledger.md",
+    "provenance.md",
+    "next_experiments.md"
+  ],
+  "required_at_closeout": [
+    "validation/input-audit.json",
+    "validation/contract-self-check.json"
+  ],
+  "maturity_ladder": {
+    "L0": "plan_exists",
+    "L1": "tools_ready",
+    "L2": "inputs_materialized",
+    "L3": "execution_performed",
+    "L4": "evidence_joined",
+    "L5": "validation_reviewed_report"
+  },
+  "claim_levels": [
+    "candidate",
+    "processed",
+    "validated",
+    "publishable",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "cryoem_evidence_requirements": {
+    "resolution_claim": ["half_map_provenance", "fsc_curve", "mask_provenance"],
+    "map_model_claim": ["map_model_correlation", "local_resolution", "geometry_validation"],
+    "orientation_claim": ["pixel_size_angstrom", "handedness_check"],
+    "figure_claim": ["source_accessions", "software_versions", "contour_levels", "camera_or_session_state"]
+  },
+  "export_policy": {
+    "raw_cryoem_movies": "do_not_export",
+    "processed_particle_stacks": "export_manifest_only_unless_authorized",
+    "maps_models_figures_logs": "export_small_artifacts",
+    "secrets_and_license_material": "never_export"
+  }
+}

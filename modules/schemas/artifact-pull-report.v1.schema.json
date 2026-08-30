@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/artifact-pull-report.v1.schema.json",
+  "title": "Structure Factory artifact pull report v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "provider",
+    "run_id",
+    "artifacts",
+    "overall_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "manifest_path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pulled_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "overall_status": {
+      "enum": [
+        "OK",
+        "PARTIAL",
+        "FAILED",
+        "BLOCKED",
+        "SKIPPED"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "declared_path",
+          "local_path",
+          "required",
+          "bytes",
+          "accepted"
+        ],
+        "properties": {
+          "declared_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "local_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "http_status": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 100,
+            "maximum": 599
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "expected_sha256": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "hash_status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "format": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "format_ok": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "proxy_error_body": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "accepted": {
+            "type": "boolean"
+          },
+          "error_class": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "properties": {
+        "requested": {
+          "type": "boolean"
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "retained_resource_authorization": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

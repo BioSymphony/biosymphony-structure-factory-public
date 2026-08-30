@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "spec_type": "provider_run_spec",
+  "campaign_id": "screening-superpowers",
+  "run_id": "screening-superpowers-fixture",
+  "source_manifest": "examples/screening-superpowers/screening-manifest.json",
+  "execution_profile": "screening-no-download-smoke",
+  "description": "No-paid provider adapter dry-run for the Screening Superpowers fixture. This spec emits inert launch packets only.",
+  "dry_run": {
+    "no_provider_launch": true,
+    "no_paid_compute": true,
+    "no_secrets_required": true,
+    "allowed_outputs_root": ".runtime/provider-adapter-dry-run"
+  },
+  "repo": {
+    "delivery": "dry_run_only",
+    "url": "https://github.com/BioSymphony/structure-factory.git",
+    "git_ref": "dry-run-not-launchable"
+  },
+  "providers": [
+    {
+      "adapter": "local_workstation_v1",
+      "profile": "modules/provider-profiles/local/workstation-no-download.v1.json"
+    },
+    {
+      "adapter": "runpod_pod_v1",
+      "profile": "modules/provider-profiles/runpod/pod-no-download.v1.json"
+    },
+    {
+      "adapter": "aws_batch_v1",
+      "profile": "modules/provider-profiles/aws/aws-batch-gpu-no-download.v1.json"
+    },
+    {
+      "adapter": "neocloud_gpu_pod_v1",
+      "profile": "modules/provider-profiles/neocloud/gpu-pod-no-download.v1.json"
+    }
+  ],
+  "closeout_policy": {
+    "claim_level_ceiling": "computational_candidate",
+    "dry_run_evidence_mode": "public_synthetic_demo",
+    "provider_success_is_not_scientific_success": true,
+    "requires_cost_report_for_paid_providers": true,
+    "requires_cleanup_proof_for_paid_providers": true,
+    "requires_artifact_hashes": true
+  }
+}

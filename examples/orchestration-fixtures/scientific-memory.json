@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "memory_id": "orchestration-fixtures-public-memory-fixture",
+  "campaign_id": "orchestration-fixtures",
+  "memory_type": "method_calibration",
+  "summary": "No-download orchestration fixtures can exercise screening, calibration, and provider closeout contracts, but they cannot support validated biological claims.",
+  "evidence_refs": [
+    "examples/orchestration-fixtures/benchmark-set.json",
+    "examples/orchestration-fixtures/calibration-summary.json"
+  ],
+  "public_safe": true
+}

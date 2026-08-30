@@ -1,0 +1,22 @@
+{
+  "schema_version": "structure-factory-binder-api-adapter-contract-v1",
+  "contract_id": "operator-api-adapter",
+  "provider_class": "api",
+  "implementation_status": "operator_supplied",
+  "network_access": "operator_gated",
+  "launch_authorization": "not_granted",
+  "required_reviews": [
+    "current service terms and tool license",
+    "input retention and model-training policy",
+    "private-data eligibility",
+    "runtime credential injection",
+    "request limit and budget",
+    "artifact export and deletion"
+  ],
+  "request_contract": {
+    "input": "stage-specific manifest resolved outside public git",
+    "output": "stage artifact index with counts, hashes, and validation notes",
+    "failure_policy": "preserve failed rows and stop before downstream promotion"
+  },
+  "boundary": "This template defines a handoff shape. It contains no service address, account identifier, credential, accepted-license state, or launch instruction."
+}

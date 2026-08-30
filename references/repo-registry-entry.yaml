@@ -1,0 +1,19 @@
+repo:
+  id: structure_factory
+  name: BioSymphony Structure Factory
+  path: <repo-root>
+  hq_repo: <biosymphony-hq-repo>
+  subgroup: structure-factory
+  owns:
+    - CryoCore handoff contracts for raw cryo-EM requests
+    - public PDB/EMDB structure-mapping reports
+    - agent-ready binder-design and screening task plans
+    - multimer and conformational-state atlases
+    - RunPod structural-biology execution stack
+    - structural figure and report packaging
+  does_not_own:
+    - raw cryo-EM movie intake, EMPIAR subset execution, reconstruction, or map-to-model build lanes
+    - BioSymphony-wide contracts
+    - other BioSymphony domain workflows outside Structure Factory integration points
+    - global Symphony/Linear operations
+  core_change_policy: "Open a separate biosymphony-core issue before editing the HQ repo."

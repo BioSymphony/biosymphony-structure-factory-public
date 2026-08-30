@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="t d" font-family="Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif">
+  <title id="t">Agent lanes fan-out</title>
+  <desc id="d">One campaign goal fans into parallel lanes (design, fold, score, render, screen), each calling specific tools, then converges into a ranked, checked report.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8fafc"/><stop offset="1" stop-color="#ecfeff"/></linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.12"/></filter>
+    <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/></marker>
+  </defs>
+  <rect width="1200" height="500" fill="url(#bg)"/>
+
+  <text x="600" y="44" text-anchor="middle" font-size="22" font-weight="800" fill="#0f172a">What an agent actually does with your goal</text>
+  <text x="600" y="68" text-anchor="middle" font-size="14" fill="#64748b">One goal fans into parallel lanes &#183; each lane calls the right tools &#183; results converge into a ranked, checked report.</text>
+
+  <!-- fan-out / fan-in connectors -->
+  <g fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#ar)">
+    <path d="M 250 250 C 300 250 300 130 348 130"/>
+    <path d="M 250 250 C 300 250 300 192 348 192"/>
+    <path d="M 250 250 C 300 250 300 254 348 254"/>
+    <path d="M 250 250 C 300 250 300 316 348 316"/>
+    <path d="M 250 250 C 300 250 300 378 348 378"/>
+    <path d="M 832 130 C 884 130 884 250 936 250"/>
+    <path d="M 832 192 C 884 192 884 250 936 250"/>
+    <path d="M 832 254 C 884 254 884 250 936 250"/>
+    <path d="M 832 316 C 884 316 884 250 936 250"/>
+    <path d="M 832 378 C 884 378 884 250 936 250"/>
+  </g>
+
+  <!-- left: goal -->
+  <g filter="url(#sh)"><rect x="60" y="198" width="190" height="104" rx="14" fill="#fff" stroke="#2dd4bf" stroke-width="2.5"/></g>
+  <text x="155" y="240" text-anchor="middle" font-size="16" font-weight="800" fill="#0f766e">Campaign goal</text>
+  <text x="155" y="264" text-anchor="middle" font-size="13" fill="#334155">+ target window</text>
+  <text x="155" y="284" text-anchor="middle" font-size="13" fill="#334155">+ constraints</text>
+
+  <!-- lanes -->
+  <g>
+    <!-- each lane: rect + accent stripe + name + tools -->
+    <g filter="url(#sh)"><rect x="348" y="104" width="484" height="52" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/></g>
+    <rect x="348" y="104" width="6" height="52" rx="3" fill="#0d9488"/>
+    <text x="372" y="127" font-size="15" font-weight="800" fill="#0f172a">Design</text>
+    <text x="372" y="146" font-size="12.5" fill="#475569">Genie3 &#183; RFdiffusion &#183; ProteinMPNN &#183; HelixDiff &#183; PepGLAD &#183; EvoBind</text>
+
+    <g filter="url(#sh)"><rect x="348" y="166" width="484" height="52" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/></g>
+    <rect x="348" y="166" width="6" height="52" rx="3" fill="#0d9488"/>
+    <text x="372" y="189" font-size="15" font-weight="800" fill="#0f172a">Fold / cofold</text>
+    <text x="372" y="208" font-size="12.5" fill="#475569">Boltz &#183; Chai &#183; ESMFold2</text>
+
+    <g filter="url(#sh)"><rect x="348" y="228" width="484" height="52" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/></g>
+    <rect x="348" y="228" width="6" height="52" rx="3" fill="#0d9488"/>
+    <text x="372" y="251" font-size="15" font-weight="800" fill="#0f172a">Score / triage</text>
+    <text x="372" y="270" font-size="12.5" fill="#475569">cofold confidence &#183; method-disagreement ranking</text>
+
+    <g filter="url(#sh)"><rect x="348" y="290" width="484" height="52" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/></g>
+    <rect x="348" y="290" width="6" height="52" rx="3" fill="#0d9488"/>
+    <text x="372" y="313" font-size="15" font-weight="800" fill="#0f172a">Render</text>
+    <text x="372" y="332" font-size="12.5" fill="#475569">ChimeraX &#183; PyMOL &#183; figure pack &#183; sessions</text>
+
+    <g filter="url(#sh)"><rect x="348" y="352" width="484" height="52" rx="10" fill="#fff" stroke="#cbd5e1" stroke-width="1.5"/></g>
+    <rect x="348" y="352" width="6" height="52" rx="3" fill="#0d9488"/>
+    <text x="372" y="375" font-size="15" font-weight="800" fill="#0f172a">Screen</text>
+    <text x="372" y="394" font-size="12.5" fill="#475569">fanout estimate &#183; shard ledgers &#183; consensus ranking</text>
+  </g>
+
+  <!-- right: report -->
+  <g filter="url(#sh)"><rect x="936" y="190" width="200" height="120" rx="14" fill="#fff" stroke="#2dd4bf" stroke-width="2.5"/></g>
+  <text x="1036" y="228" text-anchor="middle" font-size="16" font-weight="800" fill="#0f766e">Ranking + report</text>
+  <text x="1036" y="252" text-anchor="middle" font-size="12.5" fill="#334155">candidates, confidence,</text>
+  <text x="1036" y="270" text-anchor="middle" font-size="12.5" fill="#334155">failure rows, figures,</text>
+  <text x="1036" y="288" text-anchor="middle" font-size="12.5" fill="#334155">provenance</text>
+
+  <text x="600" y="462" text-anchor="middle" font-size="13.5" fill="#475569">Lanes are independent and resumable &#8212; add a tool by dropping a card in <tspan font-family="ui-monospace, Menlo, monospace" fill="#0f766e">tools/</tspan>; the agent can run, compare, and re-run any lane.</text>
+</svg>

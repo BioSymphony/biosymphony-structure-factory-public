@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "contract_id": "structure-factory-no-download-smoke.stage-contract.v1",
+  "manifest_id": "structure-factory-no-download-smoke",
+  "run_id": "structure-factory-no-download-smoke",
+  "execution_profile": "no-download-smoke",
+  "progress_ledger": "/workspace/structure-factory/runs/structure-factory-no-download-smoke/stage-progress.jsonl",
+  "success_claim": "provider/tool readiness only; no biological analysis",
+  "fail_closed": true,
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "repo_commit_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "manifest_preflight",
+      "description": "Validate the launch manifest before any runtime work.",
+      "required": true,
+      "expected_outputs": [
+        "validation/runpod-manifest-check.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/runpod-manifest-check.json",
+      "done_marker": "validation/runpod-manifest-check.json",
+      "resume_command": "bash runpod/entrypoints/no-download-smoke.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "input_audit",
+      "description": "Summarize known inputs and missing operator items before asking questions.",
+      "required": true,
+      "expected_outputs": [
+        "validation/input-audit.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/input-audit.json",
+      "done_marker": "validation/input-audit.json",
+      "resume_command": "bash runpod/entrypoints/no-download-smoke.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "toolcheck",
+      "description": "Check Python, GPU visibility, storage write/read, and open/gated tool lanes without downloads.",
+      "required": true,
+      "expected_outputs": [
+        "run-manifest.json",
+        "validation/toolcheck.json",
+        "validation/gpu.json",
+        "validation/storage.json"
+      ],
+      "timeout_minutes": 20,
+      "checkpoint_marker": "validation/toolcheck.json",
+      "done_marker": "validation/storage.json",
+      "resume_command": "python3 scripts/structure_factory/toolcheck_runner.py --manifest runpod/launch-manifests/no-download-smoke.json --out /workspace/structure-factory/runs/structure-factory-no-download-smoke",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 4
+      }
+    },
+    {
+      "stage_id": "contract_self_check",
+      "description": "Join artifacts back to the launch manifest and reject mock evidence for real success claims.",
+      "required": true,
+      "expected_outputs": [
+        "validation/contract-self-check.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "validation/contract-self-check.json",
+      "done_marker": "validation/contract-self-check.json",
+      "resume_command": "python3 scripts/structure_factory/contract_self_check.py --manifest runpod/launch-manifests/no-download-smoke.json --artifact-root /workspace/structure-factory/runs/structure-factory-no-download-smoke --execution-mode real",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    }
+  ]
+}

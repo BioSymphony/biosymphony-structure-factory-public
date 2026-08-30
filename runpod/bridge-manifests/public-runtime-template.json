@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "manifest_kind": "symphony_runpod_launch",
+  "manifest_id": "structure-factory-runtime-template",
+  "public_template_status": "tracked_public_template",
+  "remote_launch_allowed": false,
+  "provider": {
+    "name": "runpod",
+    "adapter": "runpod_pod_v1"
+  },
+  "launch_authorization": {
+    "approved_at": "PENDING",
+    "approved_by": "PENDING-OPERATOR-GATE",
+    "public_repo_note": "Tracked bridge manifests contain no live bindings or authorization. Materialize provider bindings under ignored .runtime space, validate the packet, and obtain explicit human authorization before execution."
+  },
+  "repo": {
+    "source": "git_remote_or_snapshot",
+    "url_or_path": "https://github.com/BioSymphony/structure-factory.git",
+    "commit_or_snapshot": "PENDING-PINNED-COMMIT",
+    "workdir": "/workspace/structure-factory"
+  },
+  "run_id": "structure-factory-template",
+  "runpod": {
+    "name": "structure-factory-template",
+    "dataCenterIds": [],
+    "gpuTypeIds": [],
+    "cloudType": "SECURE",
+    "networkVolumeId": "",
+    "env": {
+      "STRUCTURE_FACTORY_RUN_ID": "structure-factory-template",
+      "STRUCTURE_FACTORY_REPO_SOURCE": "git_remote_or_snapshot"
+    },
+    "registryAuth": {
+      "enabled": false,
+      "runtime_secret_refs": []
+    }
+  },
+  "startup": {
+    "commands": [
+      "echo 'Tracked template has no runtime payload. Materialize an ignored runtime packet and obtain explicit human authorization before execution.'",
+      "exit 64"
+    ]
+  },
+  "artifact_egress": {
+    "requires_network_volume": false,
+    "expected_artifacts": [],
+    "public_template_note": "Artifact roots, hashes, pod IDs, logs, and cleanup proofs are runtime closeout records and are not committed here."
+  },
+  "worker_coordination": {
+    "resource_name_prefix": "structure-factory-template",
+    "single_mutating_worker": true,
+    "read_only_monitors_allowed": true
+  },
+  "monitoring": {
+    "record_pod_fields": [
+      "id",
+      "name",
+      "desiredStatus",
+      "costPerHr",
+      "adjustedCostPerHr"
+    ]
+  },
+  "closeout": {
+    "stop_or_delete_pod": true,
+    "retain_pod": false,
+    "required_before_success": [
+      "artifact_manifest",
+      "hashes",
+      "cleanup_proof",
+      "result_boundary"
+    ]
+  },
+  "public_safety": {
+    "no_literal_secrets": true,
+    "no_concrete_provider_resources": true,
+    "no_private_volume_assumptions": true,
+    "no_prior_run_artifacts": true,
+    "no_accepted_license_state": true
+  }
+}

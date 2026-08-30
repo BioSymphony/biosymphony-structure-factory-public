@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/receptor-state-registry.v1.schema.json",
+  "title": "Structure Factory receptor state registry v1",
+  "type": "object",
+  "required": ["schema_version", "registry_id", "receptors"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "registry_id": { "type": "string", "minLength": 1 },
+    "receptors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["receptor_id", "family", "states"],
+        "properties": {
+          "receptor_id": { "type": "string", "minLength": 1 },
+          "family": { "type": "string", "minLength": 1 },
+          "states": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["state_id", "state_class", "accessions", "chain_ids"],
+              "properties": {
+                "state_id": { "type": "string", "minLength": 1 },
+                "state_class": { "type": "string", "minLength": 1 },
+                "accessions": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+                "chain_ids": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

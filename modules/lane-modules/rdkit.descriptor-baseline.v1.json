@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "rdkit-descriptor-baseline",
+  "tool": "rdkit",
+  "execution_profile": "screening-baseline",
+  "purpose": "Ligand standardization, descriptor baselines, and simple molecular-property controls for every screening campaign.",
+  "required_image_family": "md-docking",
+  "license_posture": "open-default",
+  "execution_ready_requires": [
+    "toolcheck_pass",
+    "input_audit",
+    "contract_self_check"
+  ],
+  "required_outputs": [
+    "ligand_prep.jsonl",
+    "affinity_predictions.jsonl",
+    "method_summary.json"
+  ],
+  "claim_ceiling": "processed",
+  "notes": "The repo fixture runner uses stdlib descriptor proxies so no-download tests do not depend on RDKit being installed."
+}

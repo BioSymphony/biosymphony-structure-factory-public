@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "manifest_type": "screening_manifest",
+  "campaign_id": "screening-superpowers",
+  "run_id": "screening-superpowers-fixture",
+  "intent": {
+    "mode": "screen",
+    "natural_language_goal": "Run an OpenBind-style no-download screening fixture with simple baselines, docking proxies, and selective candidate reports.",
+    "target_hint": "fixture protease pocket",
+    "claim_ceiling": "candidate"
+  },
+  "target": {
+    "target_id": "fixture-protease-pocket",
+    "name": "OpenBind-style public benchmark receptor fixture",
+    "allowed_sources": ["repo_fixture", "public_accessions"],
+    "private_data_allowed": false
+  },
+  "ligand_library": {
+    "path": "examples/screening-superpowers/ligand-library.json",
+    "stable_id_field": "ligand_id",
+    "format": "json"
+  },
+  "receptor_ensemble": {
+    "path": "examples/screening-superpowers/receptor-ensemble.json",
+    "site_definition_required": true
+  },
+  "methods": {
+    "always": ["stdlib_descriptor_proxy", "simple_affinity_baselines"],
+    "wide_pass": ["rdkit", "autodock_vina"],
+    "focused": ["boltz"],
+    "gated": ["gnina", "diffdock", "alphafold3", "chai", "phenix", "chimerax"]
+  },
+  "provider_plan": {
+    "priority": ["runpod", "aws_batch", "neocloud_gpu_pod"],
+    "execution_profile": "screening-no-download-smoke",
+    "operator_gate_required_for_paid_compute": true,
+    "current_run_is_no_download_fixture": true
+  },
+  "budget": {
+    "max_ligands": 5,
+    "max_spend_usd": 0,
+    "max_runtime_minutes": 10,
+    "scale_soon_after_canaries": true
+  },
+  "outputs": {
+    "artifact_contract": "modules/artifact-contracts/screening-results.v1.json",
+    "candidate_report_contract": "modules/artifact-contracts/candidate-report.v1.json",
+    "promote_top_n": 2
+  },
+  "policies": {
+    "allow_private_data": false,
+    "allow_large_downloads": false,
+    "allow_raw_cryoem_downloads": false,
+    "expected_download_bytes": 0,
+    "prediction_only_claim_level": "candidate"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "module_type": "data_module",
+  "id": "screening-superpowers-ligand-library",
+  "campaign": "screening-superpowers",
+  "source": "repo_fixture",
+  "profile": "screening_no_download",
+  "public_status": "public_fixture",
+  "title": "Five-ligand public screening fixture",
+  "data_classes": [
+    "ligand_library",
+    "metadata"
+  ],
+  "ligand_library": {
+    "format": "json",
+    "path": "examples/screening-superpowers/ligand-library.json",
+    "stable_id_field": "ligand_id",
+    "structure_fields": [
+      "smiles"
+    ],
+    "contains_invalid_control": true,
+    "protonation_policy": "fixture_neutral_parent_smiles",
+    "stereochemistry_policy": "preserve_input_when_present"
+  },
+  "license_or_terms_note": "Fixture ligand strings are public examples for pipeline validation only; they are not a proposed real screening library.",
+  "storage_policy": "repo_fixture_only",
+  "git_policy": "never_commit_raw_or_generated_data",
+  "download_policy": {
+    "enabled": false,
+    "expected_download_bytes_max": 0,
+    "requires_explicit_execution_issue": false,
+    "allow_raw_cryoem_downloads": false,
+    "data_payload": [
+      "small_fixture_json"
+    ],
+    "download_to": "n/a"
+  },
+  "artifact_expectations": [
+    "ligand_prep.jsonl",
+    "failure_report.json",
+    "consensus_ranking.csv"
+  ],
+  "ledger_fields": [
+    "ligand_id",
+    "smiles",
+    "source",
+    "known_class",
+    "prep_status",
+    "failure_reason"
+  ]
+}

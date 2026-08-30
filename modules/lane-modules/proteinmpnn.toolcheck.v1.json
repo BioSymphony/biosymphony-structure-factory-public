@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "proteinmpnn",
+  "mode": "toolcheck",
+  "required": false,
+  "license_gate": "none",
+  "license_class": "open_source_mit",
+  "skip_policy": "warn_when_missing_in_prep",
+  "fail_policy": "fail_when_required_by_execution_profile",
+  "smoke_command": "python protein_mpnn_run.py --help",
+  "alternate_smoke_commands": [
+    "python -c 'import protein_mpnn'",
+    "protein_mpnn_run.py --help"
+  ],
+  "image_family": "ai-design",
+  "weights_policy": {
+    "source": "github_release_under_repo",
+    "cache_path": "/workspace/structure-factory/weights/proteinmpnn",
+    "pin_policy": "pin_repo_commit_sha_in_software_registry_before_paid_execution"
+  },
+  "campaign_use": [],
+  "notes": "Open-source sequence design lane. Status remains planned until the ai-design image vendor + repo commit SHA are confirmed. Designed sequences are computational candidates only; wet-lab use is out of campaign scope."
+}

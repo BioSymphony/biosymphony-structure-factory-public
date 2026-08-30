@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "genie3",
+  "mode": "toolcheck",
+  "required": false,
+  "license_gate": "dependency_and_weight_terms_review",
+  "license_class": "apache_2_reported_by_repo_and_hf",
+  "skip_policy": "warn_when_missing_in_prep",
+  "fail_policy": "fail_when_required_by_execution_profile",
+  "smoke_command": "genie3 --help",
+  "alternate_smoke_commands": [
+    "genie3 run --help",
+    "genie3 generate --help",
+    "genie3 evaluate --help",
+    "python -c 'import genie3'",
+    "python -m genie3.cli --help"
+  ],
+  "image_family": "ai-design",
+  "source_policy": {
+    "upstream_repo": "https://github.com/aqlaboratory/genie3",
+    "pinned_commit_sha": "5214459c42e69b01fadfc7d7ebda09d8e5082115",
+    "pin_policy": "pin_repo_commit_sha_in_software_registry_before_paid_execution"
+  },
+  "weights_policy": {
+    "source": "huggingface_public_release",
+    "repo": "yeqinglin/genie3",
+    "pinned_revision": "9ae31ebb8c56eebdc05ab282a8fd3f6a6d2a03a2",
+    "cache_path": "/workspace/structure-factory/weights/genie3",
+    "expected_pretrained_download_bytes_reviewed": 536100000,
+    "training_data_download_allowed_by_default": false,
+    "pin_policy": "pin_hf_revision_and_hash_downloaded_weights_before_paid_execution"
+  },
+  "dependency_review": {
+    "required_before_public_image_or_run": true,
+    "known_setup_dependencies": [
+      "ColabFold",
+      "AlphaFold2 multimer parameters",
+      "OpenFold",
+      "ESM",
+      "ProteinMPNN",
+      "IPSAE",
+      "FoldSeek",
+      "TMscore",
+      "TMalign",
+      "DSSP helper",
+      "JAX CUDA",
+      "PyTorch"
+    ],
+    "known_review_flags": [
+      "IPSAE license was not obvious from the upstream repository at last review.",
+      "Binder problem preparation can call the ColabFold MSA server and must be blocked for private or unpublished targets unless local/precomputed MSAs are used."
+    ]
+  },
+  "execution_profiles": [
+    "genie3-no-download-toolcheck",
+    "genie3-public-design-canary",
+    "genie3-boltz-design-ranking"
+  ],
+  "runtime_artifacts": [
+    "genie3_manifest.json",
+    "weights_manifest.json",
+    "versions.json",
+    "executed-commands.jsonl",
+    "validation_ledger.json",
+    "evaluation/results/",
+    "generated_pdbs/"
+  ],
+  "claim_policy": {
+    "allowed_claim_levels": ["candidate", "insufficient_evidence", "blocked"],
+    "default_claim_level": "candidate",
+    "notes": "Generated structures, scaffolded motifs, and designed binders are computational candidates. Do not imply wet-lab readiness from Genie 3 or Boltz scores alone."
+  },
+  "campaign_use": ["design-campaign", "model-comparison", "screening-superpowers"],
+  "notes": "Review-required all-atom protein design lane. Prefer a public-data canary with no training-data download, a pinned weights manifest, and downstream Boltz cross-check before any larger campaign."
+}

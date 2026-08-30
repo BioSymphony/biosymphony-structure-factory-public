@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "ledger_type": "structure_factory_cloud_shard_ledger",
+  "ledger_mode": "dry_run_contract",
+  "campaign_id": "screening-superpowers",
+  "run_id": "screening-superpowers-fixture",
+  "source_manifest": "examples/screening-superpowers/screening-manifest.json",
+  "source_fanout_estimate": ".runtime/screening-superpowers-fixture/validation/fanout-estimate.json",
+  "shard_total": 3,
+  "aggregation_policy": {
+    "canary_required_before_fanout": true,
+    "success_requires_all_shards_closed": true,
+    "provider_success_is_not_scientific_success": true,
+    "context_timeout_closes_as": "partial"
+  },
+  "shards": [
+    {
+      "schema_version": 1,
+      "shard_id": "screening-superpowers-fixture-runpod-canary",
+      "shard_index": 0,
+      "shard_total": 3,
+      "provider": "runpod",
+      "provider_profile": "modules/provider-profiles/runpod/pod-no-download.v1.json",
+      "status": "blocked",
+      "closeout_status": "closed_blocked",
+      "no_provider_launch": true,
+      "claim_level": "candidate",
+      "evidence_mode": "fixture_or_demo",
+      "operator_gate": {
+        "required": true,
+        "authorized": false,
+        "reason": "example ledger only; real RunPod canary requires explicit operator gate"
+      },
+      "budget": {
+        "max_spend_usd": 0,
+        "max_runtime_minutes": 10
+      },
+      "expected_artifacts": [
+        "stage-progress.jsonl",
+        "validation/input-audit.json",
+        "validation/contract-self-check.json",
+        "validation/artifact-pull-report.json",
+        "cost_report.json",
+        "cleanup_proof.json"
+      ],
+      "dependencies": []
+    },
+    {
+      "schema_version": 1,
+      "shard_id": "screening-superpowers-fixture-aws-wide-pass",
+      "shard_index": 1,
+      "shard_total": 3,
+      "provider": "aws_batch",
+      "provider_profile": "modules/provider-profiles/aws/aws-batch-gpu-no-download.v1.json",
+      "status": "planned",
+      "closeout_status": "operator_gate_pending",
+      "no_provider_launch": true,
+      "claim_level": "candidate",
+      "evidence_mode": "fixture_or_demo",
+      "operator_gate": {
+        "required": true,
+        "authorized": false,
+        "reason": "AWS Batch adapter contract only; no AWS submit is authorized"
+      },
+      "budget": {
+        "max_spend_usd": 0,
+        "max_runtime_minutes": 10
+      },
+      "expected_artifacts": [
+        "stage-progress.jsonl",
+        "validation/artifact-pull-report.json",
+        "cost_report.json",
+        "cleanup_proof.json"
+      ],
+      "dependencies": [
+        "screening-superpowers-fixture-runpod-canary"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "shard_id": "screening-superpowers-fixture-neocloud-focused",
+      "shard_index": 2,
+      "shard_total": 3,
+      "provider": "neocloud_gpu_pod",
+      "provider_profile": "modules/provider-profiles/neocloud/gpu-pod-no-download.v1.json",
+      "status": "planned",
+      "closeout_status": "operator_gate_pending",
+      "no_provider_launch": true,
+      "claim_level": "candidate",
+      "evidence_mode": "fixture_or_demo",
+      "operator_gate": {
+        "required": true,
+        "authorized": false,
+        "reason": "neocloud adapter contract only; no pod create is authorized"
+      },
+      "budget": {
+        "max_spend_usd": 0,
+        "max_runtime_minutes": 10
+      },
+      "expected_artifacts": [
+        "stage-progress.jsonl",
+        "validation/artifact-pull-report.json",
+        "cost_report.json",
+        "cleanup_proof.json"
+      ],
+      "dependencies": [
+        "screening-superpowers-fixture-runpod-canary"
+      ]
+    }
+  ]
+}

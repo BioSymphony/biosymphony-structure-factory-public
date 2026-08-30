@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "runpod",
+  "provider_class": "pod",
+  "profile_id": "runpod-pod-raw-subset-gated",
+  "maps_campaign_profile": "raw_subset_gated",
+  "blessed_path": true,
+  "workspace_root": "/workspace/structure-factory",
+  "artifact_root": "/workspace/structure-factory/runs/<run-id>",
+  "secret_mode": "runpod_runtime_secrets",
+  "operator_gate_required": true,
+  "volume_mount": "/workspace",
+  "network_volume_required": false,
+  "scratch_only": true,
+  "recommended_gpu": "NVIDIA A100-SXM4-40GB",
+  "fallback_gpu": "NVIDIA L40S",
+  "gpu_count": 1,
+  "container_disk_gb": 1000,
+  "image_map": {
+    "cryo-core": "docker.io/library/ubuntu:22.04",
+    "model-build": "docker.io/library/ubuntu:22.04"
+  },
+  "execution_ready_requires": [
+    "public_or_operator_image_digest",
+    "pinned_git_ref",
+    "explicit_operator_launch",
+    "input_audit",
+    "contract_self_check",
+    "raw_subset_download_authorization",
+    "runtime_license_secrets"
+  ]
+}

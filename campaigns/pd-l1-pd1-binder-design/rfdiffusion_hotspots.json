@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "source_pdb": "4ZQK",
+  "target_chain": "A",
+  "selection_rule": "top 5 strict hotspots by min_distance_angstrom (closest first)",
+  "hotspots_pdb_chain": [
+    "A122",
+    "A125",
+    "A113",
+    "A121",
+    "A123"
+  ],
+  "hotspot_residues": [
+    {
+      "chain": "A",
+      "resnum": 122,
+      "comp": "ASP",
+      "min_distance_angstrom": 2.557,
+      "literature_cited": false
+    },
+    {
+      "chain": "A",
+      "resnum": 125,
+      "comp": "ARG",
+      "min_distance_angstrom": 2.613,
+      "literature_cited": false
+    },
+    {
+      "chain": "A",
+      "resnum": 113,
+      "comp": "ARG",
+      "min_distance_angstrom": 2.645,
+      "literature_cited": true
+    },
+    {
+      "chain": "A",
+      "resnum": 121,
+      "comp": "ALA",
+      "min_distance_angstrom": 2.678,
+      "literature_cited": false
+    },
+    {
+      "chain": "A",
+      "resnum": 123,
+      "comp": "TYR",
+      "min_distance_angstrom": 2.699,
+      "literature_cited": true
+    }
+  ],
+  "rfdiffusion_flag": "ppi.hotspot_res=[A122,A125,A113,A121,A123]",
+  "note": "RFdiffusion 'ppi.hotspot_res' performs best at 3-5 hotspots; the model drops 0-20% per design when over-constrained."
+}

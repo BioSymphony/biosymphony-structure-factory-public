@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "neocloud",
+  "provider_class": "gpu_pod",
+  "profile_id": "neocloud-gpu-pod-no-download",
+  "maps_campaign_profile": "no_download_smoke",
+  "blessed_path": false,
+  "workspace_root": "/workspace/structure-factory",
+  "artifact_root": "/workspace/structure-factory/runs/<run-id>",
+  "secret_mode": "provider_runtime_secrets",
+  "operator_gate_required": true,
+  "recommended_gpu": "RTX 4090/L40S/A100-class",
+  "gpu_required": true,
+  "mock_gpu_allowed": false,
+  "raw_downloads_allowed": false,
+  "image_strategy": "public_image_or_operator_private_image_or_bootstrap",
+  "execution_ready_requires": [
+    "public_or_operator_repo_access",
+    "pinned_git_ref",
+    "public_or_operator_image_or_bootstrap",
+    "scratch_or_volume_mount",
+    "input_audit",
+    "contract_self_check",
+    "explicit_operator_launch"
+  ],
+  "neocloud": {
+    "service": "gpu_pod",
+    "project_ref": "STRUCTURE_FACTORY_NEO_PROJECT",
+    "volume_ref": "STRUCTURE_FACTORY_NEO_VOLUME_ID",
+    "artifact_export_ref": "STRUCTURE_FACTORY_NEO_ARTIFACT_EXPORT",
+    "log_stream_ref": "STRUCTURE_FACTORY_NEO_LOG_STREAM",
+    "scope_check_required": true,
+    "launch_preflight_required": true,
+    "cleanup_proof_required": true
+  },
+  "notes": "Preferred RunPod-like GPU pod adapter path after provider-specific scope checks, launch preflight, artifact export, and cleanup proof pass. Public mode uses public repo/image/bootstrap contracts; restricted image or registry auth is an operator-gated choice outside public git. RunPod and AWS Batch are the reviewed paths; this profile is not an authorization to launch."
+}

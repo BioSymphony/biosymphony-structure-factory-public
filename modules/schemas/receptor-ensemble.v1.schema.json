@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/receptor-ensemble.v1.schema.json",
+  "title": "Structure Factory receptor ensemble v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "ensemble_id",
+    "site_definition",
+    "members"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "ensemble_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "short_name": {
+          "type": "string"
+        },
+        "target_hint": {
+          "type": "string"
+        },
+        "public_only": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "site_definition": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_ligand_id": {
+          "type": "string"
+        },
+        "box_center_angstrom": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "number"
+          }
+        },
+        "box_size_angstrom": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "number"
+          }
+        },
+        "blind_mode_allowed": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "members": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "receptor_id"
+        ],
+        "properties": {
+          "receptor_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "retained_features": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "cofactor_policy": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

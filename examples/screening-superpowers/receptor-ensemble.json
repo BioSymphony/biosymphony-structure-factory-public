@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "ensemble_id": "screening-superpowers-fixture-receptor-ensemble",
+  "target": {
+    "name": "OpenBind-style public benchmark receptor fixture",
+    "short_name": "fixture-protease-pocket",
+    "target_hint": "EV-A71/CVA16 2A protease inspired screening benchmark",
+    "public_only": true
+  },
+  "site_definition": {
+    "mode": "reference_ligand_box",
+    "reference_ligand_id": "FIX-ACT-001",
+    "box_center_angstrom": [12.5, -4.0, 8.0],
+    "box_size_angstrom": [18.0, 18.0, 18.0],
+    "blind_mode_allowed": false
+  },
+  "members": [
+    {
+      "receptor_id": "fixture-holo-pocket",
+      "state": "holo",
+      "source": "fixture_metadata",
+      "role": "redocking_control",
+      "retained_features": ["reference_ligand_context"]
+    },
+    {
+      "receptor_id": "fixture-apo-pocket",
+      "state": "apo",
+      "source": "fixture_metadata",
+      "role": "cross_docking_stress",
+      "retained_features": []
+    },
+    {
+      "receptor_id": "fixture-fragment-pocket",
+      "state": "fragment",
+      "source": "fixture_metadata",
+      "role": "fragment_selected_receptor",
+      "retained_features": ["fragment_context"]
+    }
+  ],
+  "cofactor_policy": {
+    "retain_metals": true,
+    "retain_structural_waters": "explicit_only",
+    "retain_covalent_adducts": false
+  }
+}

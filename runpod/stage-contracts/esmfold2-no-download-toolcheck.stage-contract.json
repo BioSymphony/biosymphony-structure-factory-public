@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "contract_id": "esmfold2-no-download-toolcheck.stage-contract.v1",
+  "manifest_id": "esmfold2-no-download-toolcheck",
+  "run_id": "esmfold2-no-download-toolcheck-${STRUCTURE_FACTORY_RUN_ID}",
+  "run_id_resolution_policy": "Contract is a lane-level template. Supply the concrete run_id through STRUCTURE_FACTORY_RUN_ID in ignored runtime state.",
+  "campaign_id": "esmfold2-cloud-readiness",
+  "wave": "toolcheck",
+  "execution_profile": "esmfold2-no-download-toolcheck",
+  "progress_ledger": "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/stage-progress.jsonl",
+  "success_claim": "Pinned Biohub esm source/package imports and Hugging Face model metadata probes pass without downloading model weights, calling the Biohub inference API, or running biological inference.",
+  "fail_closed": true,
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "lane_module_sha256_change",
+      "esm_source_commit_sha_change",
+      "hf_model_revision_change",
+      "repo_commit_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "host_probe",
+      "description": "Record OS, Python, CUDA, torch, GPU, disk, and cache environment before installing source.",
+      "required": true,
+      "expected_outputs": [
+        "validation/host_probe.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/host_probe.json",
+      "done_marker": "validation/host_probe.json",
+      "resume_command": "run the authorized ESMFold2 toolcheck adapter with --no-weight-download",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "source_resolution",
+      "description": "Resolve and install or review the pinned Biohub esm source commit. No model weights are downloaded.",
+      "required": true,
+      "expected_outputs": [
+        "validation/source_install.json",
+        "logs/source_install.log"
+      ],
+      "timeout_minutes": 30,
+      "checkpoint_marker": "validation/source_install.json",
+      "done_marker": "validation/source_install.json",
+      "resume_command": "rerun source install after updating the pinned source commit or runtime image",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "package_probe",
+      "description": "Probe ESMFold2 imports, package metadata, and Biohub API client imports without calling the API.",
+      "required": true,
+      "expected_outputs": [
+        "validation/package_probe.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/package_probe.json",
+      "done_marker": "validation/package_probe.json",
+      "resume_command": "rerun after resolving Python, package, or dependency import failure",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "model_metadata_probe",
+      "description": "Query Hugging Face metadata for pinned ESMFold2, ESMFold2-Fast, and ESMC revisions without downloading weight bodies.",
+      "required": true,
+      "expected_outputs": [
+        "validation/model_metadata_probe.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/model_metadata_probe.json",
+      "done_marker": "validation/model_metadata_probe.json",
+      "resume_command": "review revision drift, deliberately update the model pin, then rerun",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "api_route_awareness",
+      "description": "Record whether the Biohub API route is blocked, skipped, or operator-approved. Default public posture is skipped with no token required.",
+      "required": true,
+      "expected_outputs": [
+        "validation/biohub-api-route.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/biohub-api-route.json",
+      "done_marker": "validation/biohub-api-route.json",
+      "resume_command": "rerun only after runtime secret and API terms are explicitly approved",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "emit_artifacts",
+      "description": "Write versions, input audit, claim ledger, toolcheck report, and artifact index for no-download closeout.",
+      "required": true,
+      "expected_outputs": [
+        "versions.json",
+        "validation/input-audit.json",
+        "claim_ledger.json",
+        "esmfold2_toolcheck_report.md",
+        "artifact_index.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "claim_ledger.json",
+      "done_marker": "artifact_index.json",
+      "resume_command": "rerun artifact emission from the same source/package/model metadata outputs",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 5
+      }
+    },
+    {
+      "stage_id": "contract_self_check",
+      "description": "Fail closed unless all required no-download artifacts exist and no weights, API call, private data, or inference output is present.",
+      "required": true,
+      "expected_outputs": [
+        "validation/contract-self-check.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/contract-self-check.json",
+      "done_marker": "validation/contract-self-check.json",
+      "resume_command": "fix missing artifacts or downgrade to blocked/insufficient_support",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    }
+  ],
+  "expected_outputs": [
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/status.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/stage-progress.jsonl",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/executed-commands.jsonl",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/validation/host_probe.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/validation/source_install.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/validation/package_probe.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/validation/model_metadata_probe.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/validation/biohub-api-route.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/validation/input-audit.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/validation/contract-self-check.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/claim_ledger.json",
+    "/workspace/structure-factory/runs/esmfold2-no-download-toolcheck/artifact_index.json"
+  ],
+  "done_markers": [
+    "status.json reports ok true",
+    "validation/package_probe.json reports ok true",
+    "validation/model_metadata_probe.json reports expected pinned revisions",
+    "validation/input-audit.json reports model_weights_downloaded false and biohub_api_called false"
+  ],
+  "claim_levels_allowed": [
+    "planning",
+    "blocked",
+    "insufficient_support"
+  ],
+  "default_claim_level": "planning",
+  "license_gates_required": [
+    "Biohub ESMFold2 MIT and third-party notice review",
+    "Biohub API terms and runtime secret review before API execution",
+    "Hugging Face model revision and weight hash review before weight download"
+  ],
+  "no_false_success_notes": [
+    "Toolcheck only. No model weights downloaded. No Biohub inference API call. No biological inference.",
+    "A metadata probe pass is not a weights or prediction pass.",
+    "Any import, metadata, or API-posture failure must downgrade to blocked or insufficient_support.",
+    "Public docs must not commit generated CIF/PDB, model weights, provider logs, private inputs, or concrete provider resource IDs."
+  ]
+}

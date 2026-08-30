@@ -1,0 +1,12 @@
+{
+  "template_name": "biosymphony-structure-cryo-core",
+  "image_family": "cryo-core",
+  "image_name": "docker.io/library/ubuntu:22.04",
+  "gpu_class": "RTX 4090 or L40S for smoke; A100/H100 for large reconstructions",
+  "volume_mount": "/workspace",
+  "ports": [],
+  "startup_command": "bash /opt/structure-factory/entrypoints/no-download-smoke.sh",
+  "purpose": "Open-source cryo-EM orchestration and smoke checks for RELION, Warp/M, Topaz, CTFFIND, pyem-style helpers, and local Python tooling.",
+  "license_policy": "No restricted licenses baked into image.",
+  "public_template_note": "Tracked placeholder image. Choose and digest-pin the runtime image in an ignored packet after readiness checks and explicit human authorization."
+}

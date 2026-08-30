@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-api-adapter-contract.schema.json",
+  "title": "Public binder API adapter contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "contract_id", "provider_class", "implementation_status", "network_access", "launch_authorization", "required_reviews", "request_contract", "boundary"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-api-adapter-contract-v1"},
+    "contract_id": {"const": "operator-api-adapter"},
+    "provider_class": {"const": "api"},
+    "implementation_status": {"const": "operator_supplied"},
+    "network_access": {"const": "operator_gated"},
+    "launch_authorization": {"const": "not_granted"},
+    "required_reviews": {
+      "const": [
+        "current service terms and tool license",
+        "input retention and model-training policy",
+        "private-data eligibility",
+        "runtime credential injection",
+        "request limit and budget",
+        "artifact export and deletion"
+      ]
+    },
+    "request_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input", "output", "failure_policy"],
+      "properties": {
+        "input": {"const": "stage-specific manifest resolved outside public git"},
+        "output": {"const": "stage artifact index with counts, hashes, and validation notes"},
+        "failure_policy": {"const": "preserve failed rows and stop before downstream promotion"}
+      }
+    },
+    "boundary": {"const": "This template defines a handoff shape. It contains no service address, account identifier, credential, accepted-license state, or launch instruction."}
+  }
+}

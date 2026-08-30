@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "contract_id": "pd-l1-downstream.stage-contract.v1",
+  "manifest_id": "structure-factory-pd-l1-downstream-cofold",
+  "run_id": "structure-factory-pd-l1-downstream-cofold",
+  "campaign_id": "pd-l1-pd1-binder-design",
+  "wave": "downstream",
+  "execution_profile": "pd-l1-downstream-cofold-ranking",
+  "progress_ledger": "/workspace/runpod-execution/artifacts/stage-progress.jsonl",
+  "success_claim": "Downstream-only continuation of the PD-L1 / PD-1 binder hunt: Boltz cofolds declared backbones from a runtime artifact root, then runs ranking, reporting, validation review, and contract checks. Result boundary is at most candidate. Generated candidate manifests and structures stay outside git in runtime storage.",
+  "fail_closed": true,
+  "gpu_requirements": {
+    "min_vram_gb": 16,
+    "recommended_gpu_types": [
+      "NVIDIA GeForce RTX 4090",
+      "NVIDIA L40S"
+    ],
+    "cloud_type": "SECURE"
+  },
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "repo_commit_change",
+      "boltz_weights_sha256_change",
+      "design_candidates_dir_membership_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "boltz_crosscheck_extended",
+      "description": "Reconstruct gen_info from runpod-execution/artifacts/design_candidates/<cid>/manifest.json on the runtime volume, then Boltz-cofold every on-disk candidate against the PD-L1 target window. Writes validation/boltz_crosscheck_extended.json and boltz_crosscheck/<cid>/* artifacts. Uses the prebaked boltz conda env from /workspace/software/envs/boltz; --use_msa_server permitted because PD-L1 is public (UniProt Q9NZQ7). No Genie 3 generation in this stage.",
+      "required": true,
+      "expected_outputs": [
+        "validation/boltz_crosscheck_extended.json"
+      ],
+      "timeout_minutes": 150,
+      "checkpoint_marker": "validation/boltz_crosscheck_extended.json",
+      "done_marker": "validation/boltz_crosscheck_extended.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-downstream.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "ranking_synthesis",
+      "description": "Aggregate per-candidate Boltz iPTM/PTM/complex_plddt into candidate_ranking.json and candidate_ranking.md; sequence-level metadata and a candidate_ranking_top32.json shortlist are also emitted when the underlying ranking logic has enough signal.",
+      "required": true,
+      "expected_outputs": [
+        "validation/ranking_synthesis.json",
+        "candidate_ranking.json",
+        "candidate_ranking.md",
+        "candidate_ranking_top32.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "candidate_ranking.json",
+      "done_marker": "candidate_ranking.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-downstream.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 4
+      }
+    },
+    {
+      "stage_id": "report",
+      "description": "Emit report/README.md summarizing target intake, runtime gate, and the candidate ranking.",
+      "required": true,
+      "expected_outputs": [
+        "report/README.md"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "report/README.md",
+      "done_marker": "report/README.md",
+      "resume_command": "bash runpod/entrypoints/pd-l1-downstream.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "validation_review",
+      "description": "Write validation_ledger.json + validation_ledger.md, methods.md, provenance.md, operator_closeout.md, and artifact_index.json. Result boundary is bounded to candidate / insufficient_evidence / blocked; forbidden_claims must remain unasserted.",
+      "required": true,
+      "expected_outputs": [
+        "validation/validation_review.json",
+        "validation_ledger.json",
+        "validation_ledger.md",
+        "methods.md",
+        "provenance.md",
+        "operator_closeout.md",
+        "artifact_index.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation_ledger.json",
+      "done_marker": "validation_ledger.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-downstream.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 7
+      }
+    },
+    {
+      "stage_id": "contract_self_check",
+      "description": "Verify every candidate marked status=generated has a non-empty structure_path on disk and every candidate marked boltz_status=run has a non-empty prediction_cif_path. Verify claim_level is in the allowed set. Writes validation/contract-self-check.json with ok true on success.",
+      "required": true,
+      "expected_outputs": [
+        "validation/contract-self-check.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/contract-self-check.json",
+      "done_marker": "validation/contract-self-check.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-downstream.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    }
+  ],
+  "expected_outputs": [
+    "runpod-execution/status.json",
+    "runpod-execution/artifacts/validation/boltz_crosscheck_extended.json",
+    "runpod-execution/artifacts/validation/ranking_synthesis.json",
+    "runpod-execution/artifacts/candidate_ranking.json",
+    "runpod-execution/artifacts/candidate_ranking_top32.json",
+    "runpod-execution/artifacts/report/README.md",
+    "runpod-execution/artifacts/validation_ledger.json",
+    "runpod-execution/artifacts/operator_closeout.md",
+    "runpod-execution/artifacts/validation/contract-self-check.json",
+    "runpod-execution/artifacts/stage-progress.jsonl",
+    "runpod-execution/artifacts/executed-commands.jsonl",
+    "runpod-execution/artifacts/runpod-execution.tar.gz"
+  ],
+  "exact_commands": [
+    "bash runpod/entrypoints/pd-l1-downstream.sh"
+  ],
+  "done_markers": [
+    "runpod-execution/status.json reports ok true",
+    "runpod-execution/artifacts/validation/contract-self-check.json reports ok true",
+    "runpod-execution/artifacts/report/README.md exists and is non-empty"
+  ],
+  "claim_levels_allowed": [
+    "candidate",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "default_claim_level": "candidate",
+  "license_gates_required": [
+    "Boltz (MIT) only; no AlphaFold 3, no licensed prediction tools",
+    "ColabFold MSA service public-target-only posture confirmed in operator_closeout"
+  ],
+  "no_false_success_notes": [
+    "Boltz outputs are predicted models; campaign policy caps Boltz claims at candidate.",
+    "This pod does NOT run Genie 3 generation. It consumes operator-declared on-disk backbones from the runtime artifact root. The reconstructed gen_info MUST be persisted as validation/genie3_generation_extended.json by the runner so ranking_synthesis can resolve structure_path references.",
+    "AlphaFold 3 substitution is forbidden by campaign policy."
+  ]
+}

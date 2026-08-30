@@ -1,0 +1,12 @@
+{"control_id":"positive-1","metrics":{"interface_score":0.80,"target_alignment_rmsd":1.0},"predictor_id":"predictor-a","seed":0,"status":"scored"}
+{"control_id":"positive-2","metrics":{"interface_score":0.75,"target_alignment_rmsd":1.2},"predictor_id":"predictor-a","seed":0,"status":"scored"}
+{"control_id":"positive-3","metrics":{"interface_score":0.70,"target_alignment_rmsd":1.4},"predictor_id":"predictor-a","seed":0,"status":"scored"}
+{"control_id":"negative-1","metrics":{"interface_score":0.20,"target_alignment_rmsd":4.0},"predictor_id":"predictor-a","seed":0,"status":"scored"}
+{"control_id":"negative-2","metrics":{"interface_score":0.25,"target_alignment_rmsd":4.2},"predictor_id":"predictor-a","seed":0,"status":"scored"}
+{"control_id":"negative-3","metrics":{"interface_score":0.30,"target_alignment_rmsd":4.4},"predictor_id":"predictor-a","seed":0,"status":"scored"}
+{"control_id":"positive-1","metrics":{"interface_score":0.78,"target_alignment_rmsd":1.1},"predictor_id":"predictor-b","seed":0,"status":"scored"}
+{"control_id":"positive-2","metrics":{"interface_score":0.74,"target_alignment_rmsd":1.3},"predictor_id":"predictor-b","seed":0,"status":"scored"}
+{"control_id":"positive-3","metrics":{"interface_score":0.69,"target_alignment_rmsd":1.5},"predictor_id":"predictor-b","seed":0,"status":"scored"}
+{"control_id":"negative-1","metrics":{"interface_score":0.18,"target_alignment_rmsd":4.1},"predictor_id":"predictor-b","seed":0,"status":"scored"}
+{"control_id":"negative-2","metrics":{"interface_score":0.24,"target_alignment_rmsd":4.3},"predictor_id":"predictor-b","seed":0,"status":"scored"}
+{"control_id":"negative-3","metrics":{"interface_score":0.31,"target_alignment_rmsd":4.5},"predictor_id":"predictor-b","seed":0,"status":"scored"}

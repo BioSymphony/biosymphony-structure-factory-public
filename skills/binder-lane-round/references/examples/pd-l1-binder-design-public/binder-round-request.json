@@ -1,0 +1,169 @@
+{
+  "schema_version": "structure-factory-binder-round-request-v1",
+  "round_id": "pd-l1-public-synthetic-round",
+  "study_template": "published-binder-comparison-shape",
+  "published_workflow": {
+    "reference_ref": "references/published-binder-comparison-workflow.json",
+    "bounded_stage_ids": ["target", "generation", "sequence_design", "cofold", "scoring", "filter", "report"],
+    "published_result_values_imported": false
+  },
+  "workflow_strategy": {
+    "mode": "replay_and_swap",
+    "reference_scope": "published_workflow_shape",
+    "replay_toolchain_ids": ["diffusion-mpnn"],
+    "swap_toolchain_ids": ["all-atom-mpnn", "integrated-design"]
+  },
+  "comparison_policy": {
+    "mode": "controlled_generation",
+    "cross_arm_ranking": "shared_metrics_only",
+    "metrics": [
+      {
+        "id": "cofold_confidence_proxy",
+        "direction": "higher_is_better",
+        "unit": "unitless_proxy",
+        "missing_value_policy": "preserve_as_failure"
+      },
+      {
+        "id": "interface_confidence_proxy",
+        "direction": "higher_is_better",
+        "unit": "unitless_proxy",
+        "missing_value_policy": "preserve_as_failure"
+      }
+    ],
+    "tie_break": ["cofold_confidence_proxy", "interface_confidence_proxy", "candidate_id"]
+  },
+  "optimization_policy": {
+    "round_count": 1,
+    "current_round_index": 1,
+    "primary_metric_id": "cofold_confidence_proxy",
+    "direction": "maximize",
+    "candidate_policy": {
+      "mode": "fixed_per_toolchain",
+      "candidate_count_per_toolchain": 2
+    },
+    "stopping_rule": {"type": "fixed_round_count"},
+    "round_budget_usd": [60]
+  },
+  "source_posture": "synthetic_demo",
+  "result_boundary": "public_synthetic_demo",
+  "target": {
+    "input_posture": "public_reference",
+    "label": "PD-L1 public target window",
+    "public_accession": "PDB:4ZQK",
+    "window": "chain A residues 19-127",
+    "site": {
+      "chain_id": "A",
+      "required_residues": ["19-127"]
+    }
+  },
+  "toolchains": [
+    {
+      "id": "diffusion-mpnn",
+      "label": "Diffusion backbone plus sequence design",
+      "candidate_count": 2,
+      "generator": "rfdiffusion",
+      "sequence_designer": "proteinmpnn",
+      "predictors": ["boltz", "esmfold2"],
+      "scorers": ["dockq-v2"],
+      "filters": ["status-preserving-filter", "diversity-filter"]
+    },
+    {
+      "id": "all-atom-mpnn",
+      "label": "All-atom generation plus sequence design",
+      "candidate_count": 2,
+      "generator": "genie3",
+      "sequence_designer": "proteinmpnn",
+      "predictors": ["boltz", "esmfold2"],
+      "scorers": ["dockq-v2"],
+      "filters": ["status-preserving-filter", "diversity-filter"]
+    },
+    {
+      "id": "integrated-design",
+      "label": "Integrated binder design",
+      "candidate_count": 2,
+      "generator": "boltzgen",
+      "sequence_designer": "boltzgen",
+      "predictors": ["boltz", "esmfold2"],
+      "scorers": ["dockq-v2"],
+      "filters": ["status-preserving-filter", "diversity-filter"]
+    }
+  ],
+  "constraints": {
+    "objective": "Compare generation workflows under one public PD-L1 target window and one shared evaluation policy.",
+    "target_selection_method": "Use the deposited public complex interface identified by the request accession and window.",
+    "binder_length": {"minimum": 50, "maximum": 120},
+    "required_controls": ["public_reference", "sequence_decoy"],
+    "inclusion_rules": [
+      "Assign every row to one declared toolchain.",
+      "Keep candidates within the declared binder-length range."
+    ],
+    "exclusion_rules": [
+      "Exclude rows that cannot be assigned to a declared toolchain.",
+      "Preserve failed evaluation rows in the report instead of deleting them."
+    ],
+    "interpretation_limit": "The public fixture checks workflow contracts and does not estimate binding or tool performance.",
+    "preserve_failure_rows": true,
+    "top_per_arm": 1
+  },
+  "license_policy": {
+    "allowed_gates": [
+      "none",
+      "none_after_current_terms_check",
+      "terms_review",
+      "terms_and_weights_review",
+      "dependency_and_weight_terms_review"
+    ],
+    "blocked_tools": [],
+    "require_operator_review_for_gated": true,
+    "review_dimensions": {
+      "code": "review_required",
+      "weights": "review_required",
+      "dependencies": "review_required",
+      "api_terms": "review_required",
+      "redistribution": "review_required"
+    },
+    "use_context": "research_evaluation"
+  },
+  "execution_policy": {
+    "topology": "mixed",
+    "authorization": "plan_then_explicit_runtime_authorization",
+    "max_spend_usd": 60,
+    "max_wall_clock_minutes": 240,
+    "routes": [
+      {
+        "id": "design-on-neocloud",
+        "toolchain_ids": ["diffusion-mpnn", "all-atom-mpnn", "integrated-design"],
+        "stages": ["generation", "sequence_design"],
+        "backend": "neocloud",
+        "execution_method": "self_hosted",
+        "profile_ref": "modules/provider-profiles/neocloud/gpu-pod-no-download.v1.json",
+        "operator_adapter_required": false
+      },
+      {
+        "id": "cofold-through-api-adapter",
+        "toolchain_ids": ["diffusion-mpnn", "all-atom-mpnn", "integrated-design"],
+        "stages": ["cofold"],
+        "backend": "api",
+        "execution_method": "hosted_api",
+        "profile_ref": null,
+        "operator_adapter_required": true,
+        "adapter_contract_ref": "templates/binder-api-adapter-contract.json",
+        "api_policy": {
+          "terms_review_required": true,
+          "input_retention_review_required": true,
+          "runtime_secret_reference_required": true
+        }
+      },
+      {
+        "id": "score-and-report-locally",
+        "toolchain_ids": ["diffusion-mpnn", "all-atom-mpnn", "integrated-design"],
+        "stages": ["scoring", "filter", "report"],
+        "backend": "local",
+        "execution_method": "self_hosted",
+        "profile_ref": "modules/provider-profiles/local/workstation-no-download.v1.json",
+        "operator_adapter_required": false
+      }
+    ]
+  },
+  "synthetic_fixture": "examples/pd-l1-binder-design-public/candidate-ranking.example.json"
+}

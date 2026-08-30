@@ -1,0 +1,23 @@
+{
+  "schema_version": "structure-factory-candidate-ranking-v1",
+  "campaign_id": "pd-l1-binder-design-public",
+  "result_boundary": "public_synthetic_demo",
+  "source_posture": "synthetic_demo",
+  "ranking_policy": {
+    "primary": "cofold_confidence_proxy",
+    "secondary": ["interface_confidence_proxy", "failure_status"],
+    "note": "Rows demonstrate comparison and failure-preservation behavior. They are not model outputs or measurements."
+  },
+  "candidates": [
+    {"rank": 1, "id": "demo-a-001", "toolchain_id": "diffusion-mpnn", "source_posture": "synthetic_demo", "result_boundary": "public_synthetic_demo", "cofold_status": "completed", "scores": {"cofold_confidence_proxy": 0.62, "interface_confidence_proxy": 0.41}, "artifact_refs": []},
+    {"rank": 2, "id": "demo-a-002", "toolchain_id": "diffusion-mpnn", "source_posture": "synthetic_demo", "result_boundary": "public_synthetic_demo", "cofold_status": "failed", "scores": {"cofold_confidence_proxy": null, "interface_confidence_proxy": null}, "artifact_refs": []},
+    {"rank": 1, "id": "demo-b-001", "toolchain_id": "all-atom-mpnn", "source_posture": "synthetic_demo", "result_boundary": "public_synthetic_demo", "cofold_status": "completed", "scores": {"cofold_confidence_proxy": 0.58, "interface_confidence_proxy": 0.44}, "artifact_refs": []},
+    {"rank": 2, "id": "demo-b-002", "toolchain_id": "all-atom-mpnn", "source_posture": "synthetic_demo", "result_boundary": "public_synthetic_demo", "cofold_status": "completed", "scores": {"cofold_confidence_proxy": 0.49, "interface_confidence_proxy": 0.36}, "artifact_refs": []},
+    {"rank": 1, "id": "demo-c-001", "toolchain_id": "integrated-design", "source_posture": "synthetic_demo", "result_boundary": "public_synthetic_demo", "cofold_status": "completed", "scores": {"cofold_confidence_proxy": 0.65, "interface_confidence_proxy": 0.39}, "artifact_refs": []},
+    {"rank": 2, "id": "demo-c-002", "toolchain_id": "integrated-design", "source_posture": "synthetic_demo", "result_boundary": "public_synthetic_demo", "cofold_status": "completed", "scores": {"cofold_confidence_proxy": 0.51, "interface_confidence_proxy": 0.33}, "artifact_refs": []}
+  ],
+  "boundaries": [
+    "Synthetic comparison rows are not candidate binders.",
+    "Binding, function, selectivity, safety, and therapeutic value are not established by this fixture."
+  ]
+}

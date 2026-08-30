@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "contract_id": "pd-l1-binder-design-public.stage-contract.v1",
+  "campaign_id": "pd-l1-binder-design-public",
+  "execution_profile": "binder-design-fast-path",
+  "progress_ledger": "artifacts/stage-progress.jsonl",
+  "fail_closed": true,
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": ["failed", "partial", "timeout"],
+      "include": ["completed_stages", "failed_stage", "resume_command", "artifact_status", "result_boundary"]
+  },
+  "stages": [
+    {
+      "stage_id": "target_intake",
+      "description": "Verify public target accession, chain, window, and run boundaries.",
+      "required": true,
+      "expected_outputs": ["target-window.json"],
+      "timeout_minutes": 5,
+      "fail_closed": true
+    },
+    {
+      "stage_id": "runtime_gate",
+      "description": "Verify GPU runtime, tool availability, weights/cache posture, and use-context gates before execution.",
+      "required": true,
+      "expected_outputs": ["runtime-gate.json"],
+      "timeout_minutes": 10,
+      "fail_closed": true
+    },
+    {
+      "stage_id": "generation_canary",
+      "description": "Generate a tiny candidate tranche before wider spend.",
+      "required": true,
+      "expected_outputs": ["generated-candidate-ledger.json"],
+      "timeout_minutes": 60,
+      "fail_closed": true
+    },
+    {
+      "stage_id": "cofold_ranking",
+      "description": "Cofold candidates and synthesize candidate ranking with failures preserved.",
+      "required": true,
+      "expected_outputs": ["candidate-ranking.json"],
+      "timeout_minutes": 90,
+      "fail_closed": true
+    },
+    {
+      "stage_id": "review_report",
+      "description": "Emit validation notes and report within the computational-candidate boundary.",
+      "required": true,
+      "expected_outputs": ["validation-notes.md", "report.md"],
+      "timeout_minutes": 10,
+      "fail_closed": true
+    }
+  ],
+  "result_boundaries_allowed": ["computational_candidate", "blocked", "insufficient_support"],
+  "no_false_success_notes": [
+    "Provider launch is not success.",
+    "Candidate ranking is not binding proof.",
+    "Failed stages must downgrade the closeout."
+  ]
+}

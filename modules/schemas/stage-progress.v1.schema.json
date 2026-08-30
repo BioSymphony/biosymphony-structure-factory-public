@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/stage-progress.v1.schema.json",
+  "title": "Structure Factory stage progress event v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "timestamp",
+    "stage_id",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "shard_id": {
+      "type": "string"
+    },
+    "stage_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "pending",
+        "started",
+        "running",
+        "heartbeat",
+        "completed",
+        "failed",
+        "blocked",
+        "skipped",
+        "partial"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "progress_fraction": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "error_class": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "observed_output_count": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": true
+}

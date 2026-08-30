@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/method-adapter.v1.schema.json",
+  "title": "Structure Factory method adapter v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "adapter_id",
+    "tool_registry_id",
+    "lane",
+    "posture",
+    "inputs",
+    "outputs",
+    "score_semantics",
+    "claim_ceiling"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "adapter_id": { "type": "string", "minLength": 1 },
+    "tool_registry_id": { "type": "string", "minLength": 1 },
+    "lane": { "enum": ["ligand_prep", "wide_docking", "focused_cofolding", "pose_validation", "benchmark", "design", "admet", "free_energy", "map_model", "orchestration"] },
+    "posture": { "enum": ["open_default", "review_required", "runtime_gated", "adapter_only"] },
+    "inputs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "outputs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "score_semantics": {
+      "type": "object",
+      "required": ["primary_score", "direction"],
+      "properties": {
+        "primary_score": { "type": "string", "minLength": 1 },
+        "direction": { "enum": ["higher_is_better", "lower_is_better", "not_ranked"] }
+      },
+      "additionalProperties": true
+    },
+    "claim_ceiling": { "enum": ["candidate", "calibrated", "validated", "blocked_or_insufficient"] }
+  },
+  "additionalProperties": true
+}

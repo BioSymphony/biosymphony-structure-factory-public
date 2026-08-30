@@ -1,0 +1,346 @@
+{
+  "schema_version": "target-window-v1",
+  "target_window_id": "pd-l1-binder-window",
+  "source_pdb": "4ZQK",
+  "generated_at": "PLACEHOLDER",
+  "claim_level": "candidate",
+  "claim_notes": [
+    "Hotspots Y56/E58/R113/M115/Y123 (UniProt) sourced from PD-L1/PD-1 literature; not computed via distance cutoff in this run.",
+    "Interface residues enumerated from 4ZQK chain A vs chain B: 10 strict hotspots (\u22643.5 \u00c5), 12 extended (3.5-5.0 \u00c5). Literature-cited residues (Y56/E58/R113/M115/Y123) tagged with `literature_cited`. Genie 3's 3.5 \u00c5 gate will route strict residues to the `hotspot` slot; extended residues fall into `extended`."
+  ],
+  "distance_cutoff_angstrom": 5.0,
+  "coordinate_sha256": null,
+  "input_audit_path": "runtime-public-fetch:rcsb:4ZQK",
+  "sliced_target_cif": null,
+  "target_chain_summary": {
+    "label": "PD-L1",
+    "chain_ids_auth": [
+      "A"
+    ],
+    "chain_ids_label": [
+      "A"
+    ],
+    "description": "Programmed cell death 1 ligand 1",
+    "entity_id": "1",
+    "sequence_length": 115,
+    "source_organisms": [
+      "Homo sapiens"
+    ],
+    "type": "polypeptide(L)",
+    "window_pdb_chain_range": "19-127",
+    "window_uniprot_range": "19-127",
+    "uniprot_offset_pdb_minus_uniprot": 0,
+    "target_full_sequence": "AFTVTVPKDLYVVEYGSNMTIECKFPVEKQLDLAALIVYWEMEDKNIIQFVHGEEDLKVQHSSYRQRARLLKDQLSLGNAALQITDVKLQDAGVYRCMISYGGADYKRITVKVNA",
+    "target_window_sequence": "FTVTVPKDLYVVEYGSNMTIECKFPVEKQLDLAALIVYWEMEDKNIIQFVHGEEDLKVQHSSYRQRARLLKDQLSLGNAALQITDVKLQDAGVYRCMISYGGADYKRIT"
+  },
+  "partner_summaries": {
+    "B": {
+      "chain": "B",
+      "label": "PD-1",
+      "n_residues": 106
+    }
+  },
+  "interface": {
+    "cutoff_angstrom": 5.0,
+    "interface_residue_count": 22,
+    "interface_residues": [
+      {
+        "chain": "A",
+        "resnum": 122,
+        "resnum_uniprot": 122,
+        "comp": "ASP",
+        "min_distance_angstrom": 2.557,
+        "is_strict_hotspot": true,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 125,
+        "resnum_uniprot": 125,
+        "comp": "ARG",
+        "min_distance_angstrom": 2.613,
+        "is_strict_hotspot": true,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 113,
+        "resnum_uniprot": 113,
+        "comp": "ARG",
+        "min_distance_angstrom": 2.645,
+        "is_strict_hotspot": true,
+        "literature_cited": true,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 121,
+        "resnum_uniprot": 121,
+        "comp": "ALA",
+        "min_distance_angstrom": 2.678,
+        "is_strict_hotspot": true,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 123,
+        "resnum_uniprot": 123,
+        "comp": "TYR",
+        "min_distance_angstrom": 2.699,
+        "is_strict_hotspot": true,
+        "literature_cited": true,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 66,
+        "resnum_uniprot": 66,
+        "comp": "GLN",
+        "min_distance_angstrom": 2.906,
+        "is_strict_hotspot": true,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 124,
+        "resnum_uniprot": 124,
+        "comp": "LYS",
+        "min_distance_angstrom": 2.914,
+        "is_strict_hotspot": true,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 19,
+        "resnum_uniprot": 19,
+        "comp": "PHE",
+        "min_distance_angstrom": 2.921,
+        "is_strict_hotspot": true,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 26,
+        "resnum_uniprot": 26,
+        "comp": "ASP",
+        "min_distance_angstrom": 3.153,
+        "is_strict_hotspot": true,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 54,
+        "resnum_uniprot": 54,
+        "comp": "ILE",
+        "min_distance_angstrom": 3.499,
+        "is_strict_hotspot": true,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 56,
+        "resnum_uniprot": 56,
+        "comp": "TYR",
+        "min_distance_angstrom": 3.546,
+        "is_strict_hotspot": false,
+        "literature_cited": true,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 120,
+        "resnum_uniprot": 120,
+        "comp": "GLY",
+        "min_distance_angstrom": 3.726,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 119,
+        "resnum_uniprot": 119,
+        "comp": "GLY",
+        "min_distance_angstrom": 3.728,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 23,
+        "resnum_uniprot": 23,
+        "comp": "VAL",
+        "min_distance_angstrom": 3.786,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 115,
+        "resnum_uniprot": 115,
+        "comp": "MET",
+        "min_distance_angstrom": 3.794,
+        "is_strict_hotspot": false,
+        "literature_cited": true,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 117,
+        "resnum_uniprot": 117,
+        "comp": "SER",
+        "min_distance_angstrom": 3.831,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 58,
+        "resnum_uniprot": 58,
+        "comp": "GLU",
+        "min_distance_angstrom": 3.878,
+        "is_strict_hotspot": false,
+        "literature_cited": true,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 76,
+        "resnum_uniprot": 76,
+        "comp": "VAL",
+        "min_distance_angstrom": 4.167,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 20,
+        "resnum_uniprot": 20,
+        "comp": "THR",
+        "min_distance_angstrom": 4.573,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 18,
+        "resnum_uniprot": 18,
+        "comp": "ALA",
+        "min_distance_angstrom": 4.747,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 126,
+        "resnum_uniprot": 126,
+        "comp": "ILE",
+        "min_distance_angstrom": 4.867,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      },
+      {
+        "chain": "A",
+        "resnum": 63,
+        "resnum_uniprot": 63,
+        "comp": "ASN",
+        "min_distance_angstrom": 4.918,
+        "is_strict_hotspot": false,
+        "literature_cited": false,
+        "partner_chains_within_cutoff": [
+          "B"
+        ]
+      }
+    ],
+    "partner_chains": [
+      "B"
+    ],
+    "target_chains": [
+      "A"
+    ],
+    "target_residue_total": 109,
+    "strict_hotspot_cutoff_angstrom": 3.5,
+    "strict_hotspot_count": 10,
+    "extended_count": 12
+  },
+  "interface_residue_ranges": [
+    {
+      "chain": "A",
+      "start": 19,
+      "end": 127
+    }
+  ],
+  "all_classified_entities": {
+    "PD-L1": {
+      "chain_ids_auth": [
+        "A"
+      ],
+      "label": "PD-L1",
+      "sequence_length": 115
+    },
+    "PD-1": {
+      "chain_ids_auth": [
+        "B"
+      ],
+      "label": "PD-1",
+      "sequence_length": 106
+    }
+  }
+}

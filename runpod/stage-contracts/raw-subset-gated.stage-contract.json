@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "contract_id": "structure-factory-raw-subset-gated.stage-contract.v1",
+  "manifest_id": "structure-factory-raw-subset-gated-empiar-13124",
+  "run_id": "structure-factory-empiar-13124-raw-subset-gated-100",
+  "execution_profile": "raw-subset-gated",
+  "progress_ledger": "/workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-gated-100/stage-progress.jsonl",
+  "success_claim": "bounded raw-subset processing with gated lanes only when licenses are runtime-ready",
+  "fail_closed": true,
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "data_intake_hash_change",
+      "repo_commit_change",
+      "subset_rule_change",
+      "license_gate_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "manifest_preflight",
+      "description": "Validate manifest, raw subset boundaries, private image auth references, and gated lane declarations.",
+      "required": true,
+      "expected_outputs": [
+        "validation/runpod-manifest-check.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/runpod-manifest-check.json",
+      "done_marker": "validation/runpod-manifest-check.json",
+      "resume_command": "bash runpod/entrypoints/run-raw-subset-demo.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "license_gate_probe",
+      "description": "Verify CryoSPARC/MotionCor3 runtime access references without committing secrets or installers.",
+      "required": true,
+      "expected_outputs": [
+        "validation/license-gates.json"
+      ],
+      "timeout_minutes": 20,
+      "checkpoint_marker": "validation/license-gates.json",
+      "done_marker": "validation/license-gates.json",
+      "resume_command": "bash runpod/entrypoints/bootstrap-gated-tools.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "input_audit",
+      "description": "Audit EMPIAR-13124 subset inputs before any download.",
+      "required": true,
+      "expected_outputs": [
+        "validation/input-audit.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/input-audit.json",
+      "done_marker": "validation/input-audit.json",
+      "resume_command": "bash runpod/entrypoints/run-raw-subset-demo.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "fanout_estimate",
+      "description": "Estimate raw-download, frame, gated-tool, and context-lane fanout before any expensive transfer or annotation.",
+      "required": true,
+      "expected_outputs": [
+        "validation/fanout-estimate.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/fanout-estimate.json",
+      "done_marker": "validation/fanout-estimate.json",
+      "resume_command": "python3 scripts/structure_factory/fanout_estimator.py --manifest runpod/launch-manifests/raw-subset-gated.json --out /workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-gated-100/validation/fanout-estimate.json --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "raw_subset_intake",
+      "description": "Materialize only the declared deterministic raw-movie subset to pod scratch.",
+      "required": true,
+      "expected_outputs": [
+        "data-intake-ledger.json"
+      ],
+      "timeout_minutes": 90,
+      "checkpoint_marker": "data-intake-ledger.json",
+      "done_marker": "data-intake-ledger.json",
+      "resume_command": "bash runpod/entrypoints/run-raw-subset-demo.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "gated_motion_ctf_qc",
+      "description": "Run gated CryoSPARC/MotionCor3 lane only after license gates report ready.",
+      "required": false,
+      "expected_outputs": [
+        "motion_correction_qc/",
+        "ctf_qc/",
+        "validation/versions.json"
+      ],
+      "timeout_minutes": 240,
+      "checkpoint_marker": "validation/versions.json",
+      "done_marker": "ctf_qc/",
+      "resume_command": "bash runpod/entrypoints/run-raw-subset-demo.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 3
+      }
+    },
+    {
+      "stage_id": "contract_self_check",
+      "description": "Reject mock, planned-only, processed-input, or reference-only evidence for real raw-subset success.",
+      "required": true,
+      "expected_outputs": [
+        "validation/contract-self-check.json"
+      ],
+      "timeout_minutes": 10,
+      "checkpoint_marker": "validation/contract-self-check.json",
+      "done_marker": "validation/contract-self-check.json",
+      "resume_command": "python3 scripts/structure_factory/contract_self_check.py --manifest runpod/launch-manifests/raw-subset-gated.json --artifact-root /workspace/structure-factory/runs/structure-factory-empiar-13124-raw-subset-gated-100 --execution-mode real",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    }
+  ]
+}

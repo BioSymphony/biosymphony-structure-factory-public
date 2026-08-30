@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "ledger_id": "orchestration-fixtures-cloud-shard-ledger-fixture",
+  "campaign_id": "orchestration-fixtures",
+  "shards": [
+    {
+      "shard_id": "fixture-local-no-paid-001",
+      "provider": "local",
+      "adapter": "local_workstation_v1",
+      "state": "packet_created",
+      "budget": {
+        "max_spend_usd": 0,
+        "max_runtime_minutes": 10
+      },
+      "artifacts": [
+        {
+          "path": ".runtime/screening-superpowers-fixture/consensus_ranking.csv",
+          "required": true,
+          "hash_required_before_closeout": true
+        }
+      ],
+      "cleanup": {
+        "required_for_paid_provider": false,
+        "proof_required_before_closeout": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Structure Factory RunPod Environment",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "STRUCTURE_FACTORY_RUN_ID": {
+      "type": "string",
+      "description": "Unique run identifier used under /workspace/structure-factory/runs."
+    },
+    "STRUCTURE_FACTORY_REPO_URL": {
+      "type": "string",
+      "description": "Private GitHub clone URL. Prefer HTTPS token injection or deploy key configured outside git."
+    },
+    "STRUCTURE_FACTORY_GIT_REF": {
+      "type": "string",
+      "description": "Pinned branch, tag, or commit to clone."
+    },
+    "STRUCTURE_FACTORY_VOLUME_ROOT": {
+      "type": "string",
+      "default": "/workspace/structure-factory"
+    },
+    "STRUCTURE_FACTORY_NO_DOWNLOAD": {
+      "type": "string",
+      "enum": ["1", "true", "yes"],
+      "description": "Must be set for prep smoke runs."
+    },
+    "STRUCTURE_FACTORY_EXECUTION_PROFILE": {
+      "type": "string",
+      "enum": ["no-download-smoke", "raw-subset-open", "raw-subset-gated", "map-model-report"],
+      "description": "Execution profile selected by the launch manifest."
+    },
+    "STRUCTURE_FACTORY_ALLOW_RAW_DOWNLOADS": {
+      "type": "string",
+      "enum": ["1", "true", "yes"],
+      "description": "Required for raw-subset profiles. Never set for no-download smoke."
+    },
+    "STRUCTURE_FACTORY_OPERATOR_AUTHORIZED": {
+      "type": "string",
+      "enum": ["1", "true", "yes"],
+      "description": "Required at runtime for cost-bearing or download-bearing profiles. Do not set in repo manifests as proof of approval."
+    },
+    "STRUCTURE_FACTORY_EXECUTION_MODE": {
+      "type": "string",
+      "enum": ["prep", "real"],
+      "description": "Use prep only for local dry runs. Real RunPod runs should use real and fail if mock or dry-run evidence appears."
+    },
+    "STRUCTURE_FACTORY_STAGE_CONTRACT": {
+      "type": "string",
+      "description": "Optional absolute path to the stage-contract JSON used by the entrypoint."
+    },
+    "STRUCTURE_FACTORY_STAGE_PROGRESS": {
+      "type": "string",
+      "description": "Optional absolute path to stage-progress.jsonl. Defaults under /workspace/structure-factory/runs/<run-id>."
+    },
+    "STRUCTURE_FACTORY_REMOTE_LAUNCH_ALLOWED": {
+      "type": "string",
+      "enum": ["1", "true", "yes"],
+      "description": "Required by execution-ready preflight before paid RunPod launch."
+    },
+    "STRUCTURE_FACTORY_ALLOW_MAP_MODEL_DOWNLOADS": {
+      "type": "string",
+      "enum": ["1", "true", "yes"],
+      "description": "Required for map/model report profiles."
+    },
+    "STRUCTURE_FACTORY_SUBSET_PROFILE": {
+      "type": "string",
+      "description": "Raw subset profile such as raw_movies_50 or raw_movies_100."
+    },
+    "STRUCTURE_FACTORY_ENABLE_CRYOSPARC": {
+      "type": "string",
+      "description": "Enable CryoSPARC gated lane when CRYOSPARC_LICENSE_ID is provided at runtime."
+    },
+    "STRUCTURE_FACTORY_ENABLE_MOTIONCOR3": {
+      "type": "string",
+      "description": "Enable MotionCor3 gated lane when approved runtime access is provided."
+    },
+    "STRUCTURE_FACTORY_ENABLE_PHENIX": {
+      "type": "string",
+      "description": "Enable Phenix gated lane when approved runtime access is provided."
+    },
+    "STRUCTURE_FACTORY_ENABLE_CHIMERAX": {
+      "type": "string",
+      "description": "Enable ChimeraX gated lane when approved runtime access is provided."
+    },
+    "RUNPOD_VOLUME_ID": {
+      "type": "string",
+      "description": "RunPod-provided network volume id when attached."
+    },
+    "RUNPOD_GHCR_REGISTRY_AUTH_ID": {
+      "type": "string",
+      "description": "Runtime reference to provider-side GHCR registry auth. Store in RunPod/provider secrets, not git."
+    },
+    "RUNPOD_GHCR_USERNAME": {
+      "type": "string",
+      "description": "Runtime GHCR username only when direct registry auth injection is used."
+    },
+    "RUNPOD_GHCR_TOKEN": {
+      "type": "string",
+      "description": "Runtime GHCR token only when direct registry auth injection is used. Never commit real values."
+    },
+    "CRYOSPARC_LICENSE_ID": {
+      "type": "string",
+      "description": "Optional license-gated runtime value. Never commit real values."
+    },
+    "MOTIONCOR3_ACCESS_REF": {
+      "type": "string",
+      "description": "Optional secure reference for MotionCor3 access."
+    },
+    "PHENIX_ACCESS_REF": {
+      "type": "string",
+      "description": "Optional secure reference for Phenix installer/license access."
+    },
+    "ROSETTA_ACCESS_REF": {
+      "type": "string",
+      "description": "Optional secure reference for Rosetta/PyRosetta access."
+    },
+    "ALPHAFOLD3_ACCESS_REF": {
+      "type": "string",
+      "description": "Optional secure reference for AlphaFold 3 code/weights access."
+    }
+  },
+  "required": [
+    "STRUCTURE_FACTORY_RUN_ID",
+    "STRUCTURE_FACTORY_REPO_URL",
+    "STRUCTURE_FACTORY_GIT_REF",
+    "STRUCTURE_FACTORY_VOLUME_ROOT",
+    "STRUCTURE_FACTORY_EXECUTION_PROFILE"
+  ]
+}

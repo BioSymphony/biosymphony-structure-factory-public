@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "module_type": "campaign_manifest",
+  "campaign_id": "structure-factory-empiar-10204-v0",
+  "campaign_family": "cryoem-raw-to-atomic-report",
+  "run_profile": "no_download_smoke",
+  "data_modules": [
+    "modules/data-modules/empiar-10204.metadata-only.v1.json"
+  ],
+  "image_modules": [
+    "modules/image-modules/cryo-core.v1.json",
+    "modules/image-modules/model-build.v1.json",
+    "modules/image-modules/ai-design.v1.json",
+    "modules/image-modules/md-docking.v1.json"
+  ],
+  "lane_modules": [
+    "modules/lane-modules/relion.toolcheck.v1.json",
+    "modules/lane-modules/warp-m.toolcheck.v1.json",
+    "modules/lane-modules/topaz.toolcheck.v1.json",
+    "modules/lane-modules/ctffind.toolcheck.v1.json",
+    "modules/lane-modules/cryosparc.license-gate.v1.json",
+    "modules/lane-modules/motioncor3.license-gate.v1.json",
+    "modules/lane-modules/modelangelo.toolcheck.v1.json",
+    "modules/lane-modules/phenix.license-gate.v1.json",
+    "modules/lane-modules/chimerax.license-gate.v1.json",
+    "modules/lane-modules/alphafold3.license-gate.v1.json"
+  ],
+  "smoke_suites": [
+    "modules/smoke-checks/no-download.v1.json",
+    "modules/smoke-checks/gpu-storage-artifact.v1.json"
+  ],
+  "artifact_contract": "modules/artifact-contracts/structure-report.v1.json",
+  "policies": {
+    "allow_large_downloads": false,
+    "allow_raw_cryoem_downloads": false,
+    "allow_private_data": false,
+    "expected_download_bytes": 0
+  }
+}

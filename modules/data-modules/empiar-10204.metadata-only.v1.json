@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "module_type": "data_module",
+  "id": "empiar-10204",
+  "source": "EMPIAR",
+  "profile": "metadata_only",
+  "public_status": "public",
+  "data_classes": ["raw_cryoem_movies", "metadata"],
+  "storage_policy": "external_or_runpod_volume_only",
+  "git_policy": "never_commit_raw_or_generated_data",
+  "download_policy": {
+    "enabled": false,
+    "expected_download_bytes": 0,
+    "requires_explicit_execution_issue": true
+  },
+  "subset_profiles": [
+    {
+      "id": "metadata_only",
+      "description": "No raw data download; accession and ledger smoke only."
+    },
+    {
+      "id": "small_public_subset",
+      "description": "Future approved subset for RunPod smoke after storage and budget approval."
+    }
+  ],
+  "ledger_fields": [
+    "accession",
+    "source_url",
+    "license_or_terms_note",
+    "download_method",
+    "storage_path",
+    "file_count",
+    "checksum_policy",
+    "citation"
+  ]
+}

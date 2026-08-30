@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "module_type": "artifact_contract",
+  "contract_id": "screening-results.v1",
+  "purpose": "Compact high-throughput screening ledger and ranking contract. Candidate reports are promoted selectively, not emitted for every ligand.",
+  "required_for_screening_smoke": [
+    "screening_manifest.json",
+    "validation/input-audit.json",
+    "ligand_prep.jsonl",
+    "pose_predictions.jsonl",
+    "affinity_predictions.jsonl",
+    "consensus_ranking.csv",
+    "metrics.json",
+    "method_summary.json",
+    "failure_report.json",
+    "validation_ledger.json",
+    "stage-progress.jsonl",
+    "executed-commands.jsonl",
+    "provenance.md"
+  ],
+  "required_for_scale_canary": [
+    "screening_manifest.json",
+    "validation/input-audit.json",
+    "validation/fanout-estimate.json",
+    "validation/artifact-pull-report.json",
+    "validation/contract-self-check.json",
+    "ligand_prep.jsonl",
+    "pose_predictions.jsonl",
+    "affinity_predictions.jsonl",
+    "consensus_ranking.csv",
+    "metrics.json",
+    "method_summary.json",
+    "failure_report.json",
+    "validation_ledger.json",
+    "stage-progress.jsonl",
+    "executed-commands.jsonl",
+    "cost_report.json",
+    "cleanup_proof.json",
+    "provenance.md"
+  ],
+  "report_promotion_policy": {
+    "default": "promote_selected_only",
+    "promote_for": [
+      "top_ranked_hits",
+      "known_controls",
+      "representative_scaffolds",
+      "method_disagreement_cases",
+      "debuggable_failures"
+    ],
+    "never_required_for": "every_ligand"
+  },
+  "required_at_closeout": [
+    "validation/input-audit.json",
+    "validation/contract-self-check.json"
+  ],
+  "maturity_ladder": {
+    "L0": "manifest_compiled",
+    "L1": "inputs_materialized",
+    "L2": "ligand_prep_completed",
+    "L3": "method_comparison_scored",
+    "L4": "rankings_and_failures_joined",
+    "L5": "claims_audited_and_reports_promoted"
+  },
+  "claim_levels": [
+    "candidate",
+    "processed",
+    "validated",
+    "publishable",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "screening_evidence_requirements": {
+    "pose_claim": [
+      "receptor_ensemble_manifest",
+      "ligand_identity",
+      "pose_source",
+      "pose_validity_check"
+    ],
+    "affinity_claim": [
+      "assay_or_benchmark_context",
+      "simple_baselines",
+      "method_specific_score",
+      "calibration_scope"
+    ],
+    "ranking_claim": [
+      "ranking_formula_version",
+      "failed_ligands_report",
+      "method_disagreement_summary",
+      "claim_ceiling"
+    ],
+    "scale_claim": [
+      "fanout_estimate",
+      "provider_runtime_report",
+      "cost_report",
+      "cleanup_proof"
+    ]
+  },
+  "export_policy": {
+    "raw_cryoem_movies": "do_not_export",
+    "private_ligand_libraries": "do_not_export",
+    "model_weights": "never_export",
+    "large_pose_archives": "export_manifest_only_unless_authorized",
+    "score_tables_and_small_reports": "export_small_artifacts",
+    "secrets_and_license_material": "never_export"
+  }
+}

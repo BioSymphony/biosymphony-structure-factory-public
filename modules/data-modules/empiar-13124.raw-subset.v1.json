@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "module_type": "data_module",
+  "id": "empiar-13124",
+  "source": "EMPIAR",
+  "profile": "raw_subset_only",
+  "public_status": "public",
+  "title": "Single particle cryo-EM dataset of mouse heavy chain apoferritin prepared by jet vitrification",
+  "source_url": "https://www.ebi.ac.uk/empiar/EMPIAR-13124/",
+  "api_url": "https://www.ebi.ac.uk/empiar/api/entry/13124/",
+  "release_date": "2026-03-22",
+  "cross_references": {
+    "emdb": ["EMD-55761"],
+    "pdb": []
+  },
+  "image_set": {
+    "name": "Raw micrographs of mouse heavy chain apoferritin prepared by jet vitrification",
+    "category": "micrographs - multiframe",
+    "data_format": "EER",
+    "num_images_or_tilt_series": 6560,
+    "frames_per_image": 50,
+    "pixel_width_angstrom": 0.352,
+    "estimated_total_size_bytes": 653800000000
+  },
+  "data_classes": ["raw_cryoem_movies", "metadata"],
+  "storage_policy": "runpod_scratch_only_for_demo",
+  "git_policy": "never_commit_raw_or_generated_data",
+  "download_policy": {
+    "enabled": true,
+    "expected_download_bytes_max": 10500000000,
+    "requires_explicit_execution_issue": true,
+    "allowed_profiles": ["raw_movies_50", "raw_movies_100"],
+    "download_to": "/workspace/structure-factory/scratch/datasets/empiar-13124"
+  },
+  "fanout_notes": {
+    "fanout_unit": "raw_movie",
+    "primary_evidence_lanes": ["raw_subset_intake", "motion_correction", "ctf_qc"],
+    "context_lanes": ["particle_picking", "2d_classification", "heterogeneity_or_model_build"],
+    "estimator": "scripts/structure_factory/fanout_estimator.py",
+    "policy": "estimate before transfer; primary evidence may close partial if context lanes exceed time budget"
+  },
+  "subset_profiles": [
+    {
+      "id": "raw_movies_50",
+      "description": "Deterministic 50-movie raw EER subset for downloader, motion, CTF, and early picking smoke.",
+      "max_files": 50,
+      "expected_download_bytes": 5250000000,
+      "deterministic_rule": "lexicographic_first_n_raw_movies_from_empiar_file_listing",
+      "allow_processed_inputs": false
+    },
+    {
+      "id": "raw_movies_100",
+      "description": "Deterministic 100-movie raw EER subset for first honest 2D class target.",
+      "max_files": 100,
+      "expected_download_bytes": 10500000000,
+      "deterministic_rule": "lexicographic_first_n_raw_movies_from_empiar_file_listing",
+      "allow_processed_inputs": false
+    }
+  ],
+  "forbidden_inputs": [
+    "processed_particles",
+    "aligned_micrographs",
+    "deposited_maps",
+    "deposited_models",
+    "author_star_or_cs_particle_stacks"
+  ],
+  "success_targets": [
+    "data-intake-ledger.json",
+    "motion_correction_qc/",
+    "ctf_qc/",
+    "particle_picking_manifest.json",
+    "2d_classes/"
+  ],
+  "ledger_fields": [
+    "accession",
+    "source_url",
+    "license_or_terms_note",
+    "subset_profile",
+    "deterministic_rule",
+    "download_method",
+    "storage_path",
+    "file_count",
+    "checksum_policy",
+    "citation"
+  ]
+}

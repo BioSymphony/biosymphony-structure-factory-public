@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/artifact-index.v1.schema.json",
+  "title": "Structure Factory artifact index v1",
+  "type": "object",
+  "required": ["schema_version", "index_id", "artifacts"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "index_id": { "type": "string", "minLength": 1 },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["artifact_id", "path", "evidence_mode", "claim_ids"],
+        "properties": {
+          "artifact_id": { "type": "string", "minLength": 1 },
+          "path": { "type": "string", "minLength": 1 },
+          "evidence_mode": { "enum": ["provider_native", "derived", "fixture_or_demo", "report_only", "blocked_or_insufficient"] },
+          "claim_ids": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

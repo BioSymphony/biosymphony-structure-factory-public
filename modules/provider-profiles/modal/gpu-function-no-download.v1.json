@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "modal",
+  "provider_class": "serverless_function",
+  "profile_id": "modal-gpu-function-no-download",
+  "maps_campaign_profile": "no_download_smoke",
+  "blessed_path": true,
+  "workspace_root": "/workspace/structure-factory",
+  "artifact_root": "/workspace/structure-factory/runs/<run-id>",
+  "secret_mode": "operator_secret_store_or_provider_secret_refs",
+  "operator_gate_required": true,
+  "gpu_required": true,
+  "recommended_gpu": "H100",
+  "fallback_gpu": "A100-80GB",
+  "gpu_count": 1,
+  "execution_ready_requires": [
+    "repo_checkout",
+    "modal_cli_auth_via_operator_secret_store",
+    "input_audit",
+    "contract_self_check",
+    "stage_contract_check",
+    "explicit_operator_launch"
+  ],
+  "modal": {
+    "service": "gpu_function",
+    "app_name_ref": "STRUCTURE_FACTORY_MODAL_APP",
+    "volume_name_ref": "STRUCTURE_FACTORY_MODAL_VOLUME",
+    "volume_mount": "/vol/structure-factory",
+    "credential_source": "operator_secret_store_reference",
+    "secret_storage_policy": "do_not_write_provider_credentials_to_repo_tracker_logs_or_artifacts",
+    "requires_volume_commit": true,
+    "scope_check_required": true,
+    "launch_preflight_required": true,
+    "cleanup_proof_required": true,
+    "resources": {
+      "gpu": "H100",
+      "gpu_count": 1,
+      "max_containers": 1,
+      "timeout_seconds": 900,
+      "startup_timeout_seconds": 600,
+      "retries": 0
+    },
+    "budget": {
+      "max_authorized_spend_usd": "<operator-set>",
+      "max_runtime_minutes": 15,
+      "canary_only": true
+    },
+    "required_tags": [
+      "campaign=<campaign_id>",
+      "provider=modal",
+      "run_id=<run_id>"
+    ]
+  },
+  "notes": "Blessed Modal serverless GPU-function path for bounded single-function canaries and small single-container fanouts. Real execution requires operator-stored Modal credentials, explicit operator approval, a declared max_containers and timeout, committed and locally fetched Volume artifacts with hashes, a tag-scoped cost report, and app-stop cleanup proof. A function exiting is intent, not scientific success. Keep credentials, app/volume names, function/container IDs, logs, costs, and raw artifacts outside public git."
+}

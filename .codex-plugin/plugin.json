@@ -1,0 +1,23 @@
+{
+  "name": "biosymphony-structure-factory",
+  "version": "0.1.0",
+  "description": "BioSymphony Structure Factory skills for public-safe structural biology campaign planning.",
+  "author": {
+    "name": "BioSymphony",
+    "url": "https://github.com/BioSymphony"
+  },
+  "homepage": "https://github.com/BioSymphony/structure-factory",
+  "repository": "https://github.com/BioSymphony/structure-factory",
+  "license": "MIT",
+  "keywords": ["structural-biology", "campaign-planning", "agents"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "BioSymphony Structure Factory",
+    "shortDescription": "Structural biology campaigns",
+    "longDescription": "Public-safe Structure Factory skills for structural biology campaign planning, binder-design triage, model comparison, structure mapping, and cloud GPU stage contracts.",
+    "developerName": "BioSymphony",
+    "category": "Research",
+    "capabilities": ["Skills"],
+    "defaultPrompt": ["Use $biosymphony-structure-factory to plan a structural biology campaign."]
+  }
+}

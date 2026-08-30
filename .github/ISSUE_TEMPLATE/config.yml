@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security or private-data disclosure
+    url: https://github.com/BioSymphony/structure-factory/security/advisories/new
+    about: Do not open public issues for secrets, private biological data, provider IDs, or vulnerabilities.
+  - name: Public usage questions
+    url: https://github.com/BioSymphony/structure-factory/discussions
+    about: Ask public, non-sensitive questions about examples, recipes, and local validation.

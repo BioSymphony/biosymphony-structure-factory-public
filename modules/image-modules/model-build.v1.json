@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module_type": "image_module",
+  "family": "model-build",
+  "purpose": "Atomic model building, refinement, validation, and model/map review.",
+  "required_for_profiles": ["full_structure_report"],
+  "candidate_tools": ["modelangelo", "phenix", "coot", "chimerax", "isolde"],
+  "execution_ready_requires": ["oci_digest", "toolcheck_pass", "license_audit"],
+  "lane_dependencies": [
+    {
+      "lane_id": "chimerax",
+      "lane_module_ready": "modules/lane-modules/chimerax.ready.v1.json",
+      "lane_module_gate": "modules/lane-modules/chimerax.license-gate.v1.json",
+      "required_for": ["chimerax-render"],
+      "license_class": "no_cost_noncommercial",
+      "install_method": "runtime_installer_or_local_review",
+      "redistribution_policy": "Not redistributed in the public model-build image. Operator installs ChimeraX 1.x at runtime from the upstream installer URL after confirming noncommercial use (or supplying a commercial license override). The license-gated installation path is documented in docs/tooling-and-licensing.md."
+    }
+  ],
+  "policy_notes": [
+    "ChimeraX is noncommercial unless an explicit commercial license is held by the operator. Public model-build images do not bundle ChimeraX; runtime installation is operator-driven and recorded in validation/chimerax_license_posture.json before any render.",
+    "ISOLDE rides on the ChimeraX bundle; same license posture applies."
+  ]
+}

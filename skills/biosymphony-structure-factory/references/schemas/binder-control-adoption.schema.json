@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-control-adoption.schema.json",
+  "title": "Binder control calibration adoption",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_scope_id", "selected_metric_id", "source_artifact_sha256", "gates", "adoption_reason"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-control-adoption-v1"},
+    "source_scope_id": {"$ref": "#/$defs/id"},
+    "selected_metric_id": {"$ref": "#/$defs/id"},
+    "source_artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["predictor_id", "metric_id", "operator", "threshold"],
+        "properties": {
+          "predictor_id": {"$ref": "#/$defs/id"},
+          "metric_id": {"$ref": "#/$defs/id"},
+          "operator": {"enum": [">=", "<="]},
+          "threshold": {"type": "number"}
+        }
+      }
+    },
+    "adoption_reason": {"type": "string", "minLength": 1, "maxLength": 500}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"}
+  }
+}

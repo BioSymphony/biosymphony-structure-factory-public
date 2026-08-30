@@ -1,0 +1,291 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/screening-manifest.v1.schema.json",
+  "title": "Structure Factory screening manifest v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_type",
+    "campaign_id",
+    "run_id",
+    "intent",
+    "target",
+    "ligand_library",
+    "receptor_ensemble",
+    "methods",
+    "provider_plan",
+    "budget",
+    "outputs",
+    "policies"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "manifest_type": {
+      "const": "screening_manifest"
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intent": {
+      "type": "object",
+      "required": [
+        "mode",
+        "natural_language_goal",
+        "claim_ceiling"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "natural_language_goal": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_hint": {
+          "type": "string"
+        },
+        "claim_ceiling": {
+          "enum": [
+            "candidate",
+            "processed",
+            "validated",
+            "publishable",
+            "insufficient_evidence",
+            "blocked"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "target": {
+      "type": "object",
+      "required": [
+        "target_id",
+        "name",
+        "private_data_allowed"
+      ],
+      "properties": {
+        "target_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "allowed_sources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "private_data_allowed": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ligand_library": {
+      "type": "object",
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stable_id_field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "enum": [
+            "json",
+            "jsonl",
+            "csv",
+            "sdf"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "receptor_ensemble": {
+      "type": "object",
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "site_definition_required": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "methods": {
+      "type": "object",
+      "required": [
+        "always"
+      ],
+      "properties": {
+        "always": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "wide_pass": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "focused": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "gated": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "provider_plan": {
+      "type": "object",
+      "required": [
+        "execution_profile"
+      ],
+      "properties": {
+        "priority": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "execution_profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operator_gate_required_for_paid_compute": {
+          "type": "boolean"
+        },
+        "operator_gate_for_gated_tools": {
+          "type": "boolean"
+        },
+        "current_run_is_no_download_fixture": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "budget": {
+      "type": "object",
+      "required": [
+        "max_ligands",
+        "max_spend_usd",
+        "max_runtime_minutes"
+      ],
+      "properties": {
+        "max_ligands": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_spend_usd": {
+          "type": "number",
+          "minimum": 0
+        },
+        "max_runtime_minutes": {
+          "type": "number",
+          "minimum": 0
+        },
+        "scale_soon_after_canaries": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "outputs": {
+      "type": "object",
+      "required": [
+        "artifact_contract"
+      ],
+      "properties": {
+        "artifact_contract": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_report_contract": {
+          "type": "string",
+          "minLength": 1
+        },
+        "promote_top_n": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    },
+    "policies": {
+      "type": "object",
+      "required": [
+        "allow_private_data",
+        "allow_raw_cryoem_downloads",
+        "expected_download_bytes",
+        "prediction_only_claim_level"
+      ],
+      "properties": {
+        "allow_private_data": {
+          "type": "boolean"
+        },
+        "allow_large_downloads": {
+          "type": "boolean"
+        },
+        "allow_raw_cryoem_downloads": {
+          "type": "boolean"
+        },
+        "expected_download_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "prediction_only_claim_level": {
+          "enum": [
+            "candidate",
+            "processed",
+            "validated",
+            "publishable",
+            "insufficient_evidence",
+            "blocked"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

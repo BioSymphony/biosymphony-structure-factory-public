@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "campaign_id": "orchestration-fixtures",
+  "source_artifacts": [
+    "examples/orchestration-fixtures/benchmark-set.json",
+    "examples/screening-superpowers/screening-manifest.json"
+  ],
+  "tranches": [
+    {
+      "tranche_id": "top-ranked-fixture-controls",
+      "selection_mode": "top_ranked",
+      "ligand_ids": [
+        "FIX-ACT-001",
+        "FIX-ACT-002"
+      ],
+      "rationale": "Promote top fixture controls only after simple baselines and ranking ledgers exist.",
+      "budget_fraction": 0.35
+    },
+    {
+      "tranche_id": "method-disagreement-fixture",
+      "selection_mode": "method_disagreement",
+      "ligand_ids": [
+        "FIX-FRG-001"
+      ],
+      "rationale": "Use disagreement to choose focused Boltz or pose-validation follow-up.",
+      "budget_fraction": 0.25
+    },
+    {
+      "tranche_id": "failure-rescue-fixture",
+      "selection_mode": "rescue",
+      "ligand_ids": [
+        "FIX-BAD-001"
+      ],
+      "rationale": "Keep invalid input handling auditable instead of hiding failed ligands.",
+      "budget_fraction": 0.1
+    }
+  ]
+}

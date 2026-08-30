@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-round-request.schema.json",
+  "title": "Public binder-round request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "round_id", "study_template", "published_workflow", "workflow_strategy", "comparison_policy", "optimization_policy", "source_posture", "result_boundary", "target", "toolchains", "constraints", "license_policy", "execution_policy", "synthetic_fixture"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-round-request-v1"},
+    "round_id": {"$ref": "#/$defs/id"},
+    "study_template": {"enum": ["published-binder-comparison-shape", "toolchain-comparison", "single-arm-replay", "custom"]},
+    "published_workflow": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["reference_ref", "bounded_stage_ids", "published_result_values_imported"],
+      "properties": {
+        "reference_ref": {"type": "string"},
+        "bounded_stage_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "prefixItems": [{"const": "target"}], "items": {"enum": ["generation", "sequence_design", "cofold", "scoring", "filter", "report"]}},
+        "published_result_values_imported": {"const": false}
+      }
+    },
+    "workflow_strategy": {"$ref": "#/$defs/workflow_strategy"},
+    "comparison_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "cross_arm_ranking", "metrics", "tie_break"],
+      "properties": {
+        "mode": {"enum": ["controlled_generation", "exploratory_full_stack"]},
+        "cross_arm_ranking": {"enum": ["shared_metrics_only", "not_permitted"]},
+        "metrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "direction", "unit", "missing_value_policy"],
+            "properties": {
+              "id": {"$ref": "#/$defs/id"},
+              "direction": {"enum": ["higher_is_better", "lower_is_better"]},
+              "unit": {"enum": ["unitless_proxy", "angstrom", "probability", "score"]},
+              "missing_value_policy": {"const": "preserve_as_failure"}
+            }
+          }
+        },
+        "tie_break": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      }
+    },
+    "optimization_policy": {"$ref": "#/$defs/optimization_policy"},
+    "source_posture": {"enum": ["public_data", "synthetic_demo", "report_only"]},
+    "result_boundary": {"enum": ["planning", "public_synthetic_demo"]},
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_posture", "label", "public_accession", "window", "site"],
+      "properties": {
+        "input_posture": {"enum": ["public_reference", "synthetic"]},
+        "label": {"type": "string", "minLength": 1},
+        "public_accession": {
+          "type": "string",
+          "pattern": "^(?:PDB:[A-Za-z0-9]{4}|UniProt:[A-Z0-9]{6,10}|AlphaFoldDB:[A-Za-z0-9_-]{6,}|SYNTHETIC:[A-Za-z0-9._-]+)$"
+        },
+        "window": {"type": "string", "minLength": 1},
+        "site": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["chain_id", "required_residues"],
+          "properties": {
+            "chain_id": {"type": "string", "pattern": "^[A-Za-z0-9]+$"},
+            "required_residues": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"type": "string", "pattern": "^-?[0-9]+(?:[A-Za-z]|--?[0-9]+)?$"}
+            }
+          }
+        }
+      }
+    },
+    "toolchains": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "candidate_count", "generator", "sequence_designer", "predictors", "scorers", "filters"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "label": {"type": "string", "minLength": 1},
+          "candidate_count": {"type": "integer", "minimum": 1, "maximum": 10000},
+          "generator": {"$ref": "#/$defs/tool_selection"},
+          "sequence_designer": {"$ref": "#/$defs/tool_selection"},
+          "predictors": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/tool_selection"}},
+          "scorers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/tool_selection"}},
+          "filters": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective", "target_selection_method", "binder_length", "required_controls", "inclusion_rules", "exclusion_rules", "interpretation_limit", "preserve_failure_rows", "top_per_arm"],
+      "properties": {
+        "objective": {"type": "string", "minLength": 1},
+        "target_selection_method": {"type": "string", "minLength": 1},
+        "binder_length": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["minimum", "maximum"],
+          "properties": {"minimum": {"type": "integer", "minimum": 10}, "maximum": {"type": "integer", "maximum": 1000}}
+        },
+        "required_controls": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "inclusion_rules": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "exclusion_rules": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "interpretation_limit": {"type": "string", "minLength": 1},
+        "preserve_failure_rows": {"const": true},
+        "top_per_arm": {"type": "integer", "minimum": 1}
+      }
+    },
+    "license_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_gates", "blocked_tools", "require_operator_review_for_gated", "review_dimensions", "use_context"],
+      "properties": {
+        "allowed_gates": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "blocked_tools": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "require_operator_review_for_gated": {"const": true},
+        "review_dimensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["code", "weights", "dependencies", "api_terms", "redistribution"],
+          "properties": {
+            "code": {"enum": ["review_required", "not_applicable"]},
+            "weights": {"enum": ["review_required", "not_applicable"]},
+            "dependencies": {"enum": ["review_required", "not_applicable"]},
+            "api_terms": {"enum": ["review_required", "not_applicable"]},
+            "redistribution": {"enum": ["review_required", "not_applicable"]}
+          }
+        },
+        "use_context": {"enum": ["personal", "academic_noncommercial", "research_evaluation", "institutional", "commercial"]}
+      }
+    },
+    "execution_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topology", "authorization", "max_spend_usd", "max_wall_clock_minutes", "routes"],
+      "properties": {
+        "topology": {"enum": ["local", "api", "fal", "neocloud", "runpod", "aws", "modal", "lambda", "cloud_vm", "ssh_hpc", "mixed"]},
+        "authorization": {"const": "plan_then_explicit_runtime_authorization"},
+        "max_spend_usd": {"type": ["number", "null"], "minimum": 0},
+        "max_wall_clock_minutes": {"type": "integer", "minimum": 1},
+        "routes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "toolchain_ids", "stages", "backend", "execution_method", "profile_ref", "operator_adapter_required"],
+            "properties": {
+              "id": {"$ref": "#/$defs/id"},
+              "toolchain_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+              "stages": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["generation", "sequence_design", "cofold", "scoring", "filter", "report"]}},
+              "backend": {"enum": ["local", "api", "fal", "neocloud", "runpod", "aws", "modal", "lambda", "cloud_vm", "ssh_hpc"]},
+              "execution_method": {"enum": ["platform_skill", "hosted_api", "self_hosted"]},
+              "platform_skill_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}(?::[a-z0-9][a-z0-9._-]{0,95})?$"},
+              "profile_ref": {"type": ["string", "null"]},
+              "operator_adapter_required": {"type": "boolean"},
+              "adapter_contract_ref": {"type": "string"},
+              "api_policy": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["terms_review_required", "input_retention_review_required", "runtime_secret_reference_required"],
+                "properties": {
+                  "terms_review_required": {"const": true},
+                  "input_retention_review_required": {"const": true},
+                  "runtime_secret_reference_required": {"const": true}
+                }
+              }
+            },
+            "allOf": [
+              {
+                "if": {"properties": {"execution_method": {"const": "platform_skill"}}, "required": ["execution_method"]},
+                "then": {"required": ["platform_skill_id"]},
+                "else": {"not": {"required": ["platform_skill_id"]}}
+              },
+              {
+                "oneOf": [
+                  {"properties": {"backend": {"const": "local"}, "execution_method": {"enum": ["platform_skill", "self_hosted"]}}},
+                  {"properties": {"backend": {"const": "api"}, "execution_method": {"enum": ["platform_skill", "hosted_api"]}}},
+                  {"properties": {"backend": {"enum": ["fal", "neocloud", "runpod", "aws", "modal", "lambda", "cloud_vm", "ssh_hpc"]}, "execution_method": {"enum": ["platform_skill", "hosted_api", "self_hosted"]}}}
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "synthetic_fixture": {"type": ["string", "null"]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"study_template": {"const": "published-binder-comparison-shape"}}},
+      "then": {"properties": {"published_workflow": {"type": "object"}}},
+      "else": {"properties": {"published_workflow": {"const": null}}}
+    },
+    {
+      "if": {"properties": {"result_boundary": {"const": "public_synthetic_demo"}}},
+      "then": {"properties": {"source_posture": {"const": "synthetic_demo"}}}
+    },
+    {
+      "if": {"properties": {"target": {"properties": {"input_posture": {"const": "public_reference"}}}}},
+      "then": {
+        "properties": {
+          "target": {
+            "properties": {
+              "public_accession": {"pattern": "^(?:PDB:[A-Za-z0-9]{4}|UniProt:[A-Z0-9]{6,10}|AlphaFoldDB:[A-Za-z0-9_-]{6,})$"}
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "target": {
+            "properties": {
+              "public_accession": {"pattern": "^SYNTHETIC:[A-Za-z0-9._-]+$"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "optimization_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["round_count", "current_round_index", "primary_metric_id", "direction", "candidate_policy", "stopping_rule", "round_budget_usd"],
+      "properties": {
+        "round_count": {"type": "integer", "minimum": 1, "maximum": 1000},
+        "current_round_index": {"type": "integer", "minimum": 1, "maximum": 1000},
+        "primary_metric_id": {"$ref": "#/$defs/id"},
+        "direction": {"enum": ["maximize", "minimize"]},
+        "candidate_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "candidate_count_per_toolchain"],
+          "properties": {
+            "mode": {"const": "fixed_per_toolchain"},
+            "candidate_count_per_toolchain": {"type": "integer", "minimum": 1, "maximum": 10000}
+          }
+        },
+        "stopping_rule": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type"],
+              "properties": {"type": {"const": "fixed_round_count"}}
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "threshold", "direction"],
+              "properties": {
+                "type": {"const": "target_threshold"},
+                "threshold": {"type": "number"},
+                "direction": {"enum": ["maximize", "minimize"]}
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "patience_rounds", "minimum_delta", "direction"],
+              "properties": {
+                "type": {"const": "no_improvement"},
+                "patience_rounds": {"type": "integer", "minimum": 1},
+                "minimum_delta": {"type": "number", "minimum": 0},
+                "direction": {"enum": ["maximize", "minimize"]}
+              }
+            }
+          ]
+        },
+        "round_budget_usd": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": ["number", "null"], "minimum": 0}
+        }
+      }
+    },
+    "workflow_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "reference_scope", "replay_toolchain_ids", "swap_toolchain_ids"],
+      "properties": {
+        "mode": {"enum": ["published_shape_replay", "deliberate_tool_swap", "replay_and_swap", "independent"]},
+        "reference_scope": {"enum": ["published_workflow_shape", "published_tool_identities", null]},
+        "replay_toolchain_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "swap_toolchain_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+      }
+    },
+    "tool_selection": {
+      "oneOf": [
+        {"$ref": "#/$defs/id"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tool_id", "variant_id"],
+          "properties": {
+            "tool_id": {"$ref": "#/$defs/id"},
+            "variant_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}
+          }
+        }
+      ]
+    },
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"}
+  }
+}

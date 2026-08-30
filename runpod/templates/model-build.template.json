@@ -1,0 +1,14 @@
+{
+  "template_name": "biosymphony-structure-model-build",
+  "image_family": "model-build",
+  "image_name": "docker.io/library/ubuntu:22.04",
+  "gpu_class": "RTX 4090/L40S for ModelAngelo smoke; A100 for larger maps",
+  "volume_mount": "/workspace",
+  "ports": [
+    "8888/http"
+  ],
+  "startup_command": "bash /opt/structure-factory/entrypoints/no-download-smoke.sh",
+  "purpose": "ModelAngelo, Phenix, Coot, ChimeraX, ISOLDE, validation, and figure support.",
+  "license_policy": "ModelAngelo/Coot can be open lanes; Phenix and ChimeraX require runtime/license policy review.",
+  "public_template_note": "Tracked placeholder image. Choose and digest-pin the runtime image in an ignored packet after license review and explicit human authorization."
+}

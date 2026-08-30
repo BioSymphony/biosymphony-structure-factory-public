@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "aws",
+  "provider_class": "batch_job",
+  "profile_id": "aws-batch-gpu-no-download",
+  "maps_campaign_profile": "screening_no_download_smoke",
+  "blessed_path": true,
+  "workspace_root": "/workspace/structure-factory",
+  "artifact_root": "s3://STRUCTURE_FACTORY_AWS_ARTIFACT_BUCKET/runs/<run-id>",
+  "secret_mode": "iam_role_and_aws_secrets_manager",
+  "operator_gate_required": true,
+  "recommended_gpu": "L40S/A10G/A100-class EC2 GPU instance via AWS Batch",
+  "gpu_required": true,
+  "mock_gpu_allowed": false,
+  "raw_downloads_allowed": false,
+  "image_strategy": "ecr_digest_or_public_base_plus_bootstrap",
+  "aws": {
+    "service": "batch",
+    "compute_environment_ref": "STRUCTURE_FACTORY_AWS_BATCH_COMPUTE_ENV",
+    "job_queue_ref": "STRUCTURE_FACTORY_AWS_BATCH_JOB_QUEUE",
+    "job_definition_ref": "STRUCTURE_FACTORY_AWS_BATCH_JOB_DEFINITION",
+    "artifact_bucket_ref": "STRUCTURE_FACTORY_AWS_ARTIFACT_BUCKET",
+    "log_group_ref": "STRUCTURE_FACTORY_AWS_CLOUDWATCH_LOG_GROUP",
+    "budget_name_ref": "STRUCTURE_FACTORY_AWS_BUDGET_NAME",
+    "quota_checks": [
+      "ec2_gpu_instance_quota",
+      "batch_vcpu_quota",
+      "ecr_pull_access",
+      "s3_put_get_checksum",
+      "cloudwatch_log_write"
+    ],
+    "artifact_egress": "s3_checksum_required",
+    "cleanup_policy": "job_terminal_plus_s3_lifecycle_or_explicit_retention"
+  },
+  "execution_ready_requires": [
+    "aws_account_region_allowlist",
+    "ec2_gpu_quota_check",
+    "batch_compute_environment",
+    "batch_job_queue",
+    "batch_job_definition",
+    "ecr_auth_or_public_image",
+    "s3_artifact_bucket",
+    "cloudwatch_log_group",
+    "aws_budget_alert",
+    "pinned_git_ref",
+    "digest_pinned_image_or_bootstrap",
+    "input_audit",
+    "contract_self_check",
+    "explicit_operator_launch"
+  ],
+  "notes": "Blessed scalable cloud path for repeatable screening fanout. This profile is a contract; it does not launch AWS resources by itself."
+}

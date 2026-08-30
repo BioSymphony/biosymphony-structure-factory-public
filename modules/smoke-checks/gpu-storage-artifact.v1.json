@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "module_type": "smoke_check",
+  "check_id": "gpu_storage_artifact",
+  "severity": "fatal_on_runpod_warn_local",
+  "assertions": [
+    "gpu_visibility_recorded",
+    "network_volume_write_read",
+    "artifact_manifest_emitted"
+  ],
+  "expected_artifacts": [
+    "validation/gpu.json",
+    "validation/storage.json",
+    "validation/toolcheck.json"
+  ],
+  "write_path_policy": "/workspace/structure-factory/runs/<run-id>/"
+}

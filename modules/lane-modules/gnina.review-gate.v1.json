@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "gnina-review-gate",
+  "tool": "gnina",
+  "execution_profile": "screening-gated-ml-docking",
+  "purpose": "Optional GNINA comparison lane after exact build, dependency, and license posture are recorded.",
+  "required_image_family": "md-docking",
+  "license_posture": "review-required",
+  "execution_ready_requires": [
+    "current_terms_recorded",
+    "toolcheck_pass",
+    "input_audit",
+    "contract_self_check",
+    "explicit_operator_launch"
+  ],
+  "required_outputs": [
+    "pose_predictions.jsonl",
+    "method_summary.json",
+    "failure_report.json"
+  ],
+  "claim_ceiling": "candidate",
+  "notes": "Keep this lane scaffolded but blocked until build/license posture is explicit."
+}

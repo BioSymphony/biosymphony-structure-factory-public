@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/provider-run.v1.schema.json",
+  "title": "Structure Factory provider run v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "provider",
+    "run_id",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "provider": {
+      "$comment": "Cross-lane provider-run vocabulary. snake_case and kebab-case pairs remain valid because public run records use both spellings.",
+      "enum": [
+        "runpod",
+        "runpod_pod",
+        "runpod-pod",
+        "runpod_serverless",
+        "runpod-serverless",
+        "local",
+        "aws",
+        "aws_batch",
+        "aws-batch",
+        "ssh_hpc",
+        "ssh-hpc",
+        "generic_cloud",
+        "generic-cloud",
+        "neocloud",
+        "neocloud_gpu_pod",
+        "neocloud-gpu-pod",
+        "fal",
+        "fal_serverless",
+        "fal-serverless",
+        "modal",
+        "modal_job",
+        "modal-job",
+        "modal_function",
+        "modal-function",
+        "lambda",
+        "lambda_cloud",
+        "lambda-cloud",
+        "provider_neutral",
+        "provider-neutral"
+      ]
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider_run_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "manifest_path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "queued",
+        "running",
+        "completed",
+        "failed",
+        "blocked",
+        "deleted",
+        "cleanup_verified",
+        "provider_start_plateau",
+        "insufficient_evidence"
+      ]
+    },
+    "desired_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "actual_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runtime_uptime_seconds": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "image": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gpu_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cost_usd": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "started_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "finished_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "claim_level": {
+      "enum": [
+        "candidate",
+        "processed",
+        "validated",
+        "publishable",
+        "insufficient_evidence",
+        "blocked"
+      ]
+    },
+    "evidence_mode": {
+      "enum": [
+        "provider_native",
+        "derived",
+        "fixture_or_demo",
+        "report_only",
+        "blocked_or_insufficient"
+      ]
+    },
+    "result_boundary": {
+      "enum": [
+        "planning",
+        "public_demo",
+        "public_synthetic_demo",
+        "computational_candidate",
+        "candidate",
+        "blocked",
+        "insufficient_evidence",
+        "insufficient_support"
+      ]
+    },
+    "source_posture": {
+      "enum": [
+        "synthetic_demo",
+        "public_data",
+        "generated_candidate",
+        "blocked",
+        "insufficient_support",
+        "insufficient_evidence",
+        "report_only",
+        "provider_native",
+        "derived"
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

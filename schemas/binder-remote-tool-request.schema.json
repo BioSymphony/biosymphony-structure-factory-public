@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-remote-tool-request.schema.json",
+  "title": "Provider-neutral binder remote tool request",
+  "$comment": "This schema describes a public request envelope. It does not establish a provider account, tool installation, service route, or compute readiness. Runtime validation also checks forbidden fields and controller-local paths.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "provider_id",
+    "tool_id",
+    "operation",
+    "request_id",
+    "input_payload",
+    "artifact_prefix",
+    "source_identity",
+    "model_identity",
+    "environment_identity",
+    "credential_environment_keys",
+    "budget"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "contract_id": {"const": "structure-factory-remote-tool.v1"},
+    "provider_id": {
+      "enum": ["api", "aws", "cloud_vm", "fal", "lambda", "local", "modal", "neocloud", "runpod", "ssh_hpc"]
+    },
+    "tool_id": {"$ref": "#/$defs/tool_id"},
+    "operation": {"type": "string", "pattern": "^[a-z][a-z0-9_-]{0,63}$"},
+    "request_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "input_payload": {"$ref": "#/$defs/input_payload"},
+    "artifact_prefix": {
+      "type": "string",
+      "pattern": "^runs/(?!\\.\\.?(?:/|$))(?!.*\\/\\.\\.?(?:/|$))(?!.*\\\\)(?!.*\\u0000)[^/].*$"
+    },
+    "source_identity": {"type": "string", "pattern": "\\S"},
+    "model_identity": {"type": "string", "pattern": "\\S"},
+    "environment_identity": {"type": "string", "pattern": "\\S"},
+    "credential_environment_keys": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,127}$"}
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_spend_usd", "max_runtime_seconds"],
+      "properties": {
+        "max_spend_usd": {"type": "number", "exclusiveMinimum": 0},
+        "max_runtime_seconds": {"type": "number", "exclusiveMinimum": 0}
+      }
+    }
+  },
+  "$defs": {
+    "tool_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"},
+    "forbidden_field_name": {
+      "not": {
+        "enum": [
+          "api_key",
+          "argv",
+          "code",
+          "command",
+          "commands",
+          "credential",
+          "password",
+          "script",
+          "secret",
+          "shell",
+          "signed_url",
+          "token"
+        ]
+      }
+    },
+    "input_payload": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"$ref": "#/$defs/forbidden_field_name"},
+      "additionalProperties": {"$ref": "#/$defs/safe_value"}
+    },
+    "safe_object": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/forbidden_field_name"},
+      "additionalProperties": {"$ref": "#/$defs/safe_value"}
+    },
+    "safe_value": {
+      "anyOf": [
+        {"$ref": "#/$defs/safe_object"},
+        {"type": "array", "items": {"$ref": "#/$defs/safe_value"}},
+        {"type": "string"},
+        {"type": "number"},
+        {"type": "boolean"},
+        {"type": "null"}
+      ]
+    }
+  }
+}

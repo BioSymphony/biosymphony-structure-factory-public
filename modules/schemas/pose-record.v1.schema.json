@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/pose-record.v1.schema.json",
+  "title": "Structure Factory pose record v1",
+  "type": "object",
+  "required": ["schema_version", "pose_id", "ligand_id", "receptor_id", "method_id", "pose_path", "scores", "validity"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "pose_id": { "type": "string", "minLength": 1 },
+    "ligand_id": { "type": "string", "minLength": 1 },
+    "receptor_id": { "type": "string", "minLength": 1 },
+    "method_id": { "type": "string", "minLength": 1 },
+    "pose_path": { "type": "string", "minLength": 1 },
+    "scores": { "type": "object" },
+    "validity": {
+      "type": "object",
+      "required": ["status"],
+      "properties": { "status": { "enum": ["pass", "warn", "fail", "not_run"] } },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

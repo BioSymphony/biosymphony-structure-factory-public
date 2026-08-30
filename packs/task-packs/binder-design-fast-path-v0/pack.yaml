@@ -1,0 +1,20 @@
+pack_id: binder-design-fast-path-v0
+title: Binder Design Fast Path
+routing_label: sym:structure-factory
+result_boundary: computational_candidate
+description: >
+  Tracker-neutral task pack for a Structure Factory binder-design
+  campaign: target window, generation readiness, cofold ranking, and report review.
+issues:
+  - id: BSF-BINDER-W00
+    title: Target Window And Run Boundaries
+    path: issues/BSF-BINDER-W00-target-window-and-run-boundaries.md
+  - id: BSF-BINDER-W01
+    title: Generation Lane Readiness
+    path: issues/BSF-BINDER-W01-generation-lane-readiness.md
+  - id: BSF-BINDER-W02
+    title: Cofold Ranking Contract
+    path: issues/BSF-BINDER-W02-cofold-ranking-contract.md
+  - id: BSF-BINDER-W03
+    title: Report And Closeout
+    path: issues/BSF-BINDER-W03-report-and-closeout.md

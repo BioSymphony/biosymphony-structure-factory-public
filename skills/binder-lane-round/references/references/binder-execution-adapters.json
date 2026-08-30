@@ -1,0 +1,1468 @@
+{
+  "schema_version": "structure-factory-binder-execution-adapters-v1",
+  "boundary": {
+    "execution": "The executor may run any validated local_argv record from the selected bundled or runtime registry after explicit local authorization. It does not run built_in or external_adapter records. It passes argument arrays without a shell, resolves declared placeholders, and validates the declared outputs before completing a stage.",
+    "readiness": "A readiness command checks an installed program. It does not authorize downloads, network access, license acceptance, paid compute, or a provider request.",
+    "extensions": [
+      "Give each added adapter a unique ID and bind it to a tool in the public capability ledger.",
+      "Use a literal program name and fixed argument arrays. Do not accept command text from a request or run a shell interpreter.",
+      "Declare every placeholder, environment-variable name, network requirement, and expected output.",
+      "Keep environment values, service addresses, provider resources, and accepted-license records outside tracked adapter files.",
+      "Add tests that exercise readiness refusal, placeholder resolution, output counts, output parsing, and path containment before marking an adapter ready.",
+      "For a hosted or self-hosted route, declare the adapter's backend and execution_method in supported_routes. For a platform_skill route, name platform_skill_id in the round route; that ID records a handoff and does not claim installation or authorization."
+    ]
+  },
+  "adapters": [
+    {
+      "id": "boltz-local-v1",
+      "tool_id": "boltz",
+      "supported_selections": [{"tool_id": "boltz", "variant_id": null}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "local_argv",
+      "program": "boltz",
+      "readiness_argv": ["boltz", "--help"],
+      "command_argv": ["boltz", "predict", "{{input_path}}", "--out_dir", "{{output_dir}}"],
+      "placeholders": {
+        "input_path": {"type": "path"},
+        "output_dir": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "prediction-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "ready",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "modules/lane-modules/boltz.toolcheck.v1.json",
+        "tools/boltz.md"
+      ]
+    },
+    {
+      "id": "boltz-1-local-adapter-v1",
+      "tool_id": "boltz",
+      "supported_selections": [{"tool_id": "boltz", "variant_id": "boltz-1"}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_path": {"type": "path"},
+        "output_dir": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "prediction-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/boltz.md",
+        "references/published-binder-comparison-workflow.json"
+      ]
+    },
+    {
+      "id": "boltz-2-local-adapter-v1",
+      "tool_id": "boltz",
+      "supported_selections": [{"tool_id": "boltz", "variant_id": "boltz-2"}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_path": {"type": "path"},
+        "output_dir": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "prediction-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/boltz.md",
+        "references/published-binder-comparison-workflow.json"
+      ]
+    },
+    {
+      "id": "proteinmpnn-local-adapter-v1",
+      "tool_id": "proteinmpnn",
+      "supported_selections": [{"tool_id": "proteinmpnn", "variant_id": null}],
+      "roles": ["sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "designed-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "modules/lane-modules/proteinmpnn.toolcheck.v1.json",
+        "tools/proteinmpnn.md"
+      ]
+    },
+    {
+      "id": "ligandmpnn-local-adapter-v1",
+      "tool_id": "ligandmpnn",
+      "supported_selections": [{"tool_id": "ligandmpnn", "variant_id": null}],
+      "roles": ["sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "designed-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml"
+      ]
+    },
+    {
+      "id": "genie3-local-adapter-v1",
+      "tool_id": "genie3",
+      "supported_selections": [{"tool_id": "genie3", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "dependency_and_weight_terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_structure": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "generated-backbones",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "modules/lane-modules/genie3.toolcheck.v1.json",
+        "tools/genie3-peptides.md"
+      ]
+    },
+    {
+      "id": "rfdiffusion-local-adapter-v1",
+      "tool_id": "rfdiffusion",
+      "supported_selections": [{"tool_id": "rfdiffusion", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_structure": {"type": "path"},
+        "site_residues": {"type": "string"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "generated-backbones",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/rfdiffusion3.md"
+      ]
+    },
+    {
+      "id": "bindcraft-local-adapter-v1",
+      "tool_id": "bindcraft",
+      "supported_selections": [{"tool_id": "bindcraft", "variant_id": null}],
+      "roles": ["generator", "sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "pyrosetta_terms_af2_weights_and_dependency_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_structure": {"type": "path"},
+        "target_settings": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "design-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        },
+        {
+          "id": "designed-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/bindcraft.md"
+      ]
+    },
+    {
+      "id": "boltzgen-local-adapter-v1",
+      "tool_id": "boltzgen",
+      "supported_selections": [{"tool_id": "boltzgen", "variant_id": null}],
+      "roles": ["generator", "sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "terms_and_weights_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_manifest": {"type": "path"},
+        "constraints_path": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "generated-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/boltzgen.md"
+      ]
+    },
+    {
+      "id": "promera-local-adapter-v1",
+      "tool_id": "promera",
+      "supported_selections": [{"tool_id": "promera", "variant_id": null}],
+      "roles": ["generator", "sequence_designer", "predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "repo_weight_msa_and_confidence_output_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "design-and-prediction-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        },
+        {
+          "id": "generated-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml"
+      ]
+    },
+    {
+      "id": "switchcraft-local-adapter-v1",
+      "tool_id": "switchcraft",
+      "supported_selections": [{"tool_id": "switchcraft", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "dependency_and_weight_terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_manifest": {"type": "path"},
+        "states_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "multistate-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/switchcraft.md"
+      ]
+    },
+    {
+      "id": "helixdiff-local-adapter-v1",
+      "tool_id": "helixdiff",
+      "supported_selections": [{"tool_id": "helixdiff", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "current_source_dependency_weight_and_license_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_window": {"type": "path"},
+        "constraints_path": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "length_min": {"type": "integer", "minimum": 15, "maximum": 40},
+        "length_max": {"type": "integer", "minimum": 15, "maximum": 40},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "helical-backbone-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        },
+        {
+          "id": "helical-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/helixdiff.md"
+      ]
+    },
+    {
+      "id": "pepglad-local-adapter-v1",
+      "tool_id": "pepglad",
+      "supported_selections": [{"tool_id": "pepglad", "variant_id": null}],
+      "roles": ["generator", "sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "current_branch_dependency_weight_and_license_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_window": {"type": "path"},
+        "constraints_path": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "length_min": {"type": "integer", "minimum": 10, "maximum": 30},
+        "length_max": {"type": "integer", "minimum": 10, "maximum": 30},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "peptide-model-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        },
+        {
+          "id": "peptide-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/candidates.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/pepglad.md"
+      ]
+    },
+    {
+      "id": "evobind-local-adapter-v1",
+      "tool_id": "evobind",
+      "supported_selections": [{"tool_id": "evobind", "variant_id": null}],
+      "roles": ["sequence_designer", "scorer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "current_source_dependency_alphafold_weight_and_license_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_window": {"type": "path"},
+        "seed_sequences_path": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "iterations": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "ranked-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/ranked-candidates.jsonl",
+          "minimum_count": 1
+        },
+        {
+          "id": "optimization-ledger",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/optimization-ledger.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/evobind.md"
+      ]
+    },
+    {
+      "id": "rfpeptides-local-adapter-v1",
+      "tool_id": "rfpeptides",
+      "supported_selections": [{"tool_id": "rfpeptides", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "dependency_container_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_window": {"type": "path"},
+        "constraints_path": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "length_min": {"type": "integer", "minimum": 6, "maximum": 15},
+        "length_max": {"type": "integer", "minimum": 6, "maximum": 15},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "constrained-backbone-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        },
+        {
+          "id": "constraint-checks",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/constraint-checks.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/rfpeptides.md"
+      ]
+    },
+    {
+      "id": "cosine-local-adapter-v1",
+      "tool_id": "cosine",
+      "supported_selections": [{"tool_id": "cosine", "variant_id": null}],
+      "roles": ["sequence_designer", "scorer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_alignment": {"type": "path"},
+        "oracle_config": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "branch_length": {"type": "number", "minimum": 0},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "maturation-trajectory-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        },
+        {
+          "id": "variant-scores",
+          "kind": "jsonl",
+          "path_template": "{{output_dir}}/variant-scores.jsonl",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/cosine.md"
+      ]
+    },
+    {
+      "id": "chai-local-adapter-v1",
+      "tool_id": "chai",
+      "supported_selections": [{"tool_id": "chai", "variant_id": null}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "verify_current_terms",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_path": {"type": "path"},
+        "output_dir": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "prediction-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/chai.md"
+      ]
+    },
+    {
+      "id": "esmfold2-local-adapter-v1",
+      "tool_id": "esmfold2",
+      "supported_selections": [
+        {"tool_id": "esmfold2", "variant_id": null},
+        {"tool_id": "esmfold2", "variant_id": "esmfold2-full"}
+      ],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "local_argv",
+      "program": "bsf-esmfold2-predict",
+      "readiness_argv": [
+        "bsf-esmfold2-predict",
+        "readiness",
+        "--variant",
+        "full"
+      ],
+      "command_argv": [
+        "bsf-esmfold2-predict",
+        "run",
+        "--run-root",
+        "{{run_root}}",
+        "--input",
+        "{{input_path}}",
+        "--output",
+        "{{output_path}}",
+        "--artifact-dir",
+        "{{artifact_dir}}",
+        "--variant",
+        "full",
+        "--seed",
+        "{{seed}}",
+        "--expected-count",
+        "{{expected_count}}"
+      ],
+      "placeholders": {
+        "run_root": {"type": "path"},
+        "input_path": {"type": "path"},
+        "output_path": {"type": "path"},
+        "artifact_dir": {"type": "path"},
+        "seed": {"type": "integer", "minimum": 0},
+        "expected_count": {"type": "integer", "minimum": 1}
+      },
+      "required_environment_names": ["HF_HOME", "ESMFOLD2_CCD_PATH"],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "prediction-manifest",
+          "kind": "jsonl",
+          "path_template": "{{output_path}}",
+          "minimum_count": 1
+        },
+        {
+          "id": "prediction-artifacts",
+          "kind": "directory",
+          "path_template": "{{artifact_dir}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "ready",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "modules/lane-modules/esmfold2.toolcheck.v1.json",
+        "src/biosymphony_structure_factory/binder_esmfold2_adapter.py",
+        "tools/esmfold2.md"
+      ]
+    },
+    {
+      "id": "simplefold-local-adapter-v1",
+      "tool_id": "simplefold",
+      "supported_selections": [
+        {"tool_id": "simplefold", "variant_id": null},
+        {"tool_id": "simplefold", "variant_id": "simplefold-100m"},
+        {"tool_id": "simplefold", "variant_id": "simplefold-360m"},
+        {"tool_id": "simplefold", "variant_id": "simplefold-700m"},
+        {"tool_id": "simplefold", "variant_id": "simplefold-1.1b"},
+        {"tool_id": "simplefold", "variant_id": "simplefold-1.6b"},
+        {"tool_id": "simplefold", "variant_id": "simplefold-3b"}
+      ],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "noncommercial_scientific_research_model_terms",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "fasta_path": {"type": "path"},
+        "checkpoint_dir": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "num_steps": {"type": "integer", "minimum": 1},
+        "tau": {"type": "number", "minimum": 0},
+        "samples_per_protein": {"type": "integer", "minimum": 1},
+        "emit_plddt": {"type": "boolean"},
+        "output_format": {"type": "string", "choices": ["pdb", "mmcif"]},
+        "backend": {"type": "string", "choices": ["torch", "mlx"]},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "prediction-directory", "kind": "directory", "path_template": "{{output_dir}}", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "tools/simplefold.md"]
+    },
+    {
+      "id": "opendde-local-adapter-v1",
+      "tool_id": "opendde",
+      "supported_selections": [{"tool_id": "opendde", "variant_id": null}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "verify_current_terms_and_weight_posture",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_path": {"type": "path"},
+        "output_dir": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "prediction-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/opendde.md"
+      ]
+    },
+    {
+      "id": "protenix-local-adapter-v1",
+      "tool_id": "protenix",
+      "supported_selections": [
+        {"tool_id": "protenix", "variant_id": null},
+        {"tool_id": "protenix", "variant_id": "protenix-v2"}
+      ],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_path": {"type": "path"},
+        "output_dir": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "prediction-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml"
+      ]
+    },
+    {
+      "id": "decaf-local-adapter-v1",
+      "tool_id": "decaf",
+      "supported_selections": [{"tool_id": "decaf", "variant_id": null}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "code_weight_and_confidence_output_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_path": {"type": "path"},
+        "output_dir": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {
+          "id": "prediction-directory",
+          "kind": "directory",
+          "path_template": "{{output_dir}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml"
+      ]
+    },
+    {
+      "id": "dockq-local-adapter-v1",
+      "tool_id": "dockq-v2",
+      "supported_selections": [{"tool_id": "dockq-v2", "variant_id": null}],
+      "roles": ["scorer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none_after_current_terms_check",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "model_path": {"type": "path"},
+        "reference_path": {"type": "path"},
+        "output_path": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "score-table",
+          "kind": "jsonl",
+          "path_template": "{{output_path}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/cofold-scoring-stack.md"
+      ]
+    },
+    {
+      "id": "posebusters-local-adapter-v1",
+      "tool_id": "posebusters",
+      "supported_selections": [{"tool_id": "posebusters", "variant_id": null}],
+      "roles": ["filter"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none_after_current_terms_check",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_path": {"type": "path"},
+        "output_path": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "pose-validity-results",
+          "kind": "jsonl",
+          "path_template": "{{output_path}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/posebusters.md"
+      ]
+    },
+    {
+      "id": "rfdiffusion3-adapter-v1",
+      "tool_id": "rfdiffusion3",
+      "supported_selections": [{"tool_id": "rfdiffusion3", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "weight_terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_structure": {"type": "path"},
+        "site_residues": {"type": "string"},
+        "constraints_path": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "generated-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "tools/rfdiffusion3.md", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "solublempnn-adapter-v1",
+      "tool_id": "solublempnn",
+      "supported_selections": [
+        {"tool_id": "solublempnn", "variant_id": null},
+        {"tool_id": "solublempnn", "variant_id": "soluble_model_weights"}
+      ],
+      "roles": ["sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {"id": "designed-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "modules/lane-modules/proteinmpnn.toolcheck.v1.json", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "caliby-adapter-v1",
+      "tool_id": "caliby",
+      "supported_selections": [
+        {"tool_id": "caliby", "variant_id": null},
+        {"tool_id": "caliby", "variant_id": "default"}
+      ],
+      "roles": ["sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "designed-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "solublecaliby-adapter-v1",
+      "tool_id": "solublecaliby",
+      "supported_selections": [
+        {"tool_id": "solublecaliby", "variant_id": null},
+        {"tool_id": "solublecaliby", "variant_id": "soluble"}
+      ],
+      "roles": ["sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "designed-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "freebindcraft-adapter-v1",
+      "tool_id": "freebindcraft",
+      "supported_selections": [{"tool_id": "freebindcraft", "variant_id": null}],
+      "roles": ["generator", "sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "af2_parameter_terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_structure": {"type": "path"},
+        "target_settings": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "codesigned-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "foldcraft-adapter-v1",
+      "tool_id": "foldcraft",
+      "supported_selections": [{"tool_id": "foldcraft", "variant_id": null}],
+      "roles": ["generator", "sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "af2_parameter_terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_structure": {"type": "path"},
+        "target_settings": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "codesigned-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "boltzdesign1-adapter-v1",
+      "tool_id": "boltzdesign1",
+      "supported_selections": [{"tool_id": "boltzdesign1", "variant_id": null}],
+      "roles": ["generator", "sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_manifest": {"type": "path"},
+        "objective_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "round_count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "codesigned-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "protein-hunter-adapter-v1",
+      "tool_id": "protein-hunter",
+      "supported_selections": [{"tool_id": "protein-hunter", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_manifest": {"type": "path"},
+        "objective_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "generated-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "pxdesign-adapter-v1",
+      "tool_id": "pxdesign",
+      "supported_selections": [{"tool_id": "pxdesign", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "weight_terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_structure": {"type": "path"},
+        "constraints_path": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "generated-backbones", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "proteina-complexa-adapter-v1",
+      "tool_id": "proteina-complexa",
+      "supported_selections": [{"tool_id": "proteina-complexa", "variant_id": null}],
+      "roles": ["generator", "sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "nvidia_open_model_terms",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_manifest": {"type": "path"},
+        "task_contract": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "codesigned-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "rfantibody-adapter-v1",
+      "tool_id": "rfantibody",
+      "supported_selections": [{"tool_id": "rfantibody", "variant_id": null}],
+      "roles": ["generator", "sequence_designer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "weight_terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "target_structure": {"type": "path"},
+        "framework_manifest": {"type": "path"},
+        "site_residues": {"type": "string"},
+        "output_dir": {"type": "path"},
+        "count": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "antibody-candidates", "kind": "jsonl", "path_template": "{{output_dir}}/candidates.jsonl", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml"]
+    },
+    {
+      "id": "esmfold2-fast-adapter-v1",
+      "tool_id": "esmfold2-fast",
+      "supported_selections": [
+        {"tool_id": "esmfold2-fast", "variant_id": null},
+        {"tool_id": "esmfold2", "variant_id": "esmfold2-fast"}
+      ],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "local_argv",
+      "program": "bsf-esmfold2-predict",
+      "readiness_argv": [
+        "bsf-esmfold2-predict",
+        "readiness",
+        "--variant",
+        "fast"
+      ],
+      "command_argv": [
+        "bsf-esmfold2-predict",
+        "run",
+        "--run-root",
+        "{{run_root}}",
+        "--input",
+        "{{input_path}}",
+        "--output",
+        "{{output_path}}",
+        "--artifact-dir",
+        "{{artifact_dir}}",
+        "--variant",
+        "fast",
+        "--seed",
+        "{{seed}}",
+        "--expected-count",
+        "{{expected_count}}"
+      ],
+      "placeholders": {
+        "run_root": {"type": "path"},
+        "input_path": {"type": "path"},
+        "output_path": {"type": "path"},
+        "artifact_dir": {"type": "path"},
+        "seed": {"type": "integer", "minimum": 0},
+        "expected_count": {"type": "integer", "minimum": 1}
+      },
+      "required_environment_names": ["HF_HOME", "ESMFOLD2_CCD_PATH"],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {"id": "prediction-manifest", "kind": "jsonl", "path_template": "{{output_path}}", "minimum_count": 1},
+        {"id": "prediction-artifacts", "kind": "directory", "path_template": "{{artifact_dir}}", "minimum_count": 1}
+      ],
+      "implementation_status": "ready",
+      "public_evidence": ["references/software-registry.yaml", "modules/lane-modules/esmfold2.toolcheck.v1.json", "references/published-binder-comparison-workflow.json", "src/biosymphony_structure_factory/binder_esmfold2_adapter.py", "tools/esmfold2.md"]
+    },
+    {
+      "id": "ipsae-adapter-v1",
+      "tool_id": "ipsae",
+      "supported_selections": [{"tool_id": "ipsae", "variant_id": null}],
+      "roles": ["scorer"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "structure_path": {"type": "path"},
+        "pae_path": {"type": "path"},
+        "binder_chain": {"type": "string"},
+        "target_chain": {"type": "string"},
+        "pae_cutoff": {"type": "number", "minimum": 0},
+        "distance_cutoff": {"type": "number", "minimum": 0},
+        "output_path": {"type": "path"}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {"id": "interface-score", "kind": "json", "path_template": "{{output_path}}", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "tools/cofold-scoring-stack.md", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "alphafold-multimer-v3-adapter-v1",
+      "tool_id": "alphafold-multimer-v3",
+      "supported_selections": [{"tool_id": "alphafold-multimer-v3", "variant_id": null}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "prediction-directory", "kind": "directory", "path_template": "{{output_dir}}", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "tools/cofold-scoring-stack.md", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "openfold3-adapter-v1",
+      "tool_id": "openfold3",
+      "supported_selections": [{"tool_id": "openfold3", "variant_id": null}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "prediction-directory", "kind": "directory", "path_template": "{{output_dir}}", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "tools/cofold-scoring-stack.md", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "rosettafold3-adapter-v1",
+      "tool_id": "rosettafold3",
+      "supported_selections": [{"tool_id": "rosettafold3", "variant_id": null}],
+      "roles": ["predictor"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "weight_terms_review",
+      "execution_kind": "external_adapter",
+      "program": null,
+      "readiness_argv": [],
+      "command_argv": [],
+      "placeholders": {
+        "input_manifest": {"type": "path"},
+        "output_dir": {"type": "path"},
+        "seed": {"type": "integer", "minimum": 0}
+      },
+      "required_environment_names": [],
+      "network_policy": "runtime_review_required",
+      "expected_outputs": [
+        {"id": "prediction-directory", "kind": "directory", "path_template": "{{output_dir}}", "minimum_count": 1}
+      ],
+      "implementation_status": "adapter_required",
+      "public_evidence": ["references/software-registry.yaml", "references/published-binder-comparison-workflow.json"]
+    },
+    {
+      "id": "supplied-backbone-v1",
+      "tool_id": "supplied-backbone",
+      "supported_selections": [{"tool_id": "supplied-backbone", "variant_id": null}],
+      "roles": ["generator"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "local_argv",
+      "program": "bsf-supplied-backbone",
+      "readiness_argv": ["bsf-supplied-backbone", "readiness"],
+      "command_argv": [
+        "bsf-supplied-backbone",
+        "run",
+        "--run-root",
+        "{{run_root}}",
+        "--input",
+        "{{input_path}}",
+        "--output",
+        "{{output_path}}",
+        "--pose-dir",
+        "{{pose_dir}}",
+        "--source-chain",
+        "{{source_chain}}",
+        "--binder-chain",
+        "{{binder_chain}}",
+        "--minimum-length",
+        "{{minimum_length}}",
+        "--maximum-length",
+        "{{maximum_length}}",
+        "--expected-count",
+        "{{expected_count}}"
+      ],
+      "placeholders": {
+        "run_root": {"type": "path"},
+        "input_path": {"type": "path"},
+        "output_path": {"type": "path"},
+        "pose_dir": {"type": "path"},
+        "source_chain": {"type": "string"},
+        "binder_chain": {"type": "string"},
+        "minimum_length": {"type": "integer", "minimum": 1},
+        "maximum_length": {"type": "integer", "minimum": 1},
+        "expected_count": {"type": "integer", "minimum": 1}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {"id": "backbone-manifest", "kind": "jsonl", "path_template": "{{output_path}}", "minimum_count": 1},
+        {"id": "design-poses", "kind": "directory", "path_template": "{{pose_dir}}", "minimum_count": 1}
+      ],
+      "implementation_status": "ready",
+      "public_evidence": [
+        "docs/binder-lane-round.md",
+        "src/biosymphony_structure_factory/binder_supplied_backbone_adapter.py"
+      ]
+    },
+    {
+      "id": "status-preserving-filter-v1",
+      "tool_id": "status-preserving-filter",
+      "supported_selections": [{"tool_id": "status-preserving-filter", "variant_id": null}],
+      "roles": ["filter"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "local_argv",
+      "program": "bsf-status-filter",
+      "readiness_argv": ["bsf-status-filter", "--help"],
+      "command_argv": ["bsf-status-filter", "--run-root", "{{run_root}}", "--input", "{{input_path}}", "--output", "{{output_path}}", "--metric", "{{metric}}", "--minimum", "{{minimum}}", "--maximum", "{{maximum}}"],
+      "placeholders": {
+        "run_root": {"type": "path"},
+        "input_path": {"type": "path"},
+        "output_path": {"type": "path"},
+        "metric": {"type": "string"},
+        "minimum": {"type": "number"},
+        "maximum": {"type": "number"}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "status-filtered-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_path}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "ready",
+      "public_evidence": [
+        "examples/pd-l1-binder-design-public/stage-contract.json",
+        "src/biosymphony_structure_factory/candidate_filters.py"
+      ]
+    },
+    {
+      "id": "diversity-filter-v1",
+      "tool_id": "diversity-filter",
+      "supported_selections": [{"tool_id": "diversity-filter", "variant_id": null}],
+      "roles": ["filter"],
+      "supported_routes": [{"backend": "local", "execution_method": "self_hosted"}],
+      "license_gate": "none",
+      "execution_kind": "local_argv",
+      "program": "bsf-diversity-filter",
+      "readiness_argv": ["bsf-diversity-filter", "--help"],
+      "command_argv": ["bsf-diversity-filter", "--run-root", "{{run_root}}", "--input", "{{input_path}}", "--output", "{{output_path}}", "--sequence-field", "{{sequence_field}}", "--maximum-similarity", "{{maximum_similarity}}"],
+      "placeholders": {
+        "run_root": {"type": "path"},
+        "input_path": {"type": "path"},
+        "output_path": {"type": "path"},
+        "sequence_field": {"type": "string"},
+        "maximum_similarity": {"type": "number", "minimum": 0, "maximum": 1}
+      },
+      "required_environment_names": [],
+      "network_policy": "forbidden",
+      "expected_outputs": [
+        {
+          "id": "diversity-filtered-candidates",
+          "kind": "jsonl",
+          "path_template": "{{output_path}}",
+          "minimum_count": 1
+        }
+      ],
+      "implementation_status": "ready",
+      "public_evidence": [
+        "references/software-registry.yaml",
+        "tools/cofold-scoring-stack.md",
+        "src/biosymphony_structure_factory/candidate_filters.py"
+      ]
+    }
+  ]
+}

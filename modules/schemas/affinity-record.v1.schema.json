@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/affinity-record.v1.schema.json",
+  "title": "Structure Factory affinity record v1",
+  "type": "object",
+  "required": ["schema_version", "record_id", "ligand_id", "target_id", "method_id", "prediction", "claim_level"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "record_id": { "type": "string", "minLength": 1 },
+    "ligand_id": { "type": "string", "minLength": 1 },
+    "target_id": { "type": "string", "minLength": 1 },
+    "method_id": { "type": "string", "minLength": 1 },
+    "prediction": {
+      "type": "object",
+      "required": ["score", "direction"],
+      "properties": {
+        "score": { "type": "number" },
+        "direction": { "enum": ["higher_is_better", "lower_is_better"] }
+      },
+      "additionalProperties": true
+    },
+    "claim_level": { "enum": ["candidate", "calibrated", "validated", "blocked_or_insufficient"] }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,33 @@
+include README.md
+include LICENSE
+include AGENTS.md
+include BIOSAFETY.md
+include CHANGELOG.md
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include SECURITY.md
+include NON_CLAIMS.md
+include PUBLIC_RELEASE.md
+include CITATION.cff
+include SUPPORT.md
+include Makefile
+include sidecar.yaml
+include pyproject.toml
+include MANIFEST.in
+recursive-include .github *.md *.yml *.yaml
+recursive-include docs *.md *.svg
+recursive-include examples *.md *.json
+recursive-include modules *.json *.md
+recursive-include packs *.md *.yaml
+recursive-include recipes *.md
+recursive-include references *.md *.yaml *.json
+recursive-include runpod *.md *.json *.sh
+recursive-include schemas *.json *.md
+recursive-include skills *.json *.md
+recursive-include templates *.md *.json
+recursive-include tools *.md
+recursive-include tests *.py
+recursive-include scripts *.py *.sh
+global-exclude __pycache__/*
+global-exclude *.py[cod]
+global-exclude *.local.json

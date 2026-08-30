@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/cleanup-proof.v1.schema.json",
+  "title": "Structure Factory cleanup proof v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "provider",
+    "run_id",
+    "cleanup"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "checked_at": {
+      "type": "string"
+    },
+    "cleanup": {
+      "type": "object",
+      "required": [
+        "requested",
+        "verified"
+      ],
+      "properties": {
+        "requested": {
+          "type": "boolean"
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "policy": {
+          "type": "string"
+        },
+        "retained_resource_authorization": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "deleted_resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "resource_id",
+          "resource_type"
+        ],
+        "properties": {
+          "resource_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "resource_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "deleted": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "remaining_resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "overall_status": {
+      "enum": [
+        "verified",
+        "partial",
+        "failed",
+        "blocked",
+        "not_applicable"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

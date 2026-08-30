@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/benchmark.v1.schema.json",
+  "title": "Structure Factory benchmark contract v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "benchmark_id",
+    "campaign_id",
+    "benchmark_scope",
+    "slices",
+    "baselines",
+    "claim_ceiling",
+    "evidence_mode",
+    "policies"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "artifact_type": {
+      "enum": [
+        "benchmark_contract",
+        "benchmark_ledger"
+      ]
+    },
+    "benchmark_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "benchmark_scope": {
+      "type": "object",
+      "required": [
+        "style",
+        "purpose",
+        "candidate_claim_only"
+      ],
+      "properties": {
+        "style": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_claim_only": {
+          "type": "boolean"
+        },
+        "source_policy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "slices": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "slice_id",
+          "mode",
+          "required_controls",
+          "success_metrics"
+        ],
+        "properties": {
+          "slice_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mode": {
+            "enum": [
+              "redocking",
+              "cross_docking",
+              "cofolding",
+              "affinity_prediction",
+              "method_disagreement",
+              "failure_rescue"
+            ]
+          },
+          "required_controls": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "success_metrics": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "claim_limit": {
+            "enum": [
+              "candidate",
+              "processed",
+              "validated",
+              "publishable",
+              "insufficient_evidence",
+              "blocked"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "baselines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "method_id",
+          "role",
+          "required"
+        ],
+        "properties": {
+          "method_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "claim_ceiling": {
+      "enum": [
+        "candidate",
+        "processed",
+        "validated",
+        "publishable",
+        "insufficient_evidence",
+        "blocked"
+      ]
+    },
+    "evidence_mode": {
+      "enum": [
+        "provider_native",
+        "derived",
+        "fixture_or_demo",
+        "report_only",
+        "blocked_or_insufficient"
+      ]
+    },
+    "policies": {
+      "type": "object",
+      "required": [
+        "allow_private_data",
+        "allow_raw_cryoem_downloads",
+        "expected_download_bytes"
+      ],
+      "properties": {
+        "allow_private_data": {
+          "type": "boolean"
+        },
+        "allow_raw_cryoem_downloads": {
+          "type": "boolean"
+        },
+        "expected_download_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

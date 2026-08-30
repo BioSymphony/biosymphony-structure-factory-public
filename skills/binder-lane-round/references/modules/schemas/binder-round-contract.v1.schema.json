@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-round-contract.v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "round_id", "plan_sha256", "execution_mode", "provider_calls", "fail_closed", "toolchain_count", "planned_candidate_count", "optimization_horizon", "completion_rule", "stages"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-round-contract-v1"},
+    "round_id": {"type": "string"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "execution_mode": {"enum": ["public_synthetic_only", "planning_and_handoff"]},
+    "provider_calls": {"const": 0},
+    "fail_closed": {"const": true},
+    "toolchain_count": {"type": "integer", "minimum": 1},
+    "planned_candidate_count": {"type": "integer", "minimum": 1},
+    "optimization_horizon": {"$ref": "#/$defs/optimization_horizon"},
+    "completion_rule": {"const": "Complete only when every expected artifact exists, per-toolchain record counts match, and every artifact SHA-256 is recorded."},
+    "stages": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        {"$ref": "#/$defs/target_stage"},
+        {"$ref": "#/$defs/generation_stage"},
+        {"$ref": "#/$defs/sequence_design_stage"},
+        {"$ref": "#/$defs/cofold_stage"},
+        {"$ref": "#/$defs/scoring_stage"},
+        {"$ref": "#/$defs/filter_stage"},
+        {"$ref": "#/$defs/report_stage"}
+      ],
+      "items": false
+    }
+  },
+  "$defs": {
+    "optimization_horizon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_round_index", "maximum_round_count", "primary_metric_id", "stopping_rule", "current_round_budget_usd", "later_round_state"],
+      "properties": {
+        "current_round_index": {"type": "integer", "minimum": 1},
+        "maximum_round_count": {"type": "integer", "minimum": 1},
+        "primary_metric_id": {"type": "string"},
+        "stopping_rule": {"type": "object"},
+        "current_round_budget_usd": {"type": ["number", "null"], "minimum": 0},
+        "later_round_state": {"const": "conditional_on_stopping_rule"}
+      }
+    },
+    "counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 1}},
+    "target_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "expected_artifacts", "minimum_output_count", "expected_record_counts_by_toolchain"],
+      "properties": {
+        "id": {"const": "target"},
+        "expected_artifacts": {"const": ["target-contract.json"]},
+        "minimum_output_count": {"type": "integer", "minimum": 1},
+        "expected_record_counts_by_toolchain": {"$ref": "#/$defs/counts"}
+      }
+    },
+    "generation_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "expected_artifacts", "minimum_output_count", "expected_record_counts_by_toolchain"],
+      "properties": {
+        "id": {"const": "generation"},
+        "expected_artifacts": {"const": ["generation-status.json"]},
+        "minimum_output_count": {"type": "integer", "minimum": 1},
+        "expected_record_counts_by_toolchain": {"$ref": "#/$defs/counts"}
+      }
+    },
+    "sequence_design_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "expected_artifacts", "minimum_output_count", "expected_record_counts_by_toolchain"],
+      "properties": {
+        "id": {"const": "sequence_design"},
+        "expected_artifacts": {"const": ["sequence-design-status.json"]},
+        "minimum_output_count": {"type": "integer", "minimum": 1},
+        "expected_record_counts_by_toolchain": {"$ref": "#/$defs/counts"}
+      }
+    },
+    "cofold_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "expected_artifacts", "minimum_output_count", "expected_record_counts_by_toolchain"],
+      "properties": {
+        "id": {"const": "cofold"},
+        "expected_artifacts": {"const": ["cofold-status.json"]},
+        "minimum_output_count": {"type": "integer", "minimum": 1},
+        "expected_record_counts_by_toolchain": {"$ref": "#/$defs/counts"}
+      }
+    },
+    "scoring_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "expected_artifacts", "minimum_output_count", "expected_record_counts_by_toolchain"],
+      "properties": {
+        "id": {"const": "scoring"},
+        "expected_artifacts": {"const": ["scoring-status.json"]},
+        "minimum_output_count": {"type": "integer", "minimum": 1},
+        "expected_record_counts_by_toolchain": {"$ref": "#/$defs/counts"}
+      }
+    },
+    "filter_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "expected_artifacts", "minimum_output_count", "expected_record_counts_by_toolchain"],
+      "properties": {
+        "id": {"const": "filter"},
+        "expected_artifacts": {"const": ["filter-status.json"]},
+        "minimum_output_count": {"type": "integer", "minimum": 1},
+        "expected_record_counts_by_toolchain": {"$ref": "#/$defs/counts"}
+      }
+    },
+    "report_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "expected_artifacts", "minimum_output_count", "expected_record_counts_by_toolchain"],
+      "properties": {
+        "id": {"const": "report"},
+        "expected_artifacts": {"const": ["round-report.json"]},
+        "minimum_output_count": {"type": "integer", "minimum": 1},
+        "expected_record_counts_by_toolchain": {"$ref": "#/$defs/counts"}
+      }
+    }
+  }
+}

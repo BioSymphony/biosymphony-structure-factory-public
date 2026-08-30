@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "benchmark_id": "orchestration-fixtures-openbind-plinder-posebench-v1",
+  "sources": [
+    {
+      "source_id": "openbind-ev-a71-2a",
+      "kind": "openbind",
+      "url": "https://openbind.uk/news/blog-openbinds-first-release-a-structure-affinity-dataset-for-structure-based-ai/",
+      "terms_posture": "public_metadata_only"
+    },
+    {
+      "source_id": "plinder",
+      "kind": "plinder",
+      "url": "https://github.com/plinder-org/plinder",
+      "terms_posture": "terms_review_required"
+    },
+    {
+      "source_id": "posebench",
+      "kind": "posebench",
+      "url": "https://github.com/BioinfoMachineLearning/PoseBench",
+      "terms_posture": "terms_review_required"
+    }
+  ],
+  "scope": {
+    "target_ids": [
+      "fixture-protease-pocket",
+      "ev-a71-2a-public-slice"
+    ],
+    "task_types": [
+      "redocking",
+      "cross_docking",
+      "cofolding",
+      "affinity_ranking",
+      "screening_enrichment"
+    ],
+    "public_only": true
+  },
+  "splits": [
+    {
+      "split_id": "repo-fixture-no-download",
+      "role": "fixture",
+      "leakage_guard": "fixture ligand IDs are synthetic controls and cannot support validated claims"
+    },
+    {
+      "split_id": "openbind-public-calibration-slice",
+      "role": "calibration",
+      "leakage_guard": "importer records source split IDs and assay labels before scoring"
+    }
+  ],
+  "controls": {
+    "positive": [
+      "FIX-ACT-001",
+      "FIX-ACT-002"
+    ],
+    "negative": [
+      "FIX-DEC-001",
+      "FIX-BAD-001"
+    ]
+  },
+  "metrics": [
+    {
+      "metric_id": "pose_rmsd_angstrom",
+      "task": "redocking",
+      "direction": "lower_is_better"
+    },
+    {
+      "metric_id": "spearman_affinity",
+      "task": "affinity_ranking",
+      "direction": "higher_is_better"
+    },
+    {
+      "metric_id": "ef1_percent",
+      "task": "screening_enrichment",
+      "direction": "higher_is_better"
+    }
+  ],
+  "claim_ceiling": "candidate"
+}

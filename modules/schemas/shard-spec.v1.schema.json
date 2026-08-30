@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/shard-spec.v1.schema.json",
+  "title": "Structure Factory shard spec v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "shard_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "shard_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "campaign_id": {
+      "type": "string"
+    },
+    "shard_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "shard_total": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "target_id": {
+      "type": "string"
+    },
+    "receptor_id": {
+      "type": "string"
+    },
+    "ligand_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "provider_profile": {
+      "type": "string"
+    },
+    "stage_contract": {
+      "type": "string"
+    },
+    "expected_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

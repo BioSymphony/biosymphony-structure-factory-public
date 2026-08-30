@@ -1,0 +1,11 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "biosymphony-structure-factory",
+  "version": "0.1.0",
+  "description": "BioSymphony Structure Factory skills for public-safe structural biology campaign planning.",
+  "author": {
+    "name": "BioSymphony",
+    "url": "https://github.com/BioSymphony"
+  },
+  "skills": ["./skills/biosymphony-structure-factory", "./skills/binder-lane-round"]
+}

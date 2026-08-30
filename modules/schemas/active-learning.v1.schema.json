@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/active-learning.v1.schema.json",
+  "title": "Structure Factory active learning selection v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "active_learning_id",
+    "campaign_id",
+    "run_id",
+    "source_artifacts",
+    "selection_axes",
+    "tranches",
+    "claim_level",
+    "evidence_mode"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "artifact_type": {
+      "enum": [
+        "active_learning_plan",
+        "active_learning_tranches"
+      ]
+    },
+    "active_learning_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "campaign_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "selection_axes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "tranches": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "tranche_id",
+          "role",
+          "selection_axis",
+          "candidate_ids",
+          "recommended_next_action",
+          "claim_level"
+        ],
+        "properties": {
+          "tranche_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "top_ranked",
+              "controls",
+              "scaffold_diversity",
+              "method_disagreement",
+              "rescue",
+              "focused_followup"
+            ]
+          },
+          "selection_axis": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "recommended_next_action": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_level": {
+            "enum": [
+              "candidate",
+              "processed",
+              "validated",
+              "publishable",
+              "insufficient_evidence",
+              "blocked"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "claim_level": {
+      "enum": [
+        "candidate",
+        "processed",
+        "validated",
+        "publishable",
+        "insufficient_evidence",
+        "blocked"
+      ]
+    },
+    "evidence_mode": {
+      "enum": [
+        "provider_native",
+        "derived",
+        "fixture_or_demo",
+        "report_only",
+        "blocked_or_insufficient"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

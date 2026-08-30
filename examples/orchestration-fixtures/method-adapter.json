@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "adapter_id": "stdlib-descriptor-proxy-v1",
+  "tool_registry_id": "stdlib_descriptor_proxy",
+  "lane": "benchmark",
+  "posture": "adapter_only",
+  "inputs": [
+    "ligand_smiles",
+    "stable_ligand_id",
+    "fixture_receptor_metadata"
+  ],
+  "outputs": [
+    "ligand_prep.jsonl",
+    "affinity_predictions.jsonl",
+    "method_summary.json"
+  ],
+  "score_semantics": {
+    "primary_score": "consensus_score_proxy",
+    "direction": "higher_is_better",
+    "single_score_is_truth": false,
+    "candidate_claim_only": true
+  },
+  "claim_ceiling": "candidate",
+  "execution_guarantees": {
+    "no_provider_launch": true,
+    "no_secret_reads": true,
+    "private_data_allowed": false,
+    "real_execution_authorized": false
+  },
+  "gates": [
+    "input_audit",
+    "candidate_claim_ceiling",
+    "contract_self_check"
+  ]
+}

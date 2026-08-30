@@ -1,0 +1,61 @@
+name: Public campaign request
+description: Request a Structure Factory scaffold, example, recipe, or multi-agent task plan.
+title: "[Campaign]: "
+labels: ["campaign"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use public accessions or synthetic fixtures only. Do not include private sequences, unpublished structures, patient data, generated candidate coordinates, provider IDs, or credentials.
+  - type: input
+    id: target
+    attributes:
+      label: Target or system
+      description: Public target name or synthetic fixture label.
+      placeholder: "A2A receptor, PD-L1/PD-1 interface, synthetic demo target"
+    validations:
+      required: true
+  - type: input
+    id: accession
+    attributes:
+      label: Public accession
+      description: PDB, EMDB, UniProt, PubMed, or synthetic fixture identifier.
+      placeholder: "PDB:5G53"
+    validations:
+      required: true
+  - type: input
+    id: window
+    attributes:
+      label: Target window or scope
+      description: Residues, domain, interface, conformational state, or screening scope.
+      placeholder: "TM6 activation microswitch"
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Requested mode
+      options:
+        - binder-design
+        - model-comparison
+        - structure-mapping
+        - screening
+        - provider-prep only
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Desired output
+      description: Describe the scaffold, recipe, task plan, or demo you want.
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Boundaries
+      options:
+        - label: This request does not ask for wet-lab, clinical, safety, efficacy, or therapeutic conclusions.
+          required: true
+        - label: Any GPU, provider, or license-gated execution would require a separate operator gate.
+          required: true

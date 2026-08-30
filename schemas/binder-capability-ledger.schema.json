@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-capability-ledger.schema.json",
+  "title": "Public binder capability ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evidence_scope", "state_definitions", "tools", "boundary"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-capability-ledger-v1"},
+    "evidence_scope": {"const": "public_repository_only"},
+    "state_definitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["listed", "documented", "contract_checked"],
+      "properties": {
+        "listed": {"type": "string"},
+        "documented": {"type": "string"},
+        "contract_checked": {"type": "string"}
+      }
+    },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "registry_id", "roles", "evidence_level", "license_gate", "provider_bound", "execution_available", "public_evidence"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"enum": ["software", "built_in"]},
+          "registry_id": {"type": ["string", "null"]},
+          "roles": {"type": "array", "minItems": 1, "items": {"enum": ["generator", "sequence_designer", "predictor", "scorer", "filter"]}},
+          "evidence_level": {"enum": ["listed", "documented", "contract_checked"]},
+          "license_gate": {"type": "string"},
+          "provider_bound": {"const": false},
+          "execution_available": {"type": "boolean"},
+          "public_evidence": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+        }
+      }
+    },
+    "boundary": {"type": "string"}
+  }
+}

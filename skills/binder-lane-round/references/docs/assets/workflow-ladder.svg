@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title desc">
+  <title id="title">Structure Factory public workflow ladder</title>
+  <desc id="desc">A five step ladder: local scaffold, multi-agent plan, cloud contract, operator-gated run, checked outputs.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="0.55" stop-color="#eef6ff"/>
+      <stop offset="1" stop-color="#fff7ed"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="7" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="340" fill="url(#bg)"/>
+  <g font-family="Inter, Arial, sans-serif">
+    <g filter="url(#shadow)">
+      <rect x="35" y="62" width="180" height="166" rx="9" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+      <rect x="270" y="62" width="180" height="166" rx="9" fill="#ffffff" stroke="#93c5fd" stroke-width="2"/>
+      <rect x="505" y="62" width="180" height="166" rx="9" fill="#ffffff" stroke="#fdba74" stroke-width="2"/>
+      <rect x="740" y="62" width="180" height="166" rx="9" fill="#ffffff" stroke="#c4b5fd" stroke-width="2"/>
+      <rect x="975" y="62" width="180" height="166" rx="9" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
+    </g>
+
+    <g fill="#475569" stroke="#475569" stroke-width="3" stroke-linecap="round">
+      <line x1="225" y1="145" x2="250" y2="145"/>
+      <path d="M 250 136 L 264 145 L 250 154 Z" stroke="none"/>
+      <line x1="460" y1="145" x2="485" y2="145"/>
+      <path d="M 485 136 L 499 145 L 485 154 Z" stroke="none"/>
+      <line x1="695" y1="145" x2="720" y2="145"/>
+      <path d="M 720 136 L 734 145 L 720 154 Z" stroke="none"/>
+      <line x1="930" y1="145" x2="955" y2="145"/>
+      <path d="M 955 136 L 969 145 L 955 154 Z" stroke="none"/>
+    </g>
+
+    <g fill="#0f172a" font-size="18" font-weight="700">
+      <text x="58" y="100">1. Local Scaffold</text>
+      <text x="293" y="100">2. Agent Plan</text>
+      <text x="528" y="100">3. Cloud Contract</text>
+      <text x="763" y="100">4. Cloud Run</text>
+      <text x="998" y="100">5. Outputs</text>
+    </g>
+
+    <g fill="#334155" font-size="14">
+      <text x="58" y="132">manifest</text>
+      <text x="58" y="155">target window</text>
+      <text x="58" y="178">stage contract</text>
+
+      <text x="293" y="132">Linear / GitHub</text>
+      <text x="293" y="155">lane ownership</text>
+      <text x="293" y="178">validation commands</text>
+
+      <text x="528" y="132">RunPod / AWS / HPC</text>
+      <text x="528" y="155">budget + cleanup</text>
+      <text x="528" y="178">expected artifacts</text>
+
+      <text x="763" y="132">selected lanes</text>
+      <text x="763" y="155">runtime inputs</text>
+      <text x="763" y="178">provider logs</text>
+
+      <text x="998" y="132">hashes</text>
+      <text x="998" y="155">cleanup proof</text>
+      <text x="998" y="178">next steps</text>
+    </g>
+
+    <g fill="#be123c" font-size="13" font-weight="700">
+      <text x="58" y="205">start fast</text>
+      <text x="293" y="205">split lanes</text>
+      <text x="528" y="205">ready to scale</text>
+      <text x="763" y="205">authorized run</text>
+      <text x="998" y="205">checked results</text>
+    </g>
+
+    <text x="45" y="284" fill="#334155" font-size="17">
+      Agent value: plan, split, validate, and prepare.
+    </text>
+    <text x="535" y="284" fill="#0f766e" font-size="17" font-weight="700">
+      Scale selected structural biology work after local checks.
+    </text>
+  </g>
+</svg>

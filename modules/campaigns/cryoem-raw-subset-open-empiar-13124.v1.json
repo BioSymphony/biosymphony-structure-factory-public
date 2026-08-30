@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "module_type": "campaign_manifest",
+  "campaign_id": "structure-factory-empiar-13124-raw-subset-open",
+  "campaign_family": "cryoem-raw-to-atomic-report",
+  "run_profile": "raw_subset_open",
+  "data_modules": [
+    "modules/data-modules/empiar-13124.raw-subset.v1.json"
+  ],
+  "image_modules": [
+    "modules/image-modules/cryo-core.v1.json"
+  ],
+  "lane_modules": [
+    "modules/lane-modules/relion.toolcheck.v1.json",
+    "modules/lane-modules/warp-m.toolcheck.v1.json",
+    "modules/lane-modules/topaz.toolcheck.v1.json",
+    "modules/lane-modules/ctffind.toolcheck.v1.json",
+    "modules/lane-modules/modelangelo.toolcheck.v1.json"
+  ],
+  "smoke_suites": [
+    "modules/smoke-checks/gpu-storage-artifact.v1.json"
+  ],
+  "artifact_contract": "modules/artifact-contracts/structure-report.v1.json",
+  "raw_subset_plan": {
+    "data_module": "modules/data-modules/empiar-13124.raw-subset.v1.json",
+    "subset_profile": "raw_movies_100",
+    "max_files": 100,
+    "deterministic_rule": "lexicographic_first_n_raw_movies_from_empiar_file_listing",
+    "allow_processed_inputs": false
+  },
+  "fanout_policy": {
+    "estimator": "scripts/structure_factory/fanout_estimator.py",
+    "max_raw_movie_files": 100,
+    "max_download_bytes": 11000000000,
+    "max_motion_frames": 5000,
+    "max_context_micrographs": 100
+  },
+  "policies": {
+    "allow_large_downloads": true,
+    "allow_raw_cryoem_downloads": true,
+    "allow_private_data": false,
+    "expected_download_bytes": 10500000000
+  }
+}

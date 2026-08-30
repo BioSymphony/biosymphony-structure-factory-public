@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "module_type": "image_module",
+  "family": "md-docking",
+  "purpose": "Molecular dynamics, docking, and interaction analysis.",
+  "required_for_profiles": ["model_comparison", "validation_extension"],
+  "candidate_tools": ["openmm", "gromacs", "autodock_vina", "gnina", "rdkit"],
+  "execution_ready_requires": ["oci_digest", "toolcheck_pass", "license_audit"]
+}

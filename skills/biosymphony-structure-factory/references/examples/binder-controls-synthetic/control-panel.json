@@ -1,0 +1,34 @@
+{
+  "schema_version": "structure-factory-binder-control-panel-v1",
+  "scope_id": "synthetic-two-predictor-panel",
+  "selected_metric_id": "interface_score",
+  "minimum_controls_per_class": 3,
+  "required_predictors": ["predictor-a", "predictor-b"],
+  "required_seeds": [0],
+  "metrics": [
+    {
+      "id": "interface_score",
+      "direction": "higher_is_better",
+      "unit": "unitless_proxy",
+      "required_control_ids": []
+    },
+    {
+      "id": "target_alignment_rmsd",
+      "direction": "lower_is_better",
+      "unit": "angstrom",
+      "required_control_ids": []
+    }
+  ],
+  "controls": [
+    {"id": "positive-1", "class": "positive", "requirement": "required", "source_posture": "synthetic_demo", "source_id": "synthetic-positive-1"},
+    {"id": "positive-2", "class": "positive", "requirement": "required", "source_posture": "synthetic_demo", "source_id": "synthetic-positive-2"},
+    {"id": "positive-3", "class": "positive", "requirement": "required", "source_posture": "synthetic_demo", "source_id": "synthetic-positive-3"},
+    {"id": "negative-1", "class": "negative", "requirement": "required", "source_posture": "synthetic_demo", "source_id": "synthetic-negative-1"},
+    {"id": "negative-2", "class": "negative", "requirement": "required", "source_posture": "synthetic_demo", "source_id": "synthetic-negative-2"},
+    {"id": "negative-3", "class": "negative", "requirement": "required", "source_posture": "synthetic_demo", "source_id": "synthetic-negative-3"},
+    {"id": "positive-optional", "class": "positive", "requirement": "optional", "source_posture": "synthetic_demo", "source_id": "synthetic-positive-optional"},
+    {"id": "negative-optional", "class": "negative", "requirement": "optional", "source_posture": "synthetic_demo", "source_id": "synthetic-negative-optional"}
+  ],
+  "source_posture": "synthetic_demo",
+  "result_boundary": "planning"
+}

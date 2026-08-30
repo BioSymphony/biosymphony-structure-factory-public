@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "chimerax",
+  "mode": "ready_check",
+  "required": false,
+  "license_gate": "noncommercial_terms",
+  "license_class": "no_cost_noncommercial",
+  "license_gate_module_ref": "modules/lane-modules/chimerax.license-gate.v1.json",
+  "operator_confirmation_required": true,
+  "operator_confirmation_path": "docs/tooling-and-licensing.md",
+  "skip_policy": "skip_without_operator_confirmation_in_prep",
+  "fail_policy": "fail_when_lane_marked_required_and_posture_unrecorded",
+  "smoke_command": "ChimeraX --version || chimerax --version",
+  "render_readiness_checks": [
+    "ChimeraX --nogui --offscreen --cmd 'exit' returns success",
+    "validation/chimerax_license_posture.json declares posture in {noncommercial, commercial-licensed}",
+    "GPU is visible to ChimeraX render pipeline (offscreen still benefits from GPU)",
+    "ChimeraX command-script template exists and parses",
+    "All upstream wave outputs are aggregated under /workspace/structure-factory/atlas-inputs"
+  ],
+  "image_family": "model-build",
+  "campaign_use": [],
+  "notes": "Distinct from chimerax.license-gate.v1.json (the upstream gate probe). The .ready variant assumes the operator has confirmed noncommercial use (or recorded a commercial license override) per the tooling-and-licensing doc and adds render-readiness checks. Status remains gated; operator must clear noncommercial confirmation before render-lane promotion."
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "module_type": "lane_module",
+  "lane_id": "chimerax",
+  "mode": "license_gate_probe",
+  "required": false,
+  "license_gate": "noncommercial_terms",
+  "required_secret_refs": ["CHIMERAX_ACCESS_REF"],
+  "skip_policy": "skip_without_secret_in_prep",
+  "fail_policy": "fail_when_lane_marked_required"
+}

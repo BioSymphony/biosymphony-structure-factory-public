@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/cost-report.v1.schema.json",
+  "title": "Structure Factory cost report v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "provider",
+    "run_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "currency": {
+      "type": "string",
+      "minLength": 1
+    },
+    "total_cost_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "max_authorized_spend_usd": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "hourly_rate_usd": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "runtime_minutes": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "line_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "description"
+        ],
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cost_usd": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "budget_status": {
+      "enum": [
+        "within_budget",
+        "over_budget",
+        "unknown",
+        "not_applicable"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

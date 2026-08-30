@@ -1,0 +1,100 @@
+{
+  "_note": "Schema example. Candidate IDs and numeric scores are synthetic placeholders showing the public-summary.v1 shape. Run values belong in ignored runtime artifacts or a user-selected artifact store.",
+  "boltz_version": "2.2.1",
+  "campaign_id": "pd-l1-pd1-binder-design",
+  "candidate_count": 4,
+  "candidates": [
+    {
+      "artifact_paths_redacted": true,
+      "binder_length": 80,
+      "boltz_status": "run",
+      "candidate_id": "rfdiff-001-s1",
+      "claim_ceiling": "computational candidate only; requires experimental validation",
+      "confidence_summary": {
+        "complex_iplddt": 0.80,
+        "complex_plddt": 0.85,
+        "iptm": 0.60,
+        "ptm": 0.80
+      },
+      "designer": "rfdiffusion",
+      "generated_sequence_redacted": true,
+      "interface_confidence": 0.60,
+      "status": "generated"
+    },
+    {
+      "artifact_paths_redacted": true,
+      "binder_length": 80,
+      "boltz_status": "run",
+      "candidate_id": "rfdiff-002-s1",
+      "claim_ceiling": "computational candidate only; requires experimental validation",
+      "confidence_summary": {
+        "complex_iplddt": 0.80,
+        "complex_plddt": 0.85,
+        "iptm": 0.60,
+        "ptm": 0.80
+      },
+      "designer": "rfdiffusion",
+      "generated_sequence_redacted": true,
+      "interface_confidence": 0.60,
+      "status": "generated"
+    },
+    {
+      "artifact_paths_redacted": true,
+      "binder_length": 80,
+      "boltz_status": "run",
+      "candidate_id": "rfdiff-003-s1",
+      "claim_ceiling": "computational candidate only; requires experimental validation",
+      "confidence_summary": {
+        "complex_iplddt": 0.80,
+        "complex_plddt": 0.85,
+        "iptm": 0.60,
+        "ptm": 0.80
+      },
+      "designer": "rfdiffusion",
+      "generated_sequence_redacted": true,
+      "interface_confidence": 0.60,
+      "status": "generated"
+    },
+    {
+      "artifact_paths_redacted": true,
+      "binder_length": 80,
+      "boltz_status": "run",
+      "candidate_id": "rfdiff-004-s1",
+      "claim_ceiling": "computational candidate only; requires experimental validation",
+      "confidence_summary": {
+        "complex_iplddt": 0.80,
+        "complex_plddt": 0.85,
+        "iptm": 0.60,
+        "ptm": 0.80
+      },
+      "designer": "rfdiffusion",
+      "generated_sequence_redacted": true,
+      "interface_confidence": 0.60,
+      "status": "generated"
+    }
+  ],
+  "claim_level": "candidate",
+  "cofold_caps": {
+    "max_cofolds": 4,
+    "max_seqs_per_design": 1,
+    "per_cofold_timeout_seconds": 900
+  },
+  "evidence_mode": "generated_candidate_summary",
+  "redaction_policy": {
+    "generated_sequences": "redacted from public export",
+    "generated_structures": "not tracked in git",
+    "runtime_artifact_paths": "redacted from public export"
+  },
+  "schema_version": "public-summary.v1",
+  "source_label": "rfdiff-canary",
+  "stats": {
+    "boltz_failed": 0,
+    "boltz_run": 4,
+    "boltz_skipped": 0,
+    "cofolds_run": 4,
+    "designs_skipped_by_cap": [],
+    "total_rows": 4
+  },
+  "target_sequence_length": 109,
+  "target_window": "pd-l1-pd1-interface-window"
+}

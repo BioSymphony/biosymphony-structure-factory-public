@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "ssh_hpc",
+  "provider_class": "slurm_job",
+  "profile_id": "ssh-hpc-slurm-no-download",
+  "maps_campaign_profile": "no_download_smoke",
+  "blessed_path": false,
+  "workspace_root": "$STRUCTURE_FACTORY_HPC_WORKSPACE",
+  "artifact_root": "$STRUCTURE_FACTORY_HPC_WORKSPACE/runs/<run-id>",
+  "secret_mode": "institutional_secret_store_or_environment",
+  "operator_gate_required": true,
+  "scheduler": "slurm",
+  "gpu_required": false,
+  "mock_gpu_allowed": false,
+  "raw_downloads_allowed": false,
+  "image_strategy": "apptainer_or_module_stack",
+  "execution_ready_requires": [
+    "ssh_access",
+    "repo_checkout_or_snapshot",
+    "scheduler_account",
+    "storage_quota",
+    "input_audit",
+    "contract_self_check",
+    "explicit_operator_launch"
+  ],
+  "notes": "HPC adapters must write the same artifact tree. Scheduler completion alone is not success."
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "lambda",
+  "provider_class": "cloud_vm",
+  "profile_id": "lambda-gpu-vm-no-download",
+  "maps_campaign_profile": "no_download_smoke",
+  "blessed_path": true,
+  "workspace_root": "/workspace/structure-factory",
+  "artifact_root": "/workspace/structure-factory/runs/<run-id>",
+  "secret_mode": "operator_secret_store_reference",
+  "operator_gate_required": true,
+  "gpu_required": true,
+  "recommended_gpu": "A10/A100/GH200-class",
+  "gpu_count": 1,
+  "persistent_filesystem": false,
+  "execution_ready_requires": [
+    "repo_checkout",
+    "pinned_git_ref",
+    "lambda_api_auth_via_operator_secret_store",
+    "input_audit",
+    "contract_self_check",
+    "explicit_operator_launch"
+  ],
+  "lambda": {
+    "service": "gpu_vm",
+    "api_credential_ref": "STRUCTURE_FACTORY_LAMBDA_API_CREDENTIAL",
+    "ssh_credential_ref": "STRUCTURE_FACTORY_LAMBDA_SSH_CREDENTIAL",
+    "artifact_egress": "ssh_scp_or_object_store",
+    "remote_archive_hash_required": true,
+    "no_persistent_filesystem": true,
+    "terminate_immediately_after_canary": true,
+    "post_terminate_listing_required": true,
+    "scope_check_required": true,
+    "cleanup_proof_required": true
+  },
+  "notes": "Blessed Lambda Cloud GPU-VM path for ephemeral, no-persistent-filesystem canaries: spin up one short-lived instance, run a single canary, egress artifacts by SSH/SCP or object store, hash the remote archive, terminate immediately, then list instances and filesystems to prove nothing remains. More cost-exposed than RunPod because there is no auto-stop guardrail, so terminate fast. Keep credentials, SSH key names, instance IDs, logs, costs, and raw artifacts outside public git."
+}

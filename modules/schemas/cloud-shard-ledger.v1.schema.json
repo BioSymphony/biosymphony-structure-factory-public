@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/cloud-shard-ledger.v1.schema.json",
+  "title": "Structure Factory cloud shard ledger v1",
+  "type": "object",
+  "required": ["schema_version", "ledger_id", "campaign_id", "shards"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "ledger_id": { "type": "string", "minLength": 1 },
+    "campaign_id": { "type": "string", "minLength": 1 },
+    "shards": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["shard_id", "provider", "adapter", "state", "budget", "artifacts", "cleanup"],
+        "properties": {
+          "shard_id": { "type": "string", "minLength": 1 },
+          "provider": { "enum": ["local", "runpod", "aws", "neocloud", "ssh-hpc", "generic-cloud", "skypilot", "nextflow"] },
+          "adapter": { "type": "string", "minLength": 1 },
+          "state": { "enum": ["planned", "packet_created", "submitted", "running", "artifact_verifying", "cleanup_verified", "closed_partial", "closed_blocked", "closed_failed", "closeout_ready"] },
+          "budget": { "type": "object" },
+          "artifacts": { "type": "array", "items": { "type": "object" } },
+          "cleanup": { "type": "object" }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

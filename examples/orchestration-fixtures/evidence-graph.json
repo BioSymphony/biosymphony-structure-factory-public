@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "graph_id": "orchestration-fixtures-fixture-evidence-graph",
+  "nodes": [
+    {
+      "id": "benchmark_set",
+      "path": "examples/orchestration-fixtures/benchmark-set.json",
+      "evidence_mode": "fixture_or_demo"
+    },
+    {
+      "id": "calibration_summary",
+      "path": "examples/orchestration-fixtures/calibration-summary.json",
+      "evidence_mode": "fixture_or_demo"
+    }
+  ],
+  "edges": [
+    {
+      "from": "benchmark_set",
+      "to": "calibration_summary",
+      "relationship": "constrains_claim_ceiling"
+    }
+  ]
+}

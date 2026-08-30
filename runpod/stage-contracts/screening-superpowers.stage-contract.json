@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "contract_id": "screening-superpowers.stage-contract.v1",
+  "manifest_id": "screening-superpowers-no-download-fixture",
+  "run_id": "screening-superpowers-${STRUCTURE_FACTORY_RUN_ID}",
+  "campaign_id": "screening-superpowers",
+  "wave": "W02",
+  "execution_profile": "screening-no-download-smoke",
+  "progress_ledger": "/workspace/structure-factory/runs/${STRUCTURE_FACTORY_RUN_ID}/stage-progress.jsonl",
+  "success_claim": "No-download screening fixture produces a compact ranking ledger, failed-ligand report, method summary, and selectively promoted candidate reports. Result boundary is fixture_or_demo/candidate only.",
+  "fail_closed": true,
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "screening_manifest_sha256_change",
+      "ligand_library_sha256_change",
+      "receptor_ensemble_sha256_change",
+      "stage_contract_sha256_change",
+      "ranking_formula_version_change",
+      "repo_commit_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "manifest_preflight",
+      "description": "Validate screening manifest shape, referenced ligand library, receptor ensemble, provider posture, and no-download policy.",
+      "required": true,
+      "expected_outputs": [
+        "validation/screening-manifest-check.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/screening-manifest-check.json",
+      "done_marker": "validation/screening-manifest-check.json",
+      "resume_command": "python3 scripts/structure_factory/screening_manifest_check.py examples/screening-superpowers/screening-manifest.json --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "input_audit",
+      "description": "Confirm no private data, no raw downloads, no secrets, and public fixture inputs.",
+      "required": true,
+      "expected_outputs": [
+        "validation/input-audit.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/input-audit.json",
+      "done_marker": "validation/input-audit.json",
+      "resume_command": "python3 scripts/structure_factory/screening_fixture_run.py --manifest examples/screening-superpowers/screening-manifest.json --out .runtime/screening-superpowers-fixture --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "ligand_prep",
+      "description": "Normalize fixture ligand identifiers, compute simple descriptor baselines, and fail invalid SMILES closed.",
+      "required": true,
+      "expected_outputs": [
+        "ligand_prep.jsonl",
+        "failure_report.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "ligand_prep.jsonl",
+      "done_marker": "failure_report.json",
+      "resume_command": "python3 scripts/structure_factory/screening_fixture_run.py --manifest examples/screening-superpowers/screening-manifest.json --out .runtime/screening-superpowers-fixture --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 2
+      }
+    },
+    {
+      "stage_id": "method_comparison",
+      "description": "Emit deterministic fixture docking, descriptor, Boltz-proxy, simple-baseline, and disagreement records without external tools.",
+      "required": true,
+      "expected_outputs": [
+        "pose_predictions.jsonl",
+        "affinity_predictions.jsonl",
+        "method_summary.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "pose_predictions.jsonl",
+      "done_marker": "method_summary.json",
+      "resume_command": "python3 scripts/structure_factory/screening_fixture_run.py --manifest examples/screening-superpowers/screening-manifest.json --out .runtime/screening-superpowers-fixture --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 3
+      }
+    },
+    {
+      "stage_id": "ranking_and_validation_review",
+      "description": "Write consensus ranking, metrics, promoted candidate reports, provenance, executed command ledger, and validation ledger.",
+      "required": true,
+      "expected_outputs": [
+        "consensus_ranking.csv",
+        "metrics.json",
+        "candidate_reports/",
+        "validation_ledger.json",
+        "provenance.md",
+        "executed-commands.jsonl"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "consensus_ranking.csv",
+      "done_marker": "validation_ledger.json",
+      "resume_command": "python3 scripts/structure_factory/screening_fixture_run.py --manifest examples/screening-superpowers/screening-manifest.json --out .runtime/screening-superpowers-fixture --json",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 6
+      }
+    }
+  ],
+  "claim_levels_allowed": [
+    "candidate",
+    "processed",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "default_claim_level": "candidate",
+  "license_gates_required": [],
+  "no_false_success_notes": [
+    "Fixture scores are deterministic smoke evidence, not real docking, affinity, or mechanism evidence.",
+    "Candidate reports are promoted selectively from ranking outputs; every ligand does not receive a report.",
+    "Paid fanout requires provider-specific operator gates, budget caps, artifact hashes, and cleanup proof."
+  ]
+}

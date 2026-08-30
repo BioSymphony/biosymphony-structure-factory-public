@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "runpod",
+  "provider_class": "pod",
+  "profile_id": "runpod-pod-no-download",
+  "maps_campaign_profile": "no_download_smoke",
+  "blessed_path": true,
+  "workspace_root": "/workspace/structure-factory",
+  "artifact_root": "/workspace/structure-factory/runs/<run-id>",
+  "secret_mode": "runpod_runtime_secrets",
+  "operator_gate_required": true,
+  "volume_mount": "/workspace",
+  "network_volume_required": true,
+  "recommended_gpu": "NVIDIA GeForce RTX 4090",
+  "fallback_gpu": "NVIDIA L40S",
+  "gpu_count": 1,
+  "container_disk_gb": 80,
+  "image_map": {
+    "cryo-core": "docker.io/library/ubuntu:22.04",
+    "model-build": "docker.io/library/ubuntu:22.04",
+    "ai-design": "docker.io/nvidia/cuda:12.4.1-runtime-ubuntu22.04",
+    "md-docking": "docker.io/library/ubuntu:22.04"
+  },
+  "execution_ready_requires": [
+    "public_or_operator_image_digest",
+    "pinned_git_ref",
+    "network_volume_id",
+    "input_audit",
+    "contract_self_check",
+    "explicit_operator_launch"
+  ]
+}

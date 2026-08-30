@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "module_type": "data_module",
+  "id": "screening-superpowers-receptor-ensemble",
+  "campaign": "screening-superpowers",
+  "source": "repo_fixture",
+  "profile": "screening_no_download",
+  "public_status": "public_fixture",
+  "title": "No-download receptor ensemble fixture for screening contract validation",
+  "data_classes": [
+    "receptor_ensemble",
+    "metadata"
+  ],
+  "target": {
+    "name": "OpenBind-style public benchmark receptor fixture",
+    "short_name": "fixture-protease-pocket",
+    "target_hint": "EV-A71/CVA16 2A protease inspired screening benchmark",
+    "sequence_policy": "not_required_for_no_download_fixture"
+  },
+  "receptor_ensemble": {
+    "format": "json",
+    "path": "examples/screening-superpowers/receptor-ensemble.json",
+    "members": [
+      "fixture-holo-pocket",
+      "fixture-apo-pocket",
+      "fixture-fragment-pocket"
+    ],
+    "site_definition": {
+      "mode": "reference_ligand_box",
+      "box_center_angstrom": [12.5, -4.0, 8.0],
+      "box_size_angstrom": [18.0, 18.0, 18.0]
+    }
+  },
+  "license_or_terms_note": "Fixture metadata only; no PDB/mmCIF coordinates are stored in this data module.",
+  "storage_policy": "repo_fixture_only",
+  "git_policy": "never_commit_raw_or_generated_data",
+  "download_policy": {
+    "enabled": false,
+    "expected_download_bytes_max": 0,
+    "requires_explicit_execution_issue": false,
+    "allow_raw_cryoem_downloads": false,
+    "data_payload": [
+      "small_fixture_json"
+    ],
+    "download_to": "n/a"
+  },
+  "artifact_expectations": [
+    "receptor_ensemble_manifest.json",
+    "pose_predictions.jsonl",
+    "metrics.json"
+  ],
+  "ledger_fields": [
+    "target_name",
+    "receptor_member_id",
+    "site_definition",
+    "cofactor_policy",
+    "claim_ceiling"
+  ]
+}

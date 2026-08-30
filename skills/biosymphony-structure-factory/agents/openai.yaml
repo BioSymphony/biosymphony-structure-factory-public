@@ -1,0 +1,4 @@
+interface:
+  display_name: "BioSymphony Structure Factory"
+  short_description: "Structural biology campaigns"
+  default_prompt: "Use $biosymphony-structure-factory to plan a structural biology campaign."

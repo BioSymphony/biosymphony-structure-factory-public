@@ -1,0 +1,14 @@
+{
+  "template_name": "biosymphony-structure-md-docking",
+  "image_family": "md-docking",
+  "image_name": "docker.io/library/ubuntu:22.04",
+  "gpu_class": "RTX 4090/L40S for smoke and modest MD; A100/H100 for larger campaigns",
+  "volume_mount": "/workspace",
+  "ports": [
+    "8888/http"
+  ],
+  "startup_command": "bash /opt/structure-factory/entrypoints/no-download-smoke.sh",
+  "purpose": "OpenMM, GROMACS, Vina, GNINA, RDKit, MDAnalysis, and docking/MD validation support.",
+  "license_policy": "Open-source first; GNINA build license depends on linked dependencies.",
+  "public_template_note": "Tracked placeholder image. Choose and digest-pin the runtime image in an ignored packet after license review and explicit human authorization."
+}

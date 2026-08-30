@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-metric-provenance.schema.json",
+  "title": "Binder round metric provenance",
+  "$comment": "This schema records the source and calibration posture of one comparison metric. It does not make the metric a biological measurement or authorize a stopping decision outside the round validator.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "metric_id",
+    "metric_source",
+    "source_artifact_sha256",
+    "calibration_state",
+    "calibration_scope_id",
+    "calibration_artifact_sha256"
+  ],
+  "properties": {
+    "metric_id": {"$ref": "#/$defs/id"},
+    "metric_source": {"enum": ["stage_closeout", "operator_supplied", "synthetic_fixture"]},
+    "source_artifact_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "calibration_state": {
+      "enum": ["calibrated", "borrowed", "operator_defined", "uncalibrated", "not_applicable"]
+    },
+    "calibration_scope_id": {"$ref": "#/$defs/id"},
+    "calibration_artifact_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"metric_source": {"const": "synthetic_fixture"}}, "required": ["metric_source"]},
+      "then": {
+        "properties": {
+          "source_artifact_sha256": {"type": "null"},
+          "calibration_state": {"const": "not_applicable"},
+          "calibration_artifact_sha256": {"type": "null"}
+        }
+      },
+      "else": {"properties": {"source_artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}
+    },
+    {
+      "if": {
+        "properties": {"calibration_state": {"enum": ["calibrated", "borrowed"]}},
+        "required": ["calibration_state"]
+      },
+      "then": {"properties": {"calibration_artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}},
+      "else": {"properties": {"calibration_artifact_sha256": {"type": "null"}}}
+    }
+  ],
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"}
+  }
+}

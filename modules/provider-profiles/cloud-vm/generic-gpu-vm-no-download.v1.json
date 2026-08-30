@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "module_type": "provider_profile",
+  "provider": "generic_cloud",
+  "provider_class": "cloud_vm",
+  "profile_id": "generic-cloud-gpu-vm-no-download",
+  "maps_campaign_profile": "no_download_smoke",
+  "blessed_path": false,
+  "workspace_root": "/workspace/structure-factory",
+  "artifact_root": "/workspace/structure-factory/runs/<run-id>",
+  "secret_mode": "cloud_secret_manager_or_runtime_environment",
+  "operator_gate_required": true,
+  "recommended_gpu": "L40S/A100-class",
+  "gpu_required": true,
+  "mock_gpu_allowed": false,
+  "raw_downloads_allowed": false,
+  "image_strategy": "public_image_or_operator_image_or_bootstrap_script",
+  "execution_ready_requires": [
+    "public_or_operator_repo_access",
+    "pinned_git_ref",
+    "public_or_operator_image_or_bootstrap",
+    "storage_mount",
+    "input_audit",
+    "contract_self_check",
+    "explicit_operator_launch"
+  ],
+  "notes": "Generic cloud VM profiles are adapter-ready only. Public mode uses a public repo/image or reproducible bootstrap; restricted source or image posture is operator-gated outside public git. RunPod remains the reference remote path."
+}

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/BioSymphony/structure-factory/schemas/campaign-manifest.schema.json",
+  "title": "BioSymphony Structure Factory Campaign Manifest",
+  "type": "object",
+  "required": ["campaign_id", "result_boundary", "system", "target", "lanes", "expected_artifacts"],
+  "properties": {
+    "campaign_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string"},
+    "result_boundary": {
+      "type": "string",
+      "enum": ["planning", "public_demo", "public_synthetic_demo", "computational_candidate", "blocked", "insufficient_support"]
+    },
+    "wet_lab_execution": {"type": "boolean"},
+    "therapeutic_conclusions": {"type": "boolean"},
+    "system": {
+      "type": "object",
+      "required": ["privacy"],
+      "properties": {
+        "privacy": {"type": "string", "enum": ["public_only", "public_or_synthetic_only", "synthetic_demo"]}
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": ["label", "public_accession", "window"],
+      "properties": {
+        "label": {"type": "string"},
+        "public_accession": {"type": "string"},
+        "window": {"type": "string"}
+      }
+    },
+    "lanes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "purpose", "result_boundary"],
+        "properties": {
+          "id": {"type": "string"},
+          "purpose": {"type": "string"},
+          "result_boundary": {"type": "string"}
+        }
+      }
+    },
+    "expected_artifacts": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  }
+}

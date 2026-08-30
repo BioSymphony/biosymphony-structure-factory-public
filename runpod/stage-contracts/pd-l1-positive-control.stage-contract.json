@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "contract_id": "pd-l1-positive-control.stage-contract.v1",
+  "manifest_id": "structure-factory-pd-l1-positive-control-8znl",
+  "run_id": "structure-factory-pd-l1-positive-control-8znl",
+  "campaign_id": "pd-l1-pd1-binder-design",
+  "wave": "positive-control",
+  "execution_profile": "pd-l1-boltz-positive-control",
+  "progress_ledger": "/workspace/runpod-execution/artifacts/stage-progress.jsonl",
+  "success_claim": "Single Boltz cofold of PD-L1 (Q9NZQ7 19-127) + the 8ZNL chain-A 58-aa de novo binder, exercised end-to-end on RunPod to validate the Boltz plumbing before any design wave fires. Result boundary is at most candidate; positive-control expectation is iPTM >= 0.5 (>= 0.7 if Boltz training overlap with 8ZNL).",
+  "fail_closed": true,
+  "gpu_requirements": {
+    "min_vram_gb": 16,
+    "recommended_gpu_types": [
+      "NVIDIA GeForce RTX 4090"
+    ],
+    "cloud_type": "COMMUNITY"
+  },
+  "partial_summary": {
+    "path": "partial-summary.json",
+    "write_on": [
+      "failed",
+      "partial",
+      "timeout"
+    ],
+    "include": [
+      "completed_stages",
+      "failed_stage",
+      "resume_command",
+      "artifact_status",
+      "claim_level"
+    ]
+  },
+  "stale_output_policy": {
+    "hash_inputs": true,
+    "hash_code_ref": true,
+    "invalidate_on": [
+      "launch_manifest_sha256_change",
+      "stage_contract_sha256_change",
+      "boltz_yaml_sha256_change",
+      "boltz_weights_sha256_change",
+      "repo_commit_change"
+    ]
+  },
+  "stages": [
+    {
+      "stage_id": "manifest_preflight",
+      "description": "Verify the prebaked Boltz YAML input exists and record its sha256, and confirm the stage contract path resolves.",
+      "required": true,
+      "expected_outputs": [
+        "validation/manifest-preflight.json"
+      ],
+      "timeout_minutes": 2,
+      "checkpoint_marker": "validation/manifest-preflight.json",
+      "done_marker": "validation/manifest-preflight.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-positive-control.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "input_audit",
+      "description": "Parse the Boltz YAML and record chain ids, sequence lengths, target label (PD-L1 Q9NZQ7 19-127), and binder label (8ZNL chain A).",
+      "required": true,
+      "expected_outputs": [
+        "validation/input-audit.json"
+      ],
+      "timeout_minutes": 2,
+      "checkpoint_marker": "validation/input-audit.json",
+      "done_marker": "validation/input-audit.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-positive-control.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "boltz_weights_check",
+      "description": "Record the Boltz weight cache state at /workspace/software/weights/boltz and confirm the boltz CLI is on PATH (sourced from the network-volume conda env).",
+      "required": true,
+      "expected_outputs": [
+        "validation/boltz_weights_manifest.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/boltz_weights_manifest.json",
+      "done_marker": "validation/boltz_weights_manifest.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-positive-control.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "boltz_predict",
+      "description": "Invoke 'boltz predict <yaml> --use_msa_server --write_full_pae --no_kernels --cache <weights> --out_dir <work>' for the PD-L1 + 8ZNL cofold. Record the exact CLI invocation and exit code in executed-commands.jsonl.",
+      "required": true,
+      "expected_outputs": [
+        "logs/boltz_predict.log"
+      ],
+      "timeout_minutes": 45,
+      "checkpoint_marker": "logs/boltz_predict.log",
+      "done_marker": "logs/boltz_predict.log",
+      "resume_command": "bash runpod/entrypoints/pd-l1-positive-control.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    },
+    {
+      "stage_id": "boltz_postprocess",
+      "description": "Promote nested boltz_results_<stem>/predictions/<stem>/{model_0.cif, pae_*.npz, plddt_*.npz, confidence_*.json} to flat boltz/{prediction.cif, prediction.pae.npz, prediction.plddt.npz, confidence.json}; extract iPTM/PTM/complex_plddt into boltz_manifest.json.",
+      "required": true,
+      "expected_outputs": [
+        "boltz/prediction.cif",
+        "boltz/confidence.json",
+        "boltz/boltz_manifest.json",
+        "validation/boltz_postprocess.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "boltz/boltz_manifest.json",
+      "done_marker": "boltz/prediction.cif",
+      "resume_command": "bash runpod/entrypoints/pd-l1-positive-control.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 4
+      }
+    },
+    {
+      "stage_id": "contract_self_check",
+      "description": "Verify all required artifacts are present and non-empty, hash every artifact under runpod-execution/artifacts, and write status.json with iPTM and the missing-artifact list. Fail closed if prediction.cif is absent or zero-byte.",
+      "required": true,
+      "expected_outputs": [
+        "validation/contract-self-check.json"
+      ],
+      "timeout_minutes": 5,
+      "checkpoint_marker": "validation/contract-self-check.json",
+      "done_marker": "validation/contract-self-check.json",
+      "resume_command": "bash runpod/entrypoints/pd-l1-positive-control.sh",
+      "fail_closed": true,
+      "output_validation": {
+        "mode": "expected_paths_exist",
+        "minimum_expected_paths": 1
+      }
+    }
+  ],
+  "expected_outputs": [
+    "runpod-execution/status.json",
+    "runpod-execution/artifacts/boltz/prediction.cif",
+    "runpod-execution/artifacts/boltz/confidence.json",
+    "runpod-execution/artifacts/boltz/boltz_manifest.json",
+    "runpod-execution/artifacts/validation/manifest-preflight.json",
+    "runpod-execution/artifacts/validation/input-audit.json",
+    "runpod-execution/artifacts/validation/boltz_weights_manifest.json",
+    "runpod-execution/artifacts/validation/boltz_postprocess.json",
+    "runpod-execution/artifacts/validation/contract-self-check.json",
+    "runpod-execution/artifacts/stage-progress.jsonl",
+    "runpod-execution/artifacts/executed-commands.jsonl"
+  ],
+  "exact_commands": [
+    "bash runpod/entrypoints/pd-l1-positive-control.sh"
+  ],
+  "done_markers": [
+    "runpod-execution/status.json reports ok",
+    "runpod-execution/artifacts/validation/contract-self-check.json reports ok true",
+    "runpod-execution/artifacts/boltz/prediction.cif exists and is non-empty"
+  ],
+  "claim_levels_allowed": [
+    "candidate",
+    "insufficient_evidence",
+    "blocked"
+  ],
+  "default_claim_level": "candidate",
+  "license_gates_required": [],
+  "no_false_success_notes": [
+    "Boltz outputs are predicted models; campaign policy caps Boltz claims at candidate.",
+    "AlphaFold 3 substitution is forbidden by campaign policy.",
+    "A high iPTM on the 8ZNL positive control is supportive plumbing evidence, not a publishable structural claim \u2014 it only proves the runtime fires end-to-end against a known-good binder."
+  ]
+}

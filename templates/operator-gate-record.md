@@ -1,0 +1,21 @@
+# Operator Gate Record
+
+- issue:
+- campaign:
+- requested action:
+- provider:
+- manifest:
+- code ref:
+- image digest:
+- network volume:
+- max spend:
+- max runtime:
+- cleanup policy:
+- expected artifacts:
+- validation commands:
+- data posture:
+- license gates:
+- explicit authorization:
+- authorization timestamp:
+- operator:
+- notes:

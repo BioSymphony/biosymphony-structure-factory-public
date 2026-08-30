@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/protein-rna-fit-manifest.v1.schema.json",
+  "title": "Structure Factory protein RNA fit manifest v1",
+  "type": "object",
+  "required": ["schema_version", "manifest_type", "campaign_id", "intent", "public_accessions", "chain_registry", "workflow", "claim_ceiling", "execution_policy"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "manifest_type": { "const": "protein_rna_fit_manifest" },
+    "campaign_id": { "type": "string", "minLength": 1 },
+    "intent": { "type": "object" },
+    "public_accessions": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+    "chain_registry": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+    "workflow": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+    "claim_ceiling": { "enum": ["candidate", "calibrated", "validated"] },
+    "execution_policy": { "type": "object" }
+  },
+  "additionalProperties": true
+}

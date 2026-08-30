@@ -1,0 +1,29 @@
+# Boltz 2.x YAML input — positive control cofold for the PD-L1 binder hunt
+# Target: PD-L1 (Q9NZQ7 residues 19-127, from PDB 4ZQK chain A 1-109)
+# Binder: 8ZNL chain A (58-aa de novo binder, picomolar KD)
+#
+# Expected: iPTM >= 0.7 if Boltz training overlap; >= 0.5 minimum to validate pipeline.
+#
+# Run:
+#   boltz predict positive_control_8znl.yaml --use_msa_server --write_full_pae
+#
+# Reference:
+#   PDB 4ZQK   — PD-L1 / PD-1 complex (2.0 Å)
+#   PDB 8ZNL   — PD-L1 + de novo binder (1.77 Å, picomolar KD, May 2024)
+#   UniProt Q9NZQ7 PD1L1_HUMAN
+
+version: 1
+sequences:
+  - protein:
+      id: A
+      sequence: AFTVTVPKDLYVVEYGSNMTIECKFPVEKQLDLAALIVYWEMEDKNIIQFVHGEEDLKVQHSSYRQRARLLKDQLSLGNAALQITDVKLQDAGVYRCMISYGGAD
+      # PD-L1 chain A residues 19-127 (UniProt Q9NZQ7).
+      # Sourced from 4ZQK chain A residues 1-109 (PDB) = UniProt 19-127.
+  - protein:
+      id: B
+      sequence: GPDRERARELARILLKVIKLSDSPEARRQLLRNLEELAEKYKDPEVRRILEEAERYIK
+      # 8ZNL chain A — 58-aa de novo binder, picomolar KD.
+      # Designed sequence: expect MSA server to return near-empty results, which is fine.
+
+# constraints: optional contact/pocket constraints can go here for designed binders
+# templates: optional template-locking can go here if iPTMs flatten

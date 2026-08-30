@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "module_type": "schema_contract",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "modules/schemas/scientific-memory.v1.schema.json",
+  "title": "Structure Factory scientific memory event v1",
+  "type": "object",
+  "required": ["schema_version", "memory_id", "campaign_id", "memory_type", "summary", "evidence_refs", "public_safe"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "memory_id": { "type": "string", "minLength": 1 },
+    "campaign_id": { "type": "string", "minLength": 1 },
+    "memory_type": { "enum": ["provider_lesson", "method_calibration", "target_choice", "failed_route", "claim_caveat", "operator_gate"] },
+    "summary": { "type": "string", "minLength": 1 },
+    "evidence_refs": { "type": "array", "items": { "type": "string" } },
+    "public_safe": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}

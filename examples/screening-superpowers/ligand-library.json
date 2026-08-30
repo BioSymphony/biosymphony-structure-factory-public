@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "library_id": "screening-superpowers-fixture-ligands",
+  "source": "repo_fixture",
+  "protonation_policy": "fixture_neutral_parent_smiles",
+  "stereochemistry_policy": "preserve_input_when_present",
+  "ligands": [
+    {
+      "ligand_id": "FIX-ACT-001",
+      "name": "fixture benzamide active-like control",
+      "smiles": "CC(=O)Nc1ccccc1",
+      "source": "fixture",
+      "known_class": "active_control"
+    },
+    {
+      "ligand_id": "FIX-ACT-002",
+      "name": "fixture phenoxy alcohol analog",
+      "smiles": "CC(C)Oc1ccc(O)cc1",
+      "source": "fixture",
+      "known_class": "active_control"
+    },
+    {
+      "ligand_id": "FIX-FRG-001",
+      "name": "fixture fragment-like phenol",
+      "smiles": "c1ccc(O)cc1",
+      "source": "fixture",
+      "known_class": "fragment_control"
+    },
+    {
+      "ligand_id": "FIX-DEC-001",
+      "name": "fixture aliphatic decoy",
+      "smiles": "CCCCCCCC",
+      "source": "fixture",
+      "known_class": "decoy_control"
+    },
+    {
+      "ligand_id": "FIX-BAD-001",
+      "name": "invalid smiles negative control",
+      "smiles": "C1=INVALID",
+      "source": "fixture",
+      "known_class": "invalid_control"
+    }
+  ]
+}

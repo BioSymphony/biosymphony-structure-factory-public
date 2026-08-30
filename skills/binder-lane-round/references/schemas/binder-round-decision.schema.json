@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://biosymphony.org/schemas/binder-round-decision.schema.json",
+  "title": "Binder optimization round decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "round_id", "current_round_index", "history_round_count", "primary_metric_id", "metric_source", "metric_source_artifact_sha256", "calibration_state", "calibration_scope_id", "calibration_artifact_sha256", "latest_primary_metric_value", "actual_spend_usd", "remaining_budget_usd", "decision", "reason", "next_round_index", "next_round_budget_usd", "provider_calls"],
+  "properties": {
+    "schema_version": {"const": "structure-factory-binder-round-decision-v1"},
+    "round_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"},
+    "current_round_index": {"type": "integer", "minimum": 1},
+    "history_round_count": {"type": "integer", "minimum": 1},
+    "primary_metric_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"},
+    "metric_source": {"enum": ["stage_closeout", "operator_supplied", "synthetic_fixture"]},
+    "metric_source_artifact_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "calibration_state": {"enum": ["calibrated", "borrowed", "operator_defined", "uncalibrated", "not_applicable"]},
+    "calibration_scope_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,95}$"},
+    "calibration_artifact_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "latest_primary_metric_value": {"type": "number"},
+    "actual_spend_usd": {"type": ["number", "null"], "minimum": 0},
+    "remaining_budget_usd": {"type": ["number", "null"], "minimum": 0},
+    "decision": {"enum": ["continue", "stop"]},
+    "reason": {"enum": ["stopping_rule_not_met", "budget_ceiling_reached", "target_threshold_reached", "no_improvement_patience_reached", "maximum_round_count_reached", "insufficient_remaining_budget"]},
+    "next_round_index": {"type": ["integer", "null"], "minimum": 1},
+    "next_round_budget_usd": {"type": ["number", "null"], "minimum": 0},
+    "provider_calls": {"const": 0}
+  }
+}
