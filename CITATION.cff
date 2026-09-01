@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use BioSymphony Structure Factory, cite the repository and the specific third-party tools or datasets used by your campaign."
 title: "BioSymphony Structure Factory"
-version: "0.1.0a0"
-date-released: "2026-05-23"
+version: "0.1.0"
+date-released: "2026-09-01"
 authors:
   - name: "BioSymphony contributors"
 license: "MIT"

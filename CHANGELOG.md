@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.0 - 2026-09-01
+
 - Added an early Claude/Anthropic binder-study entry point to the README and linked the skill, round guide, and decision loop across newcomer documentation.
 - Added Apple SimpleFold as a public, machine-selectable monomer structure and conformational-ensemble predictor with model variants, runtime bindings, source and model-license distinctions, and an explicit cofold boundary.
 - Covered the advertised FAL, Modal, Lambda Cloud, and RunPod provider-run identities.
