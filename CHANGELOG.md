@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Documented OpenFold3 v0.5.0 and its OpenBind v0 default parameters, including the structure-prediction and affinity boundary and the distinction from the OpenBind benchmark dataset.
+
 ## 0.1.0 - 2026-09-01
 
 - Added an early Claude/Anthropic binder-study entry point to the README and linked the skill, round guide, and decision loop across newcomer documentation.

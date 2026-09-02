@@ -57,7 +57,7 @@ These can be useful, but public image inclusion or execution should wait for exa
 - DOMINO multidomain construct assembly, downstream of a validated binder; upstream license is unresolved (no LICENSE, empty model card, no-reuse preprint), so treat reuse and image inclusion as blocked until terms are published.
 - Baker miniprotein-GPCR recipe (motif-directed RFdiffusion + ProteinMPNN + AF2 over public deposited targets), inheriting the upstream tools' posture.
 - CTFFIND, cisTEM, GNINA, cryoDRGN, EMAN2, Scipion/Xmipp, DeepEMhancer, CUDA/NVIDIA bases, and large public weight/database bundles.
-- Protenix, OpenFold3-preview, BioEmu, PLACER, and BoltzGen until exact source, model-weight, dependency, and cache posture are recorded for the intended use.
+- Protenix, OpenFold3 v0.5.0 with OpenBind v0 parameters, BioEmu, PLACER, and BoltzGen until exact source, model-weight, dependency, and cache posture are recorded for the intended use.
 
 ## Runtime Gated
 

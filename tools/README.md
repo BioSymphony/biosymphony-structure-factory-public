@@ -51,6 +51,7 @@ The wider tool knowledge base lives in [`references/software-registry.yaml`](../
 - [Boltz](boltz.md). Open biomolecular cofold with confidence and full PAE outputs.
 - [Chai-1](chai.md). Open biomolecular cofold with MSA-driven prediction.
 - [OpenDDE](opendde.md). Open all-atom biomolecular cofold/prediction lane with ABAG checkpoint and optional PAE/PDE sidecars.
+- [OpenFold3 and OpenBind v0](openfold3.md). All-atom biomolecular structure prediction with the current default OpenBind v0 parameters and an explicit no-affinity boundary.
 - [ESMFold2](esmfold2.md). Biohub structure prediction and foldability review lane, with Hugging Face weights as the first cloud canary route and Biohub API as optional/deferred.
 - [ESMFold2 binder control notes](esmfold2-binder-controls.md). Sequence, structure, interface, logit, and optimization controls for constraining ESMFold2/Biohub binder-design runs against a deposited target site.
 - [SimpleFold](simplefold.md). Apple single-protein structure and conformational-ensemble prediction through PyTorch or MLX, behind the released-model research-use gate.
@@ -89,7 +90,7 @@ A short routing guide. Pick the designer arm by target and binder length, then a
 | A protein that changes shape on ligand binding (allostery, AND gate, biosensor) | [SwitchCraft](switchcraft.md) | [Cofold scoring stack](cofold-scoring-stack.md) for the orthogonal switch check |
 | Add a function or effector to a validated binder (fusion construct) | [DOMINO](domino.md) | [Cofold scoring stack](cofold-scoring-stack.md) to prove both modules fold |
 | Triage or mature antibody variant libraries (sequence-only) | [CoSiNE](cosine.md) | [Cofold scoring stack](cofold-scoring-stack.md) for an orthogonal structural check |
-| Cofold one designed candidate against a target | [Boltz](boltz.md), [Chai-1](chai.md), or [OpenDDE](opendde.md) alone | [Cofold scoring stack](cofold-scoring-stack.md) for multi-validator gating |
+| Cofold one designed candidate against a target | [Boltz](boltz.md), [Chai-1](chai.md), [OpenDDE](opendde.md), or [OpenFold3](openfold3.md) alone | [Cofold scoring stack](cofold-scoring-stack.md) for multi-validator gating |
 | Check foldability or uncertainty for a public sequence/candidate | [ESMFold2](esmfold2.md) | [Cofold scoring stack](cofold-scoring-stack.md) when interface or binder claims are requested |
 | Sample alternate monomer conformations from a public sequence | [SimpleFold](simplefold.md) | [Cofold scoring stack](cofold-scoring-stack.md) when interface or binder claims are requested |
 | Check monomer conformational spread | [BioEmu](bioemu.md) | [MolViewSpec](molviewspec.md) for report scenes, [Cofold scoring stack](cofold-scoring-stack.md) when interface claims are requested |

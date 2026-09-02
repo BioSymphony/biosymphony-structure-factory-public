@@ -907,7 +907,7 @@ software:
     runtime_artifacts: "benchmark_set.json, calibration_summary.json"
     citation_notes: "Record dataset release, target split, ligand IDs, assay labels, and OpenBind benchmark repo ref."
     status: planned
-    notes: "First calibration anchor for screening claims; use metadata/small fixtures in git, not bulk structures."
+    notes: "First calibration anchor for screening claims; use metadata/small fixtures in git, not bulk structures. This registry ID is the OpenBind Consortium benchmark dataset, not the OpenBind v0 parameters recorded under openfold3."
   plinder:
     role: protein_ligand_benchmark_dataset
     image_family: md-docking
@@ -1028,16 +1028,19 @@ software:
     image_family: ai-design
     install_method: source_with_public_parameter_download
     upstream_repo: "https://github.com/aqlaboratory/openfold-3"
-    primary_source_checked: "2026-08-21; release v0.5.0 code and the OpenFold3 model card record Apache-2.0, and the project parameter bucket permits unauthenticated download."
+    upstream_release: "v0.5.0"
+    upstream_commit_sha: "c4771653c5d0a3ebb0b3af71b05efd64bc44ee86"
+    model_parameters: "openbind-2025-06-30-174k (of3-ob-2025-06-30-174k.pt; default for OpenFold3 >=0.5.0)"
+    primary_source_checked: "2026-09-02; official v0.5.0 release, parameter reference, inference documentation, repository LICENSE, and model card reviewed."
     license_class: open_source_apache_2_code_and_weights
     license_gate: none
     runpod_fit: strong_with_gpu
     gpu_class: "A100/H100 preferred"
-    smoke_command: "python run_pretrained_openfold.py --help || python -m openfold --help"
-    runtime_artifacts: "openfold3_predictions/, openfold3_manifest.json"
-    citation_notes: "Record preview status, repo commit, model parameters, and input JSON."
+    smoke_command: "run_openfold predict --help"
+    runtime_artifacts: "openfold3_predictions/*.cif, openfold3_predictions/*_confidences.json, openfold3_predictions/*_confidences_aggregated.json, openfold3_predictions/timing.json, openfold3_manifest.json"
+    citation_notes: "Record the v0.5.0 source commit, exact checkpoint name and file, query JSON, MSA/template policy, seeds, samples, and output hashes."
     status: planned
-    notes: "OpenFold3 is a selectable cofold predictor and a published post-hoc comparison identity. Record whether a run uses preview or v0.5.0 parameters."
+    notes: "OpenFold3 is the inference software; OpenBind v0 is its current default protein-ligand structure-prediction parameter set. It predicts structures and confidence outputs, not binding affinity, and is distinct from the OpenBind Consortium benchmark dataset recorded under openbind."
   rosettafold3:
     role: biomolecular_prediction_and_cofolding
     image_family: ai-design

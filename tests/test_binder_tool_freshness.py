@@ -130,6 +130,30 @@ class BinderToolFreshnessTests(unittest.TestCase):
             {row["variant_id"] for row in adapter["supported_selections"]},
         )
 
+    def test_openfold3_openbind_v0_is_current_and_public_safe(self) -> None:
+        block = registry_block("openfold3")
+        self.assertIn('upstream_release: "v0.5.0"', block)
+        self.assertIn(
+            'upstream_commit_sha: "c4771653c5d0a3ebb0b3af71b05efd64bc44ee86"',
+            block,
+        )
+        self.assertIn("openbind-2025-06-30-174k", block)
+        self.assertIn("license_gate: none", block)
+
+        card = (ROOT / "tools" / "openfold3.md").read_text(encoding="utf-8")
+        self.assertIn("OpenBind v0", card)
+        self.assertIn("openbind-2025-06-30-174k", card)
+        self.assertIn("does not predict binding affinity", card)
+        self.assertIn("adapter_required", card)
+        for internal_term in ("fal", "h100", "canary completed", "transport failed"):
+            self.assertNotIn(internal_term, card.lower())
+
+        ledger = json.loads(LEDGER.read_text(encoding="utf-8"))
+        tool = next(row for row in ledger["tools"] if row["id"] == "openfold3")
+        self.assertEqual("documented", tool["evidence_level"])
+        self.assertFalse(tool["execution_available"])
+        self.assertIn("tools/openfold3.md", tool["public_evidence"])
+
 
 if __name__ == "__main__":
     unittest.main()

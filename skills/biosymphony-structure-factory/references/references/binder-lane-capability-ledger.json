@@ -401,7 +401,7 @@
       "license_gate": "none",
       "provider_bound": false,
       "execution_available": false,
-      "public_evidence": ["references/software-registry.yaml", "tools/cofold-scoring-stack.md", "references/published-binder-comparison-workflow.json"]
+      "public_evidence": ["references/software-registry.yaml", "tools/openfold3.md", "tools/cofold-scoring-stack.md", "references/published-binder-comparison-workflow.json"]
     },
     {
       "id": "rosettafold3",
